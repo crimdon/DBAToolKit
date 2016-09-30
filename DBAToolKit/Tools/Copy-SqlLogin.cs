@@ -29,6 +29,11 @@ namespace DBAToolKit.Tools
                 Server sourceserver = connection.Connect(txtSource.Text);
                 Server destserver = connection.Connect(txtDestination.Text);
 
+                if(sourceserver.VersionMajor < 9 || destserver.VersionMajor < 9)
+                {
+                    throw new Exception("SQL Server versions prior to 2005 are not supported");
+                }
+
                 if (sourceserver.VersionMajor > 10 && destserver.VersionMajor < 11)
                 {
                     throw new Exception(string.Format("SQL Login migration FROM SQL Server version {0} to {1} not supported", sourceserver.VersionMajor.ToString(), destserver.VersionMajor.ToString()));
@@ -193,7 +198,7 @@ namespace DBAToolKit.Tools
         }
 
         private StringCollection destrolemembers;
-        private void syncPermissions (Server sourceserver, Server destserver, string username)
+        private void syncPermissions(Server sourceserver, Server destserver, string username)
         {
             foreach (ServerRole role in sourceserver.Roles)
             {
@@ -218,46 +223,42 @@ namespace DBAToolKit.Tools
                 }
             }
 
-            // SQL Server 2005 and above
-            if (sourceserver.VersionMajor > 9 && destserver.VersionMajor > 9)
+            //First remove all permissions from destination server
+            foreach (ServerPermissionInfo perm in destserver.EnumServerPermissions(username))
             {
-                //First remove all permissions from destination server
-                foreach (ServerPermissionInfo perm in destserver.EnumServerPermissions(username))
+                string permstate = perm.PermissionState.ToString();
+                bool grantwithgrant = false;
+                if (permstate == "GrantWithGrant")
                 {
-                    string permstate = perm.PermissionState.ToString();
-                    bool grantwithgrant = false;
-                    if (permstate == "GrantWithGrant")
-                    {
-                        grantwithgrant = true;
-                        permstate = "grant";
-                    }
-                    else
-                    {
-                        grantwithgrant = false;
-                    }
-                    ServerPermissionSet permset = new ServerPermissionSet(perm.PermissionType);
-                    destserver.Revoke(permset, username, false, grantwithgrant);
-                    displayOutput(string.Format("Successfully revoked {0} to {1} on destination server", permstate, username));
+                    grantwithgrant = true;
+                    permstate = "grant";
                 }
-                //Copy permissions from source server
-                foreach (ServerPermissionInfo perm in sourceserver.EnumServerPermissions(username))
+                else
                 {
-                    string permstate = perm.PermissionState.ToString();
-                    bool grantwithgrant = false;
-                    if (permstate == "GrantWithGrant")
-                    {
-                        grantwithgrant = true;
-                        permstate = "grant";
-                    }
-                    else
-                    {
-                        grantwithgrant = false;
-                    }
+                    grantwithgrant = false;
+                }
+                ServerPermissionSet permset = new ServerPermissionSet(perm.PermissionType);
+                destserver.Revoke(permset, username, false, grantwithgrant);
+                displayOutput(string.Format("Successfully revoked {0} to {1} on destination server", permstate, username));
+            }
+            //Copy permissions from source server
+            foreach (ServerPermissionInfo perm in sourceserver.EnumServerPermissions(username))
+            {
+                string permstate = perm.PermissionState.ToString();
+                bool grantwithgrant = false;
+                if (permstate == "GrantWithGrant")
+                {
+                    grantwithgrant = true;
+                    permstate = "grant";
+                }
+                else
+                {
+                    grantwithgrant = false;
+                }
 
-                    ServerPermissionSet permset = new ServerPermissionSet(perm.PermissionType);
-                    destserver.Grant(permset, username, grantwithgrant);
-                    displayOutput(string.Format("Successfully performed {0} to {1} on destination server", permstate, username));
-                }
+                ServerPermissionSet permset = new ServerPermissionSet(perm.PermissionType);
+                destserver.Grant(permset, username, grantwithgrant);
+                displayOutput(string.Format("Successfully performed {0} to {1} on destination server", permstate, username));
             }
         }
 

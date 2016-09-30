@@ -32,14 +32,7 @@ namespace DBAToolKit.Helpers
 
                 if (!Connection)
                 {
-                    if (server.VersionMajor == 8)
-                    {
-                        // 2000
-                        server.SetDefaultInitFields(typeof(Database), "OverLappingIndexesReplicationOptions", "Collation", "CompatibilityLevel", "CreateDate", "ID", "IsAccessible", "IsFullTextEnabled", "IsUpdateable", "LastBackupDate", "LastDifferentialBackupDate", "LastLogBackupDate", "Name", "Owner", "PrimaryFilePath", "ReadOnly", "RecoveryModel", "Status", "Version");
-                        server.SetDefaultInitFields(typeof(Login), "CreateDate", "DateLastModified", "DefaultDatabase", "DenyWindowsLogin", "IsSystemObject", "Language", "LanguageAlias", "LoginType", "Name", "Sid", "WindowsLoginAccessType");
-                    }
-
-                    else if (server.VersionMajor == 9 || server.VersionMajor == 10)
+                    if (server.VersionMajor == 9 || server.VersionMajor == 10)
                     {
                         // 2005 and 2008
                         server.SetDefaultInitFields(typeof(Database), "ReplicationOptions", "BrokerEnabled", "Collation", "CompatibilityLevel", "CreateDate", "ID", "IsAccessible", "IsFullTextEnabled", "IsMirroringEnabled", "IsUpdateable", "LastBackupDate", "LastDifferentialBackupDate", "LastLogBackupDate", "Name", "Owner", "PrimaryFilePath", "ReadOnly", "RecoveryModel", "Status", "Trustworthy", "Version");

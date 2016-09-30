@@ -49,21 +49,15 @@ namespace DBAToolKit.Helpers
 
         public static SecureString GetHashedPassword (Server server, Login login)
         {
-                switch (server.VersionMajor)
-                {
-                    case 0:
-                        sql = "SELECT convert(varbinary(256),password) as hashedpass FROM master.dbo.syslogins WHERE loginname='" + login.Name + "'";
-                        break;
-                    case 8:
-                        sql = "SELECT convert(varbinary(256),password) as hashedpass FROM dbo.syslogins WHERE name='" + login.Name + "'";
-                        break;
-                    case 9:
-                        sql = "SELECT convert(varbinary(256),password_hash) as hashedpass FROM sys.sql_logins where name='" + login.Name + "'";
-                        break;
-                    default:
-                        sql = "SELECT CAST(CONVERT(varchar(256), CAST(LOGINPROPERTY(name,'PasswordHash') AS varbinary (256)), 1) AS nvarchar(max)) as hashedpass FROM sys.server_principals WHERE principal_id = " + login.ID + "";
-                        break;
-                }
+            if (server.VersionMajor == 9)
+            {
+                sql = "SELECT convert(varbinary(256),password_hash) as hashedpass FROM sys.sql_logins where name='" + login.Name + "'";
+            }
+            else
+            {
+                sql = "SELECT CAST(CONVERT(varchar(256), CAST(LOGINPROPERTY(name,'PasswordHash') AS varbinary (256)), 1) AS nvarchar(max)) as hashedpass FROM sys.server_principals WHERE principal_id = " + login.ID + "";
+            }
+
             try
             {
                 hashedpass = server.ConnectionContext.ExecuteScalar(sql);
