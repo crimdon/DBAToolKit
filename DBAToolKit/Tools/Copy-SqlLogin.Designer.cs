@@ -34,7 +34,6 @@
             this.txtDestination = new System.Windows.Forms.TextBox();
             this.chksyncOnly = new System.Windows.Forms.CheckBox();
             this.chkForce = new System.Windows.Forms.CheckBox();
-            this.chkSyncSaName = new System.Windows.Forms.CheckBox();
             this.txtOutput = new System.Windows.Forms.TextBox();
             this.btnCopy = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -87,20 +86,10 @@
             this.chkForce.AutoSize = true;
             this.chkForce.Location = new System.Drawing.Point(187, 73);
             this.chkForce.Name = "chkForce";
-            this.chkForce.Size = new System.Drawing.Size(53, 17);
+            this.chkForce.Size = new System.Drawing.Size(80, 17);
             this.chkForce.TabIndex = 6;
-            this.chkForce.Text = "Force";
+            this.chkForce.Text = "Force Copy";
             this.chkForce.UseVisualStyleBackColor = true;
-            // 
-            // chkSyncSaName
-            // 
-            this.chkSyncSaName.AutoSize = true;
-            this.chkSyncSaName.Location = new System.Drawing.Point(308, 73);
-            this.chkSyncSaName.Name = "chkSyncSaName";
-            this.chkSyncSaName.Size = new System.Drawing.Size(106, 17);
-            this.chkSyncSaName.TabIndex = 7;
-            this.chkSyncSaName.Text = "Sync sa account";
-            this.chkSyncSaName.UseVisualStyleBackColor = true;
             // 
             // txtOutput
             // 
@@ -142,7 +131,6 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnCopy);
             this.Controls.Add(this.txtOutput);
-            this.Controls.Add(this.chkSyncSaName);
             this.Controls.Add(this.chkForce);
             this.Controls.Add(this.chksyncOnly);
             this.Controls.Add(this.txtDestination);
@@ -164,7 +152,6 @@
         private System.Windows.Forms.TextBox txtDestination;
         private System.Windows.Forms.CheckBox chksyncOnly;
         private System.Windows.Forms.CheckBox chkForce;
-        private System.Windows.Forms.CheckBox chkSyncSaName;
         private System.Windows.Forms.TextBox txtOutput;
         private System.Windows.Forms.Button btnCopy;
         private System.Windows.Forms.Label label3;
