@@ -37,6 +37,9 @@
             this.txtOutput = new System.Windows.Forms.TextBox();
             this.btnCopy = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtUsersToCopy = new System.Windows.Forms.TextBox();
+            this.chksyncDatabasePerms = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // txtSource
@@ -69,7 +72,7 @@
             this.txtDestination.Location = new System.Drawing.Point(434, 36);
             this.txtDestination.Name = "txtDestination";
             this.txtDestination.Size = new System.Drawing.Size(150, 20);
-            this.txtDestination.TabIndex = 3;
+            this.txtDestination.TabIndex = 1;
             // 
             // chksyncOnly
             // 
@@ -77,17 +80,17 @@
             this.chksyncOnly.Location = new System.Drawing.Point(30, 73);
             this.chksyncOnly.Name = "chksyncOnly";
             this.chksyncOnly.Size = new System.Drawing.Size(160, 17);
-            this.chksyncOnly.TabIndex = 5;
+            this.chksyncOnly.TabIndex = 3;
             this.chksyncOnly.Text = "Syncronise Permissions Only";
             this.chksyncOnly.UseVisualStyleBackColor = true;
             // 
             // chkForce
             // 
             this.chkForce.AutoSize = true;
-            this.chkForce.Location = new System.Drawing.Point(238, 73);
+            this.chkForce.Location = new System.Drawing.Point(434, 73);
             this.chkForce.Name = "chkForce";
             this.chkForce.Size = new System.Drawing.Size(80, 17);
-            this.chkForce.TabIndex = 6;
+            this.chkForce.TabIndex = 5;
             this.chkForce.Text = "Force Copy";
             this.chkForce.UseVisualStyleBackColor = true;
             // 
@@ -101,15 +104,15 @@
             this.txtOutput.Name = "txtOutput";
             this.txtOutput.ReadOnly = true;
             this.txtOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtOutput.Size = new System.Drawing.Size(670, 246);
+            this.txtOutput.Size = new System.Drawing.Size(969, 276);
             this.txtOutput.TabIndex = 8;
             // 
             // btnCopy
             // 
-            this.btnCopy.Location = new System.Drawing.Point(509, 73);
+            this.btnCopy.Location = new System.Drawing.Point(754, 78);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(75, 23);
-            this.btnCopy.TabIndex = 9;
+            this.btnCopy.TabIndex = 6;
             this.btnCopy.Text = "Copy";
             this.btnCopy.UseVisualStyleBackColor = true;
             this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
@@ -124,10 +127,39 @@
             this.label3.TabIndex = 10;
             this.label3.Text = "Copy SQL Logins";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(652, 42);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(73, 13);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "Users to Copy";
+            // 
+            // txtUsersToCopy
+            // 
+            this.txtUsersToCopy.Location = new System.Drawing.Point(754, 36);
+            this.txtUsersToCopy.Name = "txtUsersToCopy";
+            this.txtUsersToCopy.Size = new System.Drawing.Size(150, 20);
+            this.txtUsersToCopy.TabIndex = 2;
+            // 
+            // chksyncDatabasePerms
+            // 
+            this.chksyncDatabasePerms.AutoSize = true;
+            this.chksyncDatabasePerms.Location = new System.Drawing.Point(206, 73);
+            this.chksyncDatabasePerms.Name = "chksyncDatabasePerms";
+            this.chksyncDatabasePerms.Size = new System.Drawing.Size(185, 17);
+            this.chksyncDatabasePerms.TabIndex = 4;
+            this.chksyncDatabasePerms.Text = "Syncronise Database Permissions";
+            this.chksyncDatabasePerms.UseVisualStyleBackColor = true;
+            // 
             // Copy_SqlLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chksyncDatabasePerms);
+            this.Controls.Add(this.txtUsersToCopy);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnCopy);
             this.Controls.Add(this.txtOutput);
@@ -138,7 +170,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtSource);
             this.Name = "Copy_SqlLogin";
-            this.Size = new System.Drawing.Size(701, 370);
+            this.Size = new System.Drawing.Size(1000, 400);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -155,5 +187,8 @@
         private System.Windows.Forms.TextBox txtOutput;
         private System.Windows.Forms.Button btnCopy;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtUsersToCopy;
+        private System.Windows.Forms.CheckBox chksyncDatabasePerms;
     }
 }

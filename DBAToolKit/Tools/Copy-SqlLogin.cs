@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.SqlServer.Management.Smo;
 using DBAToolKit.Helpers;
 using System.Security;
 using System.Collections.Specialized;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DBAToolKit.Tools
 {
@@ -18,58 +19,66 @@ namespace DBAToolKit.Tools
 
         private void btnCopy_Click(object sender, EventArgs e)
         {
-            displayOutput("Attempting to connect to SQL Servers");
+            displayOutput("Attempting to connect to SQL Servers...");
             try
             {
-                if (txtSource.Text == null || txtDestination == null)
+                if (string.IsNullOrEmpty(txtSource.Text) == true || string.IsNullOrEmpty(txtDestination.Text) == true)
                 {
-                    throw new Exception("Enter a Source and Destination Server");
+                    throw new Exception("Enter a Source and Destination Server!");
                 }
+
+                if (txtSource.Text == txtDestination.Text)
+                {
+                    throw new Exception("Source and destination cannot be the same!");
+                }
+
                 ConnectSqlServer connection = new ConnectSqlServer();
                 Server sourceserver = connection.Connect(txtSource.Text);
                 Server destserver = connection.Connect(txtDestination.Text);
 
                 if(sourceserver.VersionMajor < 9 || destserver.VersionMajor < 9)
                 {
-                    throw new Exception("SQL Server versions prior to 2005 are not supported");
+                    throw new Exception("SQL Server versions prior to 2005 are not supported!");
                 }
 
                 if (sourceserver.VersionMajor > 10 && destserver.VersionMajor < 11)
                 {
-                    throw new Exception(string.Format("SQL Login migration FROM SQL Server version {0} to {1} not supported", sourceserver.VersionMajor.ToString(), destserver.VersionMajor.ToString()));
-                }
-
-                if (sourceserver.VersionMajor < 8 || destserver.VersionMajor < 8)
-                {
-                    throw new Exception("SQL Server 7 and below not supported");
+                    throw new Exception(string.Format("SQL Login migration FROM SQL Server version {0} to {1} not supported!", sourceserver.VersionMajor.ToString(), destserver.VersionMajor.ToString()));
                 }
 
                 if (chkForce.Checked && chksyncOnly.Checked)
                 {
-                    throw new Exception("Force Copy cannot be selected with Sync Only");
+                    throw new Exception("Force Copy cannot be selected with Syncronise Permissions Only!");
                 }
 
-                Stopwatch elapsed = new Stopwatch();
+                List<String> usersToCopy = txtUsersToCopy.Text.Split(',').ToList();
+
                 DateTime started = DateTime.Now;
                 txtOutput.Clear();
-                displayOutput(string.Format("Migration started: {0}", started.ToShortTimeString()));
-                processLogins(sourceserver, destserver, chkForce.Checked, chksyncOnly.Checked);
+                displayOutput(string.Format("Migration started: {0}", DateTime.Now.ToShortTimeString()));
+                processLogins(sourceserver, destserver, chkForce.Checked, chksyncOnly.Checked, usersToCopy);
+                displayOutput(string.Format("Migration ended: {0}", DateTime.Now.ToShortTimeString()));
             }
 
             catch (Exception ex)
             {
-                displayOutput(ex.Message);
+                displayOutput(ex.Message, true);
             }
         }
 
-        private void processLogins(Server sourceserver, Server destserver, bool force, bool synconly)
+        private void processLogins(Server sourceserver, Server destserver, bool force, bool synconly, List<string> userstoprocess)
         {
             foreach (Login sourcelogin in sourceserver.Logins)
             {
                 string username = sourcelogin.Name;
                 string currentlogin = sourceserver.ConnectionContext.TrueLogin;
-                string servername = sourceserver.NetName;
+                string servername = sourceserver.NetName.ToLower();
                 Login destlogin = destserver.Logins[username];
+
+                if (userstoprocess.Count > 0 && !userstoprocess.Contains(username))
+                {
+                    continue;
+                }
 
                 if (username.StartsWith("##") || username == "sa" || username == "distributor_admin")
                 {
@@ -106,17 +115,18 @@ namespace DBAToolKit.Tools
                     dropUser(destserver, destlogin, username);
                 }
 
-                if (destlogin != null && !force || synconly)
-                {
-                    displayOutput(string.Format("{0} already exists in destination. Use -force to drop and recreate.", username));
-                    continue;
-                }
-
                 if (destlogin == null && synconly)
                 {
                     displayOutput(string.Format("{0} does not exist on destination. Skipping sync.", username));
                     continue;
                 }
+
+                if (destlogin != null && !force && !synconly)
+                {
+                    displayOutput(string.Format("{0} already exists in destination. Select Force Copy to drop and recreate.", username));
+                    continue;
+                }
+
                 if (!synconly)
                 {
                     copyLogin(sourceserver, destserver, sourcelogin, destlogin);
@@ -143,13 +153,12 @@ namespace DBAToolKit.Tools
                 }
                 destlogin.DefaultDatabase = defaultdb;
 
-                destlogin.PasswordPolicyEnforced = sourcelogin.PasswordPolicyEnforced;
-                destlogin.PasswordExpirationEnabled = sourcelogin.PasswordExpirationEnabled;
-
                 if (sourcelogin.LoginType == LoginType.SqlLogin)
                 {
                     destlogin.LoginType = LoginType.SqlLogin;
                     destlogin.Name = sourcelogin.Name;
+                    destlogin.PasswordPolicyEnforced = sourcelogin.PasswordPolicyEnforced;
+                    destlogin.PasswordExpirationEnabled = sourcelogin.PasswordExpirationEnabled;
 
                     SecureString hashedpass = DBFunctions.GetHashedPassword(sourceserver, sourcelogin);
 
@@ -167,11 +176,16 @@ namespace DBAToolKit.Tools
                     destlogin.Refresh();
                     displayOutput(string.Format("Successfully added {0} to {1}.", username, destserver.Name));
                 }
+
+                else
+                {
+                    throw new Exception("User type is not supported");
+                }
             }
 
             catch (Exception ex)
             {
-                displayOutput("Error processing user.");
+                displayOutput("Error processing user!", true);
                 displayOutput(ex.Message);
             }
         }
@@ -250,8 +264,17 @@ namespace DBAToolKit.Tools
             }
 
         }
-        private void displayOutput(string message)
+        private void displayOutput(string message, bool errormessage = false)
         {
+            if (errormessage)
+            {
+                txtOutput.ForeColor = System.Drawing.Color.Red;
+            }
+            else
+            {
+                txtOutput.ForeColor = System.Drawing.Color.Black;
+            }
+
             if (txtOutput.Text.Length == 0)
             {
                 txtOutput.Text = message;
