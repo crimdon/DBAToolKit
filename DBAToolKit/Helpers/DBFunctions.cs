@@ -58,15 +58,7 @@ namespace DBAToolKit.Helpers
                 sql = "SELECT CAST(CONVERT(varchar(256), CAST(LOGINPROPERTY(name,'PasswordHash') AS varbinary (256)), 1) AS nvarchar(max)) as hashedpass FROM sys.server_principals WHERE principal_id = " + login.ID + "";
             }
 
-            try
-            {
-                hashedpass = server.ConnectionContext.ExecuteScalar(sql);
-            }
-            catch
-            {
-                DataSet hashedpassdt = server.Databases["master"].ExecuteWithResults(sql);
-                hashedpass = hashedpassdt.Tables[0].Rows[0][0].ToString();
-            }
+            hashedpass = server.ConnectionContext.ExecuteScalar(sql);
 
             if (hashedpass.GetType().Name != "String")
             {

@@ -62,18 +62,6 @@ namespace DBAToolKit.Tools
             }
         }
 
-        private void displayOutput(string message)
-        {
-            if (txtOutput.Text.Length == 0)
-            {
-                txtOutput.Text = message;
-            }
-            else
-            {
-                txtOutput.AppendText("\r\n" + message);
-            }
-        }
-
         private void processLogins(Server sourceserver, Server destserver, bool force, bool synconly)
         {
             foreach (Login sourcelogin in sourceserver.Logins)
@@ -115,10 +103,10 @@ namespace DBAToolKit.Tools
                         displayOutput(string.Format("{0} is the destiation service account. Skipping drop.", username));
                         continue;
                     }
-                    dropUser(destserver, username);
+                    dropUser(destserver, destlogin, username);
                 }
 
-                if (destlogin != null && !force || synconly || syncsa)
+                if (destlogin != null && !force || synconly)
                 {
                     displayOutput(string.Format("{0} already exists in destination. Use -force to drop and recreate.", username));
                     continue;
@@ -188,13 +176,13 @@ namespace DBAToolKit.Tools
             }
         }
 
-        private void dropUser (Server destserver, string username)
+        private void dropUser (Server dbserver, Login serverlogin, string username)
         {
-            DBFunctions.KillConnections(destserver, username);
-            //DBFunctions.ChangeDbOwner(destserver, username);
-            //DBFunctions.ChangeJobOwner(destserver, username);
+            DBFunctions.KillConnections(dbserver, username);
+            DBFunctions.ChangeDbOwner(dbserver, username);
+            DBFunctions.ChangeJobOwner(dbserver, username);
             displayOutput(string.Format("Dropping {0} from destination server.", username));
-            //destlogin.Drop(); 
+            serverlogin.Drop(); 
         }
 
         private StringCollection destrolemembers;
@@ -260,7 +248,18 @@ namespace DBAToolKit.Tools
                 destserver.Grant(permset, username, grantwithgrant);
                 displayOutput(string.Format("Successfully performed {0} to {1} on destination server", permstate, username));
             }
-        }
 
+        }
+        private void displayOutput(string message)
+        {
+            if (txtOutput.Text.Length == 0)
+            {
+                txtOutput.Text = message;
+            }
+            else
+            {
+                txtOutput.AppendText("\r\n" + message);
+            }
+        }
     }
 }

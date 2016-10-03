@@ -76,15 +76,15 @@
             this.chksyncOnly.AutoSize = true;
             this.chksyncOnly.Location = new System.Drawing.Point(30, 73);
             this.chksyncOnly.Name = "chksyncOnly";
-            this.chksyncOnly.Size = new System.Drawing.Size(74, 17);
+            this.chksyncOnly.Size = new System.Drawing.Size(160, 17);
             this.chksyncOnly.TabIndex = 5;
-            this.chksyncOnly.Text = "Sync Only";
+            this.chksyncOnly.Text = "Syncronise Permissions Only";
             this.chksyncOnly.UseVisualStyleBackColor = true;
             // 
             // chkForce
             // 
             this.chkForce.AutoSize = true;
-            this.chkForce.Location = new System.Drawing.Point(187, 73);
+            this.chkForce.Location = new System.Drawing.Point(238, 73);
             this.chkForce.Name = "chkForce";
             this.chkForce.Size = new System.Drawing.Size(80, 17);
             this.chkForce.TabIndex = 6;
