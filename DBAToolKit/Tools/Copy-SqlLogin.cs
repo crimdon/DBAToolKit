@@ -56,7 +56,7 @@ namespace DBAToolKit.Tools
                 DateTime started = DateTime.Now;
                 txtOutput.Clear();
                 displayOutput(string.Format("Migration started: {0}", DateTime.Now.ToShortTimeString()));
-                processLogins(sourceserver, destserver, chkForce.Checked, chksyncOnly.Checked, usersToCopy);
+                processLogins(sourceserver, destserver, chkForce.Checked, chksyncOnly.Checked, chksyncDatabasePerms.Checked, usersToCopy);
                 displayOutput(string.Format("Migration ended: {0}", DateTime.Now.ToShortTimeString()));
             }
 
@@ -66,7 +66,7 @@ namespace DBAToolKit.Tools
             }
         }
 
-        private void processLogins(Server sourceserver, Server destserver, bool force, bool synconly, List<string> userstoprocess)
+        private void processLogins(Server sourceserver, Server destserver, bool force, bool synconly, bool syncdatabaseperms, List<string> userstoprocess)
         {
             foreach (Login sourcelogin in sourceserver.Logins)
             {
@@ -131,7 +131,13 @@ namespace DBAToolKit.Tools
                 {
                     copyLogin(sourceserver, destserver, sourcelogin, destlogin);
                 }
+
                 syncPermissions(sourceserver, destserver, username);
+
+                if (syncdatabaseperms)
+                {
+                    syncDatabasePerms(sourcelogin, destlogin, sourceserver, destserver);
+                }
             }
         }
                 
@@ -263,6 +269,178 @@ namespace DBAToolKit.Tools
                 displayOutput(string.Format("Successfully performed {0} to {1} on destination server", permstate, username));
             }
 
+        }
+
+        private void syncDatabasePerms(Login sourcelogin, Login destlogin, Server destserver, Server sourceserver)
+        {
+            foreach(DatabaseMapping dbmap in destlogin.EnumDatabaseMappings())
+            {
+                string dbname = dbmap.DBName;
+                Database destdb = destserver.Databases[dbname];
+                Database sourcedb = sourceserver.Databases[dbname];
+                string dbusername = dbmap.UserName;
+                string dbloginname = dbmap.LoginName;
+
+                if(sourcedb != null && sourcedb.Users[dbusername] == null && destdb.Users[dbusername] != null)
+                {
+
+                    try
+                    {
+                        destdb.Users[dbusername].Drop();
+                    }
+                    catch (Exception ex)
+                    {
+                        displayOutput(string.Format("Failed to drop user {0} From {1} on destination.", dbusername, dbname));
+                        displayOutput(ex.Message);
+                    }
+
+
+                    foreach(DatabaseRole destrole in destdb.Roles)
+                    {
+                        string destrolename = destrole.Name;
+                        DatabaseRole sourcerole = sourcedb.Roles[destrolename];
+
+                        if(sourcerole != null && !sourcerole.EnumMembers().Contains(dbusername) && destrole.EnumMembers().Contains(dbusername))
+                        {
+                            try
+                            {
+                                destrole.DropMember(dbusername);
+                            }
+
+                            catch (Exception ex)
+                            {
+                                displayOutput(string.Format("Failed to drop user {0} From {1} on destination.", dbusername, destrolename));
+                                displayOutput(ex.Message, true);
+                            }
+                        }
+
+                    }
+
+                    var destperms = destdb.EnumDatabasePermissions(dbusername);
+                    var sourceperms = sourcedb.EnumDatabasePermissions(dbusername);
+                    foreach(var perm in destperms)
+                    {
+                        PermissionState permstate = perm.PermissionState;
+                        var sourceperm = sourceperms.Where(p => p.PermissionState == perm.PermissionState && p.PermissionType == perm.PermissionType);
+
+                        if(sourceperm == null)
+                        {
+                            try
+                            {
+                                bool grantwithgrant;
+                                DatabasePermissionSet permset = new DatabasePermissionSet(perm.PermissionType);
+                                if (permstate == PermissionState.GrantWithGrant)
+                                {
+                                    grantwithgrant = true;
+                                    permstate = PermissionState.Grant;
+                                }
+                                else
+                                {
+                                    grantwithgrant = false;
+                                }
+                                destdb.Revoke(permset, dbusername, false, grantwithgrant);
+                            }
+                            catch (Exception ex)
+                            {
+                                displayOutput(string.Format("Failed to revoke permission {0} From {1} on destination.", perm.PermissionType, dbusername));
+                                displayOutput(ex.Message, true);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Add the database mappings and permissions
+            foreach(DatabaseMapping dbmap in sourcelogin.EnumDatabaseMappings())
+            {
+                string dbname = dbmap.DBName;
+                Database destdb = destserver.Databases[dbname];
+                Database sourcedb = sourceserver.Databases[dbname];
+                string dbusername = dbmap.UserName;
+                string dbloginname = dbmap.LoginName;
+
+                // Map the user
+                if (destdb == null && destdb.Users[dbusername] == null)
+                {
+                    try
+                    {
+                        User dbuser = new User(destdb, dbusername);
+                        dbuser.Login = dbusername;
+                        dbuser.Create();
+                        dbuser.Refresh();
+                    }
+                    catch (Exception ex)
+                    {
+                        displayOutput(string.Format("Failed to create user {0} on database {1} on destination.", dbusername, dbname));
+                        displayOutput(ex.Message, true);
+                    }
+                }
+
+                //Change the owner
+                if(sourcedb.Owner == dbusername)
+                {
+                    try
+                    {
+                        destdb.SetOwner(dbusername);
+                    }
+                    catch (Exception ex)
+                    {
+                        displayOutput(string.Format("Failed to change dbowner on database {0} to {1} on destination.", dbname, dbusername));
+                        displayOutput(ex.Message, true);
+                    }
+                }
+
+                //Map the roles
+                foreach(DatabaseRole role in sourcedb.Roles)
+                {
+                    if (role.EnumMembers().Contains(dbusername))
+                    {
+                        string rolename = role.Name;
+                        DatabaseRole destdbrole = destdb.Roles[rolename];
+
+                        if (destdbrole != null && dbusername != "dbo" && !destdbrole.EnumMembers().Contains(dbusername))
+                        {
+                            try
+                            {
+                                destdbrole.AddMember(dbusername);
+                                destdbrole.Alter();
+                            }
+                            catch (Exception ex)
+                            {
+                                displayOutput(string.Format("Failed to add user {0} to role {1} on database {3}", rolename, dbusername, dbname));
+                                displayOutput(ex.Message, true);
+                            }
+                        }
+                    }
+                }
+
+                //Map permissions
+                var sourceperms = sourcedb.EnumDatabasePermissions(dbusername);
+                foreach (var perm in sourceperms)
+                {
+                    DatabasePermissionSet permset = new DatabasePermissionSet(perm.PermissionType);
+                    PermissionState permstate = perm.PermissionState;
+                    bool grantwithgrant;
+                    if(permstate == PermissionState.GrantWithGrant)
+                    {
+                        grantwithgrant = true;
+                        permstate = PermissionState.Grant;
+                    }
+                    else
+                    {
+                        grantwithgrant = false;
+                    }
+                    try
+                    {
+                        destdb.Grant(permset, dbusername, grantwithgrant);
+                    }
+                    catch (Exception ex)
+                    {
+                        displayOutput(string.Format("Failed to grant {0} on database {1} for user {2}", perm.PermissionType, dbname, dbusername));
+                        displayOutput(ex.Message, true);
+                    }
+                }
+            }
         }
         private void displayOutput(string message, bool errormessage = false)
         {
