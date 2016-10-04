@@ -388,7 +388,7 @@ namespace DBAToolKit.Tools
                         displayOutput(ex.Message, true);
                     }
                 }
-                displayOutput(string.Format("Database permissions synced for user {0}", dbusername));
+                displayOutput(string.Format("Database permissions synced for user {0} on database {1}", dbusername, dbname));
             }
         }
 
