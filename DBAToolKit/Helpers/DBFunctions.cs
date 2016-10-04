@@ -10,21 +10,65 @@ namespace DBAToolKit.Helpers
 {
     public static class DBFunctions
     {
-        private static string sql;
-        private static object hashedpass;
-
-        public static void KillConnections(Server destserver, string username)
+        public static bool DatabaseExists (Server dbserver, string dbname)
         {
-            DataTable processes = destserver.EnumProcesses(username);
+            foreach (Database db in dbserver.Databases)
+            {
+               if (db.Name == dbname)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool DatabaseUserExists (Database db, string user)
+        {
+            foreach (User dbuser in db.Users)
+            {
+                if (user == dbuser.Name)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool LoginExists (Server server, string login)
+        {
+            foreach (Login serverlogin in server.Logins)
+                if(serverlogin.Name == login)
+                {
+                    return true;
+                }
+            return false;
+        }
+
+        public static bool DBRoleExists (Database db, string rolename)
+        {
+            foreach (DatabaseRole role in db.Roles)
+            {
+                if (role.Name == rolename)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static void KillConnections(Server dbserver, string username)
+        {
+            DataTable processes = dbserver.EnumProcesses(username);
             foreach (DataRow r in processes.Rows)
             {
-                destserver.KillProcess(Int32.Parse(r["Spid"].ToString()));
+                dbserver.KillProcess(Int32.Parse(r["Spid"].ToString()));
             }
         }
 
-        public static void ChangeDbOwner(Server destserver, string username)
+        public static void ChangeDbOwner(Server dbserver, string username)
         {
-            var databases = destserver.Databases;
+            var databases = dbserver.Databases;
             foreach (Database db in databases)
             {
                 if (db.Owner == username)
@@ -35,9 +79,9 @@ namespace DBAToolKit.Helpers
             }
         }
 
-        public static void ChangeJobOwner(Server destserver, string username)
+        public static void ChangeJobOwner(Server dbserver, string username)
         {
-            var jobs = destserver.JobServer;
+            var jobs = dbserver.JobServer;
             foreach (Job j in jobs.Jobs)
             {
                 if (j.OwnerLoginName == username)
@@ -50,6 +94,7 @@ namespace DBAToolKit.Helpers
 
         public static SecureString GetHashedPassword (Server server, Login login)
         {
+            string sql;
             if (server.VersionMajor == 9)
             {
                 sql = "SELECT convert(varbinary(256),password_hash) as hashedpass FROM sys.sql_logins where name='" + login.Name + "'";
@@ -59,7 +104,7 @@ namespace DBAToolKit.Helpers
                 sql = "SELECT CAST(CONVERT(varchar(256), CAST(LOGINPROPERTY(name,'PasswordHash') AS varbinary (256)), 1) AS nvarchar(max)) as hashedpass FROM sys.server_principals WHERE principal_id = " + login.ID + "";
             }
 
-            hashedpass = server.ConnectionContext.ExecuteScalar(sql);
+            object hashedpass = server.ConnectionContext.ExecuteScalar(sql);
 
             if (hashedpass.GetType().Name != "String")
             {
@@ -132,7 +177,7 @@ namespace DBAToolKit.Helpers
                 string destrolename = destrole.Name;
                 DatabaseRole sourcerole = sourcedb.Roles[destrolename];
 
-                if (sourcerole != null && !sourcerole.EnumMembers().Contains(dbusername) && destrole.EnumMembers().Contains(dbusername))
+                if (!DBRoleExists(sourcedb, destrolename) && !sourcerole.EnumMembers().Contains(dbusername) && destrole.EnumMembers().Contains(dbusername))
                 {
                         destrole.DropMember(dbusername);
                 }
@@ -145,7 +190,7 @@ namespace DBAToolKit.Helpers
         public static void AddDBUser(Database db, string dbusername)
         {
             // Map the user
-            if (db == null && db.Users[dbusername] == null)
+            if (!DatabaseUserExists(db,dbusername))
             {
                     User dbuser = new User(db, dbusername);
                     dbuser.Login = dbusername;
@@ -163,7 +208,7 @@ namespace DBAToolKit.Helpers
                     string rolename = role.Name;
                     DatabaseRole destdbrole = destdb.Roles[rolename];
 
-                    if (destdbrole != null && dbusername != "dbo" && !destdbrole.EnumMembers().Contains(dbusername))
+                    if (DBRoleExists(destdb, rolename) && dbusername != "dbo" && !destdbrole.EnumMembers().Contains(dbusername))
                     {
                         destdbrole.AddMember(dbusername);
                         destdbrole.Alter();

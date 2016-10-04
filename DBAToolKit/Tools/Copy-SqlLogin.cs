@@ -15,6 +15,15 @@ namespace DBAToolKit.Tools
         public Copy_SqlLogin()
         {
             InitializeComponent();
+
+            //Setup Action combo box
+            cmbAction.Items.Add("Normal Copy");
+            cmbAction.Items.Add("Normal Copy with Database Permission Sync");
+            cmbAction.Items.Add("Forced Copy");
+            cmbAction.Items.Add("Forced Copy with Database Permission Sync");
+            cmbAction.Items.Add("Sync Logon Permissions Only");
+            cmbAction.Items.Add("Sync Database Permission Only");
+            cmbAction.SelectedItem = "Normal Copy";
         }
 
         private void btnCopy_Click(object sender, EventArgs e)
@@ -46,17 +55,12 @@ namespace DBAToolKit.Tools
                     throw new Exception(string.Format("SQL Login migration FROM SQL Server version {0} to {1} not supported!", sourceserver.VersionMajor.ToString(), destserver.VersionMajor.ToString()));
                 }
 
-                if (chkForce.Checked && chksyncOnly.Checked)
-                {
-                    throw new Exception("Force Copy cannot be selected with Syncronise Permissions Only!");
-                }
-
                 List<String> usersToCopy = txtUsersToCopy.Text.Split(',').ToList();
 
                 DateTime started = DateTime.Now;
                 txtOutput.Clear();
                 displayOutput(string.Format("Migration started: {0}", DateTime.Now.ToShortTimeString()));
-                processLogins(sourceserver, destserver, chkForce.Checked, chksyncOnly.Checked, chksyncDatabasePerms.Checked, usersToCopy);
+                processLogins(sourceserver, destserver, cmbAction.SelectedItem.ToString(), usersToCopy);
                 displayOutput(string.Format("Migration ended: {0}", DateTime.Now.ToShortTimeString()));
             }
 
@@ -66,7 +70,7 @@ namespace DBAToolKit.Tools
             }
         }
 
-        private void processLogins(Server sourceserver, Server destserver, bool force, bool synconly, bool syncdatabaseperms, List<string> userstoprocess)
+        private void processLogins(Server sourceserver, Server destserver, string action, List<string> userstoprocess)
         {
             foreach (Login sourcelogin in sourceserver.Logins)
             {
@@ -86,7 +90,7 @@ namespace DBAToolKit.Tools
                     continue;
                 }
 
-                if (currentlogin == username && force)
+                if (currentlogin == username && action.StartsWith("Force"))
                 {
                     displayOutput("Cannot drop login performing the migration. Skipping");
                     continue;
@@ -105,38 +109,61 @@ namespace DBAToolKit.Tools
                     continue;
                 }
 
-                if (destlogin != null && force)
+                if (destlogin != null && action.StartsWith("Force") && username == destserver.ServiceAccount)
                 {
-                    if (username == destserver.ServiceAccount)
-                    {
-                        displayOutput(string.Format("{0} is the destiation service account. Skipping drop.", username));
-                        continue;
-                    }
-                    dropUser(destserver, destlogin, username);
+                    displayOutput(string.Format("{0} is the destiation service account. Skipping drop.", username));
+                    continue;
                 }
 
-                if (destlogin == null && synconly)
+                if (destlogin == null && action.StartsWith("Sync"))
                 {
                     displayOutput(string.Format("{0} does not exist on destination. Skipping sync.", username));
                     continue;
                 }
 
-                if (destlogin != null && !force && !synconly)
+                if (destlogin != null && action.StartsWith("Normal"))
                 {
                     displayOutput(string.Format("{0} already exists in destination. Select Force Copy to drop and recreate.", username));
                     continue;
                 }
 
-                if (!synconly)
+                switch (action)
                 {
-                    copyLogin(sourceserver, destserver, sourcelogin, destlogin);
-                }
+                    case "Normal Copy":
+                        copyLogin(sourceserver, destserver, sourcelogin, destlogin);
+                        syncPermissions(sourceserver, destserver, username);
+                        break;
 
-                syncPermissions(sourceserver, destserver, username);
+                    case "Normal Copy with Database Permission Sync":
+                        copyLogin(sourceserver, destserver, sourcelogin, destlogin);
+                        syncPermissions(sourceserver, destserver, username);
+                        syncDatabasePerms(sourcelogin, destlogin, sourceserver, destserver);
+                        break;
 
-                if (syncdatabaseperms)
-                {
-                    syncDatabasePerms(sourcelogin, destlogin, sourceserver, destserver);
+                    case "Forced Copy":
+                        dropUser(destserver, destlogin, username);
+                        copyLogin(sourceserver, destserver, sourcelogin, destlogin);
+                        syncPermissions(sourceserver, destserver, username);
+                        break;
+
+                    case "Forced Copy with Database Permission Sync":
+                        dropUser(destserver, destlogin, username);
+                        copyLogin(sourceserver, destserver, sourcelogin, destlogin);
+                        syncPermissions(sourceserver, destserver, username);
+                        syncDatabasePerms(sourcelogin, destlogin, sourceserver, destserver);
+                        break;
+
+                    case "Sync Logon Permissions Only":
+                        syncPermissions(sourceserver, destserver, username);
+                        break;
+
+                    case "Sync Database Permission Only":
+                        syncDatabasePerms(sourcelogin, destlogin, sourceserver, destserver);
+                        break;
+
+                    default:
+                        displayOutput("No Action selected", true);
+                        break;
                 }
             }
         }
@@ -192,7 +219,7 @@ namespace DBAToolKit.Tools
             catch (Exception ex)
             {
                 displayOutput("Error copying user!", true);
-                displayOutput(ex.Message);k
+                displayOutput(ex.Message);
             }
         }
 
@@ -205,7 +232,6 @@ namespace DBAToolKit.Tools
             serverlogin.Drop(); 
         }
 
-        private StringCollection destrolemembers;
         private void syncPermissions(Server sourceserver, Server destserver, string username)
         {
             foreach (ServerRole role in sourceserver.Roles)
@@ -213,6 +239,7 @@ namespace DBAToolKit.Tools
                 string rolename = role.Name;
                 ServerRole destrole = destserver.Roles[rolename];
                 var sourcerolemembers = role.EnumMemberNames();
+                StringCollection destrolemembers = new StringCollection();
 
                 if (destrole != null)
                 {
@@ -271,8 +298,9 @@ namespace DBAToolKit.Tools
 
         }
 
-        private void syncDatabasePerms(Login sourcelogin, Login destlogin, Server destserver, Server sourceserver)
+        private void syncDatabasePerms(Login sourcelogin, Login destlogin, Server sourceserver, Server destserver)
         {
+            // Remove user from destination if it does not exist on source
             foreach (DatabaseMapping dbmap in destlogin.EnumDatabaseMappings())
             {
                 string dbname = dbmap.DBName;
@@ -281,7 +309,8 @@ namespace DBAToolKit.Tools
                 string dbusername = dbmap.UserName;
                 string dbloginname = dbmap.LoginName;
 
-                if (sourcedb != null && sourcedb.Users[dbusername] == null && destdb.Users[dbusername] != null)
+                if (DBFunctions.DatabaseExists(sourceserver, destdb.Name) &&
+                    !DBFunctions.DatabaseUserExists(sourcedb, dbusername) && DBFunctions.DatabaseUserExists(destdb, dbusername))
                 {
 
                     try
@@ -290,7 +319,7 @@ namespace DBAToolKit.Tools
                     }
                     catch (Exception ex)
                     {
-                        displayOutput(string.Format("Failed to drop user {0} From {1} on destination.", dbusername, dbname));
+                        displayOutput(string.Format("Failed to drop user {0} From {1} on destination.", dbusername, dbname),true);
                         displayOutput(ex.Message);
                     }
 
@@ -300,14 +329,14 @@ namespace DBAToolKit.Tools
                     }
                     catch (Exception ex)
                     {
-                        displayOutput(string.Format("Failed to revoke permission for user {0} on {1}.", dbusername, dbname));
+                        displayOutput(string.Format("Failed to revoke permission for user {0} on {1}.", dbusername, dbname),true);
                         displayOutput(ex.Message, true);
                     }
                 }
             }
 
             // Add the database mappings and permissions
-            foreach(DatabaseMapping dbmap in sourcelogin.EnumDatabaseMappings())
+            foreach (DatabaseMapping dbmap in sourcelogin.EnumDatabaseMappings())
             {
                 string dbname = dbmap.DBName;
                 Database destdb = destserver.Databases[dbname];
@@ -315,47 +344,54 @@ namespace DBAToolKit.Tools
                 string dbusername = dbmap.UserName;
                 string dbloginname = dbmap.LoginName;
 
-                // Add DB User
-                try
+                // Only if database exists on destination
+                if (DBFunctions.DatabaseExists(destserver, sourcedb.Name) &&
+                    DBFunctions.LoginExists(destserver, dbloginname) && !DBFunctions.DatabaseUserExists(destdb, dbusername))
                 {
-                    DBFunctions.AddDBUser(destdb, dbusername);
-                }
-                catch (Exception ex)
-                {
-                    displayOutput(string.Format("Failed to add user {0} to database {1}", dbusername, dbname));
-                    displayOutput(ex.Message, true);
-                }
+                    // Add DB User
+                    try
+                    {
+                        DBFunctions.AddDBUser(destdb, dbusername);
+                    }
+                    catch (Exception ex)
+                    {
+                        displayOutput(string.Format("Failed to add user {0} to database {1}", dbusername, dbname),true);
+                        displayOutput(ex.Message, true);
+                    }
 
-                //Change the owner
-                if(sourcedb.Owner == dbusername)
-                {
-                    DBFunctions.ChangeDbOwner(destserver, dbusername);
-                }
+                    //Change the owner
+                    if (sourcedb.Owner == dbusername)
+                    {
+                        DBFunctions.ChangeDbOwner(destserver, dbusername);
+                    }
 
-                //Map the roles
-                try
-                {
-                    DBFunctions.AddUserToDBRoles(sourcedb, destdb, dbusername);
-                }
-                catch (Exception ex)
-                {
-                    displayOutput(string.Format("Error adding user {0} to role on database {3}", dbusername, dbname));
-                    displayOutput(ex.Message, true);
-                }
+                    //Map the roles
+                    try
+                    {
+                        DBFunctions.AddUserToDBRoles(sourcedb, destdb, dbusername);
+                    }
+                    catch (Exception ex)
+                    {
+                        displayOutput(string.Format("Error adding user {0} to role on database {1}", dbusername, dbname),true);
+                        displayOutput(ex.Message, true);
+                    }
 
-                //Map permissions
-                
+                    //Map permissions
+
                     try
                     {
                         DBFunctions.GrantDBPerms(sourcedb, destdb, dbusername);
                     }
                     catch (Exception ex)
                     {
-                        displayOutput(string.Format("Error granting permission for user {0} on database {1}", dbusername, dbname));
+                        displayOutput(string.Format("Error granting permission for user {0} on database {1}", dbusername, dbname),true);
                         displayOutput(ex.Message, true);
                     }
                 }
+                displayOutput(string.Format("Database permissions synced for user {0}", dbusername));
             }
+        }
+
         private void displayOutput(string message, bool errormessage = false)
         {
             if (errormessage)
