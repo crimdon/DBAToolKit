@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.SqlServer.Management.Smo;
 using Microsoft.SqlServer.Management.Smo.Agent;
 using System.Security;
+using System.Linq;
 
 namespace DBAToolKit.Helpers
 {
@@ -74,6 +75,101 @@ namespace DBAToolKit.Helpers
             {
                 return Utilities.MakeSecureString(hashedpass.ToString());
             }            
+        }
+
+        public static void GrantDBPerms(Database sourcedb, Database destdb, string dbusername)
+        {
+            var sourceperms = sourcedb.EnumDatabasePermissions(dbusername);
+            foreach (var perm in sourceperms)
+            {
+                DatabasePermissionSet permset = new DatabasePermissionSet(perm.PermissionType);
+                PermissionState permstate = perm.PermissionState;
+                bool grantwithgrant;
+                if (permstate == PermissionState.GrantWithGrant)
+                {
+                    grantwithgrant = true;
+                    permstate = PermissionState.Grant;
+                }
+                else
+                {
+                    grantwithgrant = false;
+                }
+                destdb.Grant(permset, dbusername, grantwithgrant);
+            }
+        }
+
+        public static void RevokeDBPerms(Database sourcedb, Database destdb, string dbusername)
+        {
+            var destperms = destdb.EnumDatabasePermissions(dbusername);
+            var sourceperms = sourcedb.EnumDatabasePermissions(dbusername);
+            foreach (var perm in destperms)
+            {
+                PermissionState permstate = perm.PermissionState;
+                var sourceperm = sourceperms.Where(p => p.PermissionState == perm.PermissionState && p.PermissionType == perm.PermissionType);
+
+                if (sourceperm == null)
+                {
+                    bool grantwithgrant;
+                    DatabasePermissionSet permset = new DatabasePermissionSet(perm.PermissionType);
+                    if (permstate == PermissionState.GrantWithGrant)
+                    {
+                        grantwithgrant = true;
+                        permstate = PermissionState.Grant;
+                    }
+                    else
+                    {
+                        grantwithgrant = false;
+                    }
+                    destdb.Revoke(permset, dbusername, false, grantwithgrant);
+                }
+            }
+        }
+
+        public static void DropDBUser(Database sourcedb, Database destdb, string dbusername)
+        {
+            foreach (DatabaseRole destrole in destdb.Roles)
+            {
+                string destrolename = destrole.Name;
+                DatabaseRole sourcerole = sourcedb.Roles[destrolename];
+
+                if (sourcerole != null && !sourcerole.EnumMembers().Contains(dbusername) && destrole.EnumMembers().Contains(dbusername))
+                {
+                        destrole.DropMember(dbusername);
+                }
+
+            }
+
+            destdb.Users[dbusername].Drop();
+        }
+
+        public static void AddDBUser(Database db, string dbusername)
+        {
+            // Map the user
+            if (db == null && db.Users[dbusername] == null)
+            {
+                    User dbuser = new User(db, dbusername);
+                    dbuser.Login = dbusername;
+                    dbuser.Create();
+                    dbuser.Refresh();
+            }
+        }
+
+        public static void AddUserToDBRoles(Database sourcedb, Database destdb, string dbusername)
+        {
+            foreach (DatabaseRole role in sourcedb.Roles)
+            {
+                if (role.EnumMembers().Contains(dbusername))
+                {
+                    string rolename = role.Name;
+                    DatabaseRole destdbrole = destdb.Roles[rolename];
+
+                    if (destdbrole != null && dbusername != "dbo" && !destdbrole.EnumMembers().Contains(dbusername))
+                    {
+                        destdbrole.AddMember(dbusername);
+                        destdbrole.Alter();
+                    }
+                }
+            }
         }
     }
 }
