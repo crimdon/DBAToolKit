@@ -79,7 +79,7 @@ namespace DBAToolKit.Tools
                 string servername = sourceserver.NetName.ToLower();
                 Login destlogin = destserver.Logins[username];
 
-                if (userstoprocess.Count > 0 && !userstoprocess.Contains(username))
+                if (!string.IsNullOrEmpty(userstoprocess[0]) && !userstoprocess.Contains(username))
                 {
                     continue;
                 }
@@ -309,8 +309,8 @@ namespace DBAToolKit.Tools
                 string dbusername = dbmap.UserName;
                 string dbloginname = dbmap.LoginName;
 
-                if (DBFunctions.DatabaseExists(sourceserver, destdb.Name) &&
-                    !DBFunctions.DatabaseUserExists(sourcedb, dbusername) && DBFunctions.DatabaseUserExists(destdb, dbusername))
+                if (DBChecks.DatabaseExists(sourceserver, destdb.Name) &&
+                    !DBChecks.DatabaseUserExists(sourcedb, dbusername) && DBChecks.DatabaseUserExists(destdb, dbusername))
                 {
 
                     try
@@ -345,8 +345,8 @@ namespace DBAToolKit.Tools
                 string dbloginname = dbmap.LoginName;
 
                 // Only if database exists on destination
-                if (DBFunctions.DatabaseExists(destserver, sourcedb.Name) &&
-                    DBFunctions.LoginExists(destserver, dbloginname) && !DBFunctions.DatabaseUserExists(destdb, dbusername))
+                if (DBChecks.DatabaseExists(destserver, sourcedb.Name) &&
+                    DBChecks.LoginExists(destserver, dbloginname) && !DBChecks.DatabaseUserExists(destdb, dbusername))
                 {
                     // Add DB User
                     try
@@ -362,7 +362,7 @@ namespace DBAToolKit.Tools
                     //Change the owner
                     if (sourcedb.Owner == dbusername)
                     {
-                        DBFunctions.ChangeDbOwner(destserver, dbusername);
+                        DBFunctions.ChangeDbOwner(destserver, null, dbusername, dbname);
                     }
 
                     //Map the roles

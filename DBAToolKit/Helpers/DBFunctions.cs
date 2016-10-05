@@ -10,53 +10,6 @@ namespace DBAToolKit.Helpers
 {
     public static class DBFunctions
     {
-        public static bool DatabaseExists (Server dbserver, string dbname)
-        {
-            foreach (Database db in dbserver.Databases)
-            {
-               if (db.Name == dbname)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public static bool DatabaseUserExists (Database db, string user)
-        {
-            foreach (User dbuser in db.Users)
-            {
-                if (user == dbuser.Name)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static bool LoginExists (Server server, string login)
-        {
-            foreach (Login serverlogin in server.Logins)
-                if(serverlogin.Name == login)
-                {
-                    return true;
-                }
-            return false;
-        }
-
-        public static bool DBRoleExists (Database db, string rolename)
-        {
-            foreach (DatabaseRole role in db.Roles)
-            {
-                if (role.Name == rolename)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public static void KillConnections(Server dbserver, string username)
         {
             DataTable processes = dbserver.EnumProcesses(username);
@@ -66,28 +19,34 @@ namespace DBAToolKit.Helpers
             }
         }
 
-        public static void ChangeDbOwner(Server dbserver, string username)
+        public static void ChangeDbOwner(Server dbserver, string username, string newname = "sa", string dbname = null)
         {
             var databases = dbserver.Databases;
             foreach (Database db in databases)
             {
-                if (db.Owner == username)
+                if (string.IsNullOrEmpty(dbname) || db.Name == dbname)
                 {
-                    db.SetOwner("sa");
-                    db.Alter();
+                    if (db.Owner == username || string.IsNullOrEmpty(username))
+                    {
+                        db.SetOwner(newname);
+                        db.Alter();
+                    }
                 }
             }
         }
 
-        public static void ChangeJobOwner(Server dbserver, string username)
+        public static void ChangeJobOwner(Server dbserver, string username, string newname = "sa", string jobname = null)
         {
             var jobs = dbserver.JobServer;
             foreach (Job j in jobs.Jobs)
             {
-                if (j.OwnerLoginName == username)
+                if (string.IsNullOrEmpty(jobname) || j.Name == jobname)
                 {
-                    j.OwnerLoginName = "sa";
-                    j.Alter();
+                    if (j.OwnerLoginName == username)
+                    {
+                        j.OwnerLoginName = newname;
+                        j.Alter();
+                    }
                 }
             }
         }
@@ -177,7 +136,7 @@ namespace DBAToolKit.Helpers
                 string destrolename = destrole.Name;
                 DatabaseRole sourcerole = sourcedb.Roles[destrolename];
 
-                if (!DBRoleExists(sourcedb, destrolename) && !sourcerole.EnumMembers().Contains(dbusername) && destrole.EnumMembers().Contains(dbusername))
+                if (!DBChecks.DBRoleExists(sourcedb, destrolename) && !sourcerole.EnumMembers().Contains(dbusername) && destrole.EnumMembers().Contains(dbusername))
                 {
                         destrole.DropMember(dbusername);
                 }
@@ -190,7 +149,7 @@ namespace DBAToolKit.Helpers
         public static void AddDBUser(Database db, string dbusername)
         {
             // Map the user
-            if (!DatabaseUserExists(db,dbusername))
+            if (!DBChecks.DatabaseUserExists(db,dbusername))
             {
                     User dbuser = new User(db, dbusername);
                     dbuser.Login = dbusername;
@@ -208,7 +167,7 @@ namespace DBAToolKit.Helpers
                     string rolename = role.Name;
                     DatabaseRole destdbrole = destdb.Roles[rolename];
 
-                    if (DBRoleExists(destdb, rolename) && dbusername != "dbo" && !destdbrole.EnumMembers().Contains(dbusername))
+                    if (DBChecks.DBRoleExists(destdb, rolename) && dbusername != "dbo" && !destdbrole.EnumMembers().Contains(dbusername))
                     {
                         destdbrole.AddMember(dbusername);
                         destdbrole.Alter();

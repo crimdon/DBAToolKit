@@ -34,5 +34,17 @@ namespace DBAToolKit
         {
             Application.Exit();
         }
+
+        private void copyJobsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var copyjobs = new Copy_SqlJobs();
+            LoadControl(copyjobs);
+        }
+
+        private void copyCategoriesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var copycategories = new Copy_SqlCategories();
+            LoadControl(copycategories);
+        }
     }
 }
