@@ -66,7 +66,33 @@ namespace DBAToolKit.Tools
                 string alertname = alert.Name;
                 if (string.IsNullOrEmpty(alertstocopy[0]) || alertstocopy.Contains(alertname))
                 {
+                    if (DBChecks.AlertExists(destserver, alertname))
+                    {
+                        displayOutput(string.Format("Alert {0} already exists in destination. Skipping.", alertname));
+                        continue;
+                    }
 
+                    if (DBChecks.CategoryExists(destserver, alert.CategoryName))
+                    {
+                        displayOutput(string.Format("Category {0} does not exist. Skipping copy of alert {1}.", alert.CategoryName, alertname));
+                        continue;
+                    }
+
+                    try
+                    {
+                        StringCollection sql = alert.Script();
+                        destserver.ConnectionContext.ExecuteNonQuery(sql);
+                        destserver.JobServer.Refresh();
+
+                        displayOutput(string.Format("Copied job {0} to {1}", alertname, destserver.Name));
+                    }
+                    catch (Exception ex)
+                    {
+                        displayOutput(ex.Message);
+                        continue;
+                    }
+
+                    displayOutput(string.Format("Copied category {0} to destination", alertname));
                 }
             }
         }

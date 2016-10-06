@@ -46,5 +46,11 @@ namespace DBAToolKit
             var copycategories = new Copy_SqlCategories();
             LoadControl(copycategories);
         }
+
+        private void copyAlertsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var copyalerts = new Copy_SqlAlerts();
+            LoadControl(copyalerts);
+        }
     }
 }
