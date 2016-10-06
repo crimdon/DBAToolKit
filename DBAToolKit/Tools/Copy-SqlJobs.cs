@@ -42,7 +42,7 @@ namespace DBAToolKit.Tools
 
                 if (sourceserver.VersionMajor > 10 && destserver.VersionMajor < 11)
                 {
-                    throw new Exception(string.Format("SQL Login migration FROM SQL Server version {0} to {1} not supported!", sourceserver.VersionMajor.ToString(), destserver.VersionMajor.ToString()));
+                    throw new Exception(string.Format("Migration FROM SQL Server version {0} to {1} not supported!", sourceserver.VersionMajor.ToString(), destserver.VersionMajor.ToString()));
                 }
 
                 List<String> jobsToCopy = txtJobsToCopy.Text.Split(',').ToList();
@@ -90,6 +90,24 @@ namespace DBAToolKit.Tools
                         }
                     }
 
+                    if (!string.IsNullOrEmpty(job.OperatorToEmail) && !DBChecks.OperatorExists(destserver, job.OperatorToEmail))
+                    {
+                        displayOutput(string.Format("[Job: {0}] Operator {1} doesn't exist on destination. Skipping. ", jobname, job.OperatorToEmail));
+                        continue;
+                    }
+
+                    if (!string.IsNullOrEmpty(job.OperatorToNetSend) && !DBChecks.OperatorExists(destserver, job.OperatorToNetSend))
+                    {
+                        displayOutput(string.Format("[Job: {0}] Operator {1} doesn't exist on destination. Skipping. ", jobname, job.OperatorToNetSend));
+                        continue;
+                    }
+
+                    if (!string.IsNullOrEmpty(job.OperatorToPage) && !DBChecks.OperatorExists(destserver, job.OperatorToPage))
+                    {
+                        displayOutput(string.Format("[Job: {0}] Operator {1} doesn't exist on destination. Skipping. ", jobname, job.OperatorToPage));
+                        continue;
+                    }
+
                     if (DBChecks.JobExists(destserver, jobname))
                     {
                         if (!dropdest)
@@ -120,22 +138,19 @@ namespace DBAToolKit.Tools
                             sql[i] = sql[i].Replace(sourceserver.Name, destserver.Name);
                         }
 
-                        destserver.ConnectionContext.ExecuteNonQuery(sql);
-                        destserver.JobServer.Refresh();
-
-                        displayOutput(string.Format("Copied job {0} to {1}", jobname, destserver.Name));
+                        destserver.ConnectionContext.ExecuteNonQuery(sql);                      
 
                         if (disableondest)
                         {
-                            destserver.JobServer.Jobs[jobname].IsEnabled = false;
-                            destserver.JobServer.Jobs[jobname].Alter();
+                            DBFunctions.ChangeJobStatus(destserver, jobname, false);
                         }
 
                         if (disableonsource)
                         {
-                            sourceserver.JobServer.Jobs[jobname].IsEnabled = false;
-                            sourceserver.JobServer.Jobs[jobname].Alter();
+                            DBFunctions.ChangeJobStatus(sourceserver, jobname, false);
                         }
+
+                        displayOutput(string.Format("Copied job {0} to {1}", jobname, destserver.Name));
 
                     }
                     catch (Exception ex)

@@ -9,9 +9,9 @@ using System.Collections.Specialized;
 
 namespace DBAToolKit.Tools
 {
-    public partial class Copy_SqlAlerts : UserControl
+    public partial class Copy_SqlOperators : UserControl
     {
-        public Copy_SqlAlerts()
+        public Copy_SqlOperators()
         {
             InitializeComponent();
         }
@@ -44,12 +44,12 @@ namespace DBAToolKit.Tools
                     throw new Exception(string.Format("Migration FROM SQL Server version {0} to {1} not supported!", sourceserver.VersionMajor.ToString(), destserver.VersionMajor.ToString()));
                 }
 
-                List<String> alertsToCopy = txtAlertsToCopy.Text.Split(',').ToList();
+                List<String> operatorsToCopy = txtOperatorsToCopy.Text.Split(',').ToList();
 
                 DateTime started = DateTime.Now;
                 txtOutput.Clear();
                 displayOutput(string.Format("Migration started: {0}", DateTime.Now.ToShortTimeString()));
-                copyAlerts(sourceserver, destserver, alertsToCopy);
+                copyOperators(sourceserver, destserver, operatorsToCopy);
                 displayOutput(string.Format("Migration ended: {0}", DateTime.Now.ToShortTimeString()));
             }
 
@@ -59,31 +59,26 @@ namespace DBAToolKit.Tools
             }
         }
 
-        private void copyAlerts (Server sourceserver, Server destserver, List<string> alertstocopy)
+        private void copyOperators (Server sourceserver, Server destserver, List<string> alertstocopy)
         {
-            foreach (Alert alert in sourceserver.JobServer.Alerts)
+            foreach (Operator op in sourceserver.JobServer.Operators)
             {
-                string alertname = alert.Name;
-                if (string.IsNullOrEmpty(alertstocopy[0]) || alertstocopy.Contains(alertname))
+                string opname = op.Name;
+                if (string.IsNullOrEmpty(alertstocopy[0]) || alertstocopy.Contains(opname))
                 {
-                    if (DBChecks.AlertExists(destserver, alertname))
+                    if (DBChecks.OperatorExists(destserver, opname))
                     {
-                        displayOutput(string.Format("Alert {0} already exists in destination. Skipping.", alertname));
-                        continue;
-                    }
-
-                    if (DBChecks.CategoryExists(destserver, alert.CategoryName))
-                    {
-                        displayOutput(string.Format("Category {0} does not exist. Skipping copy of alert {1}.", alert.CategoryName, alertname));
+                        displayOutput(string.Format("Operator {0} already exists in destination. Skipping.", opname));
                         continue;
                     }
 
                     try
                     {
-                        StringCollection sql = alert.Script();
+                        StringCollection sql = op.Script();
                         destserver.ConnectionContext.ExecuteNonQuery(sql);
                         destserver.JobServer.Refresh();
-                        displayOutput(string.Format("Copied alert {0} to {1}", alertname, destserver.Name));
+
+                        displayOutput(string.Format("Copied operator {0} to {1}", opname, destserver.Name));
                     }
                     catch (Exception ex)
                     {

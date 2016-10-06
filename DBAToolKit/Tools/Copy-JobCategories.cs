@@ -9,9 +9,9 @@ using System.Collections.Specialized;
 
 namespace DBAToolKit.Tools
 {
-    public partial class Copy_SqlCategories : UserControl
+    public partial class Copy_JobCategories : UserControl
     {
-        public Copy_SqlCategories()
+        public Copy_JobCategories()
         {
             InitializeComponent();
         }

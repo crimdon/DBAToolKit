@@ -1,6 +1,6 @@
 ﻿namespace DBAToolKit.Tools
 {
-    partial class Copy_SqlCategories
+    partial class Copy_SqlOperators
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.label3 = new System.Windows.Forms.Label();
-            this.txtCategoriesToCopy = new System.Windows.Forms.TextBox();
+            this.txtOperatorsToCopy = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.btnCopy = new System.Windows.Forms.Button();
             this.txtOutput = new System.Windows.Forms.TextBox();
@@ -45,25 +45,25 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(3, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(220, 25);
+            this.label3.Size = new System.Drawing.Size(211, 25);
             this.label3.TabIndex = 12;
-            this.label3.Text = "Copy SQL Categories";
+            this.label3.Text = "Copy SQL Operators";
             // 
-            // txtCategoriesToCopy
+            // txtOperatorsToCopy
             // 
-            this.txtCategoriesToCopy.Location = new System.Drawing.Point(755, 27);
-            this.txtCategoriesToCopy.Name = "txtCategoriesToCopy";
-            this.txtCategoriesToCopy.Size = new System.Drawing.Size(150, 20);
-            this.txtCategoriesToCopy.TabIndex = 25;
+            this.txtOperatorsToCopy.Location = new System.Drawing.Point(755, 27);
+            this.txtOperatorsToCopy.Name = "txtOperatorsToCopy";
+            this.txtOperatorsToCopy.Size = new System.Drawing.Size(150, 20);
+            this.txtOperatorsToCopy.TabIndex = 25;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(653, 33);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(96, 13);
+            this.label4.Size = new System.Drawing.Size(92, 13);
             this.label4.TabIndex = 30;
-            this.label4.Text = "Categories to Copy";
+            this.label4.Text = "Operators to Copy";
             // 
             // btnCopy
             // 
@@ -120,11 +120,11 @@
             this.txtSource.Size = new System.Drawing.Size(150, 20);
             this.txtSource.TabIndex = 23;
             // 
-            // Copy_SqlCategories
+            // Copy_SqlOperators
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.txtCategoriesToCopy);
+            this.Controls.Add(this.txtOperatorsToCopy);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btnCopy);
             this.Controls.Add(this.txtOutput);
@@ -133,7 +133,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtSource);
             this.Controls.Add(this.label3);
-            this.Name = "Copy_SqlCategories";
+            this.Name = "Copy_SqlOperators";
             this.Size = new System.Drawing.Size(1000, 400);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -143,7 +143,7 @@
         #endregion
 
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtCategoriesToCopy;
+        private System.Windows.Forms.TextBox txtOperatorsToCopy;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnCopy;
         private System.Windows.Forms.TextBox txtOutput;

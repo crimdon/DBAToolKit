@@ -62,11 +62,17 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tools\Copy-SqlCategories.cs">
+    <Compile Include="Tools\Copy-SqlOperators.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Tools\Copy-SqlCategories.Designer.cs">
-      <DependentUpon>Copy-SqlCategories.cs</DependentUpon>
+    <Compile Include="Tools\Copy-SqlOperators.Designer.cs">
+      <DependentUpon>Copy-SqlOperators.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\Copy-JobCategories.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tools\Copy-JobCategories.Designer.cs">
+      <DependentUpon>Copy-JobCategories.cs</DependentUpon>
     </Compile>
     <Compile Include="Tools\Copy-SqlAlerts.cs">
       <SubType>UserControl</SubType>
@@ -98,8 +104,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Tools\Copy-SqlCategories.resx">
-      <DependentUpon>Copy-SqlCategories.cs</DependentUpon>
+    <EmbeddedResource Include="Tools\Copy-SqlOperators.resx">
+      <DependentUpon>Copy-SqlOperators.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\Copy-JobCategories.resx">
+      <DependentUpon>Copy-JobCategories.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\Copy-SqlAlerts.resx">
       <DependentUpon>Copy-SqlAlerts.cs</DependentUpon>

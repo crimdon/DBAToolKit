@@ -175,5 +175,18 @@ namespace DBAToolKit.Helpers
                 }
             }
         }
+
+        public static void ChangeJobStatus(Server dbserver, string jobname, bool enabled)
+        {
+            dbserver.JobServer.Jobs.Refresh();
+            foreach (Job job in dbserver.JobServer.Jobs)
+            {
+                if (job.Name.ToLower() == jobname.ToLower())
+                {
+                    job.IsEnabled = enabled;
+                    job.Alter();
+                }
+            }
+        }
     }
 }

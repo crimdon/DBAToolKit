@@ -43,7 +43,7 @@ namespace DBAToolKit
 
         private void copyCategoriesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var copycategories = new Copy_SqlCategories();
+            var copycategories = new Copy_JobCategories();
             LoadControl(copycategories);
         }
 
@@ -51,6 +51,12 @@ namespace DBAToolKit
         {
             var copyalerts = new Copy_SqlAlerts();
             LoadControl(copyalerts);
+        }
+
+        private void copyOperatorsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var copyoperators = new Copy_SqlOperators();
+            LoadControl(copyoperators);
         }
     }
 }

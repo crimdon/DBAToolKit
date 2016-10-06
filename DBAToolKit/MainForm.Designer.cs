@@ -42,11 +42,12 @@
             this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
             this.copyJobsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyCategoriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyAlertsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.copyAlertsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyOperatorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -141,7 +142,8 @@
             this.toolStripMenuItem6.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.copyJobsToolStripMenuItem,
             this.copyCategoriesToolStripMenuItem,
-            this.copyAlertsToolStripMenuItem});
+            this.copyAlertsToolStripMenuItem,
+            this.copyOperatorsToolStripMenuItem});
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
             this.toolStripMenuItem6.Size = new System.Drawing.Size(165, 22);
             this.toolStripMenuItem6.Text = "SQL Server Agent";
@@ -159,6 +161,13 @@
             this.copyCategoriesToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.copyCategoriesToolStripMenuItem.Text = "Copy Categories";
             this.copyCategoriesToolStripMenuItem.Click += new System.EventHandler(this.copyCategoriesToolStripMenuItem_Click);
+            // 
+            // copyAlertsToolStripMenuItem
+            // 
+            this.copyAlertsToolStripMenuItem.Name = "copyAlertsToolStripMenuItem";
+            this.copyAlertsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.copyAlertsToolStripMenuItem.Text = "Copy Alerts";
+            this.copyAlertsToolStripMenuItem.Click += new System.EventHandler(this.copyAlertsToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -191,12 +200,12 @@
             this.panel1.Size = new System.Drawing.Size(1000, 400);
             this.panel1.TabIndex = 11;
             // 
-            // copyAlertsToolStripMenuItem
+            // copyOperatorsToolStripMenuItem
             // 
-            this.copyAlertsToolStripMenuItem.Name = "copyAlertsToolStripMenuItem";
-            this.copyAlertsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.copyAlertsToolStripMenuItem.Text = "Copy Alerts";
-            this.copyAlertsToolStripMenuItem.Click += new System.EventHandler(this.copyAlertsToolStripMenuItem_Click);
+            this.copyOperatorsToolStripMenuItem.Name = "copyOperatorsToolStripMenuItem";
+            this.copyOperatorsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.copyOperatorsToolStripMenuItem.Text = "Copy Operators";
+            this.copyOperatorsToolStripMenuItem.Click += new System.EventHandler(this.copyOperatorsToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -237,6 +246,7 @@
         private System.Windows.Forms.ToolStripMenuItem copyJobsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyCategoriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyAlertsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyOperatorsToolStripMenuItem;
     }
 }
 

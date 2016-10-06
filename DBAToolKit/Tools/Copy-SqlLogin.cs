@@ -52,7 +52,7 @@ namespace DBAToolKit.Tools
 
                 if (sourceserver.VersionMajor > 10 && destserver.VersionMajor < 11)
                 {
-                    throw new Exception(string.Format("SQL Login migration FROM SQL Server version {0} to {1} not supported!", sourceserver.VersionMajor.ToString(), destserver.VersionMajor.ToString()));
+                    throw new Exception(string.Format("Migration FROM SQL Server version {0} to {1} not supported!", sourceserver.VersionMajor.ToString(), destserver.VersionMajor.ToString()));
                 }
 
                 List<String> usersToCopy = txtUsersToCopy.Text.Split(',').ToList();
