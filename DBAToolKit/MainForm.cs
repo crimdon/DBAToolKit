@@ -58,5 +58,11 @@ namespace DBAToolKit
             var copyoperators = new Copy_SqlOperators();
             LoadControl(copyoperators);
         }
+
+        private void copyDatabaseMailToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var copydatabasemail = new Copy_DatabaseMail();
+            LoadControl(copydatabasemail);
+        }
     }
 }
