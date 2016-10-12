@@ -64,5 +64,11 @@ namespace DBAToolKit
             var copydatabasemail = new Copy_DatabaseMail();
             LoadControl(copydatabasemail);
         }
+
+        private void getConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var getserverconfiguration = new Get_ServerConfiguration();
+            LoadControl(getserverconfiguration);
+        }
     }
 }
