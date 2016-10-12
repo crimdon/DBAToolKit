@@ -6,6 +6,9 @@ namespace DBAToolKit
 {
     public partial class MainForm : Form
     {
+        public static String dbServer;
+
+        public static string dbName;
         public MainForm()
         {
             InitializeComponent();
@@ -69,6 +72,12 @@ namespace DBAToolKit
         {
             var getserverconfiguration = new Get_ServerConfiguration();
             LoadControl(getserverconfiguration);
+        }
+
+        private void listDatabasesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var listdatabases = new Get_DatabaseDetails();
+            LoadControl(listdatabases);
         }
     }
 }

@@ -37,6 +37,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Program Files\Microsoft SQL Server\120\SDK\Assemblies\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files\Microsoft SQL Server\120\SDK\Assemblies\Microsoft.SqlServer.Management.Sdk.Sfc.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.SqlServer.Smo, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Program Files\Microsoft SQL Server\120\SDK\Assemblies\Microsoft.SqlServer.Smo.dll</HintPath>
@@ -110,11 +114,23 @@
     <Compile Include="Tools\Copy-SqlLogin.Designer.cs">
       <DependentUpon>Copy-SqlLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\Get-DatabaseDetails.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tools\Get-DatabaseDetails.Designer.cs">
+      <DependentUpon>Get-DatabaseDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tools\Get-ServerConfiguration.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Tools\Get-ServerConfiguration.Designer.cs">
       <DependentUpon>Get-ServerConfiguration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\Show-DatabaseDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tools\Show-DatabaseDetails.Designer.cs">
+      <DependentUpon>Show-DatabaseDetails.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -146,8 +162,14 @@
     <EmbeddedResource Include="Tools\Copy-SqlLogin.resx">
       <DependentUpon>Copy-SqlLogin.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Tools\Get-DatabaseDetails.resx">
+      <DependentUpon>Get-DatabaseDetails.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Tools\Get-ServerConfiguration.resx">
       <DependentUpon>Get-ServerConfiguration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\Show-DatabaseDetails.resx">
+      <DependentUpon>Show-DatabaseDetails.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
