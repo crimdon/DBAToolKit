@@ -79,5 +79,11 @@ namespace DBAToolKit
             var listdatabases = new Get_DatabaseDetails();
             LoadControl(listdatabases);
         }
+
+        private void copyServerTriggersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var copyservertriggers = new Copy_ServerTriggers();
+            LoadControl(copyservertriggers);
+        }
     }
 }

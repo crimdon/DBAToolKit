@@ -36,6 +36,7 @@
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.getConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.listDatabasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.loginsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,7 +51,7 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.listDatabasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyServerTriggersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -124,6 +125,13 @@
             this.toolStripMenuItem3.Size = new System.Drawing.Size(165, 22);
             this.toolStripMenuItem3.Text = "Databases";
             // 
+            // listDatabasesToolStripMenuItem
+            // 
+            this.listDatabasesToolStripMenuItem.Name = "listDatabasesToolStripMenuItem";
+            this.listDatabasesToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.listDatabasesToolStripMenuItem.Text = "List Databases";
+            this.listDatabasesToolStripMenuItem.Click += new System.EventHandler(this.listDatabasesToolStripMenuItem_Click);
+            // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -141,6 +149,8 @@
             // 
             // toolStripMenuItem4
             // 
+            this.toolStripMenuItem4.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyServerTriggersToolStripMenuItem});
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
             this.toolStripMenuItem4.Size = new System.Drawing.Size(165, 22);
             this.toolStripMenuItem4.Text = "Server Objects";
@@ -230,12 +240,12 @@
             this.panel1.Size = new System.Drawing.Size(1000, 400);
             this.panel1.TabIndex = 11;
             // 
-            // listDatabasesToolStripMenuItem
+            // copyServerTriggersToolStripMenuItem
             // 
-            this.listDatabasesToolStripMenuItem.Name = "listDatabasesToolStripMenuItem";
-            this.listDatabasesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.listDatabasesToolStripMenuItem.Text = "List Databases";
-            this.listDatabasesToolStripMenuItem.Click += new System.EventHandler(this.listDatabasesToolStripMenuItem_Click);
+            this.copyServerTriggersToolStripMenuItem.Name = "copyServerTriggersToolStripMenuItem";
+            this.copyServerTriggersToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.copyServerTriggersToolStripMenuItem.Text = "Copy Server Triggers";
+            this.copyServerTriggersToolStripMenuItem.Click += new System.EventHandler(this.copyServerTriggersToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -280,6 +290,7 @@
         private System.Windows.Forms.ToolStripMenuItem copyDatabaseMailToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem getConfigurationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listDatabasesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyServerTriggersToolStripMenuItem;
     }
 }
 

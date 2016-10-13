@@ -84,6 +84,12 @@
     <Compile Include="Tools\Copy-DatabaseMail.Designer.cs">
       <DependentUpon>Copy-DatabaseMail.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\Copy-ServerTriggers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tools\Copy-ServerTriggers.Designer.cs">
+      <DependentUpon>Copy-ServerTriggers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tools\Copy-SqlOperators.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -146,6 +152,9 @@
     </Compile>
     <EmbeddedResource Include="Tools\Copy-DatabaseMail.resx">
       <DependentUpon>Copy-DatabaseMail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\Copy-ServerTriggers.resx">
+      <DependentUpon>Copy-ServerTriggers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\Copy-SqlOperators.resx">
       <DependentUpon>Copy-SqlOperators.cs</DependentUpon>
