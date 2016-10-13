@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBAToolKit", "DBAToolKit\DBAToolKit.csproj", "{81E165E0-A709-4236-9EB0-9D9EF90AD00B}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{F53805A6-4A60-46A2-AEDE-82D1B500533A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{81E165E0-A709-4236-9EB0-9D9EF90AD00B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81E165E0-A709-4236-9EB0-9D9EF90AD00B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81E165E0-A709-4236-9EB0-9D9EF90AD00B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F53805A6-4A60-46A2-AEDE-82D1B500533A}.Debug|Any CPU.ActiveCfg = Debug
+		{F53805A6-4A60-46A2-AEDE-82D1B500533A}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
