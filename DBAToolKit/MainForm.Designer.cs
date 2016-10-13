@@ -40,6 +40,7 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.loginsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyServerTriggersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
             this.copyDatabaseMailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,7 +52,6 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.copyServerTriggersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -155,6 +155,13 @@
             this.toolStripMenuItem4.Size = new System.Drawing.Size(165, 22);
             this.toolStripMenuItem4.Text = "Server Objects";
             // 
+            // copyServerTriggersToolStripMenuItem
+            // 
+            this.copyServerTriggersToolStripMenuItem.Name = "copyServerTriggersToolStripMenuItem";
+            this.copyServerTriggersToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.copyServerTriggersToolStripMenuItem.Text = "Copy Server Triggers";
+            this.copyServerTriggersToolStripMenuItem.Click += new System.EventHandler(this.copyServerTriggersToolStripMenuItem_Click);
+            // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -240,13 +247,6 @@
             this.panel1.Size = new System.Drawing.Size(1000, 400);
             this.panel1.TabIndex = 11;
             // 
-            // copyServerTriggersToolStripMenuItem
-            // 
-            this.copyServerTriggersToolStripMenuItem.Name = "copyServerTriggersToolStripMenuItem";
-            this.copyServerTriggersToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.copyServerTriggersToolStripMenuItem.Text = "Copy Server Triggers";
-            this.copyServerTriggersToolStripMenuItem.Click += new System.EventHandler(this.copyServerTriggersToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -258,6 +258,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "DBA Tool Kit";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);

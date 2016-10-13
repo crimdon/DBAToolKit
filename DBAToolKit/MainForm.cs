@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 using DBAToolKit.Tools;
+using DBAToolKit.Helpers;
+using Microsoft.SqlServer.Management.Smo;
+using System.Data;
 
 namespace DBAToolKit
 {
@@ -14,7 +17,16 @@ namespace DBAToolKit
             InitializeComponent();
         }
 
-        private void LoadControl(Control control)
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            if (!Utilities.CheckForSmo())
+            {
+                MessageBox.Show("SMO is not installed!");
+                toolsToolStripMenuItem.Enabled = false;
+            }
+        }
+
+        private void loadControl(Control control)
         {
             this.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -30,7 +42,7 @@ namespace DBAToolKit
         private void loginsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var copyLogins = new Copy_SqlLogin();
-            LoadControl(copyLogins);   
+            loadControl(copyLogins);   
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -41,49 +53,50 @@ namespace DBAToolKit
         private void copyJobsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var copyjobs = new Copy_SqlJobs();
-            LoadControl(copyjobs);
+            loadControl(copyjobs);
         }
 
         private void copyCategoriesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var copycategories = new Copy_JobCategories();
-            LoadControl(copycategories);
+            loadControl(copycategories);
         }
 
         private void copyAlertsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var copyalerts = new Copy_SqlAlerts();
-            LoadControl(copyalerts);
+            loadControl(copyalerts);
         }
 
         private void copyOperatorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var copyoperators = new Copy_SqlOperators();
-            LoadControl(copyoperators);
+            loadControl(copyoperators);
         }
 
         private void copyDatabaseMailToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var copydatabasemail = new Copy_DatabaseMail();
-            LoadControl(copydatabasemail);
+            loadControl(copydatabasemail);
         }
 
         private void getConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var getserverconfiguration = new Get_ServerConfiguration();
-            LoadControl(getserverconfiguration);
+            loadControl(getserverconfiguration);
         }
 
         private void listDatabasesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var listdatabases = new Get_DatabaseDetails();
-            LoadControl(listdatabases);
+            loadControl(listdatabases);
         }
 
         private void copyServerTriggersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var copyservertriggers = new Copy_ServerTriggers();
-            LoadControl(copyservertriggers);
+            loadControl(copyservertriggers);
         }
+
     }
 }
