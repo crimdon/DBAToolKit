@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Show_DatabaseDetails));
             this.listPages = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.listDetails = new System.Windows.Forms.ListView();
@@ -78,6 +79,7 @@
             this.Controls.Add(this.listDetails);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.listPages);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Show_DatabaseDetails";
             this.Text = "Database Details";
             this.ResumeLayout(false);

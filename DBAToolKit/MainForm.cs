@@ -98,5 +98,10 @@ namespace DBAToolKit
             loadControl(copyservertriggers);
         }
 
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Help.About about = new Help.About();
+            about.Show();
+        }
     }
 }
