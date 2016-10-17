@@ -144,6 +144,12 @@
     <Compile Include="Tools\Copy-SqlLogin.Designer.cs">
       <DependentUpon>Copy-SqlLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\Fix-OrphanUsers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tools\Fix-OrphanUsers.Designer.cs">
+      <DependentUpon>Fix-OrphanUsers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tools\Get-DatabaseDetails.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -198,6 +204,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\Copy-SqlLogin.resx">
       <DependentUpon>Copy-SqlLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\Fix-OrphanUsers.resx">
+      <DependentUpon>Fix-OrphanUsers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\Get-DatabaseDetails.resx">
       <DependentUpon>Get-DatabaseDetails.cs</DependentUpon>

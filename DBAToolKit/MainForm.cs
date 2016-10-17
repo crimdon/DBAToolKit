@@ -103,5 +103,11 @@ namespace DBAToolKit
             Help.About about = new Help.About();
             about.Show();
         }
+
+        private void fixOrphanUsersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var fixorphanusers = new Fix_OrphanUsers();
+            loadControl(fixorphanusers);
+        }
     }
 }

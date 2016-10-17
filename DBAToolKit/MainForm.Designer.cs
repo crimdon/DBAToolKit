@@ -52,6 +52,7 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.fixOrphanUsersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -120,7 +121,8 @@
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.listDatabasesToolStripMenuItem});
+            this.listDatabasesToolStripMenuItem,
+            this.fixOrphanUsersToolStripMenuItem});
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
             this.toolStripMenuItem3.Size = new System.Drawing.Size(165, 22);
             this.toolStripMenuItem3.Text = "Databases";
@@ -128,7 +130,7 @@
             // listDatabasesToolStripMenuItem
             // 
             this.listDatabasesToolStripMenuItem.Name = "listDatabasesToolStripMenuItem";
-            this.listDatabasesToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.listDatabasesToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.listDatabasesToolStripMenuItem.Text = "List Databases";
             this.listDatabasesToolStripMenuItem.Click += new System.EventHandler(this.listDatabasesToolStripMenuItem_Click);
             // 
@@ -240,6 +242,13 @@
             this.panel1.Size = new System.Drawing.Size(1000, 425);
             this.panel1.TabIndex = 11;
             // 
+            // fixOrphanUsersToolStripMenuItem
+            // 
+            this.fixOrphanUsersToolStripMenuItem.Name = "fixOrphanUsersToolStripMenuItem";
+            this.fixOrphanUsersToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.fixOrphanUsersToolStripMenuItem.Text = "Fix Orphan Users";
+            this.fixOrphanUsersToolStripMenuItem.Click += new System.EventHandler(this.fixOrphanUsersToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -284,6 +293,7 @@
         private System.Windows.Forms.ToolStripMenuItem getConfigurationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listDatabasesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyServerTriggersToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fixOrphanUsersToolStripMenuItem;
     }
 }
 
