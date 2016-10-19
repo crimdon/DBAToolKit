@@ -32,12 +32,13 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.getConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.currentProcessesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.listDatabasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fixOrphanUsersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.loginsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,7 +53,6 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.fixOrphanUsersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,7 +60,6 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.viewToolStripMenuItem,
             this.toolsToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -80,15 +79,9 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // viewToolStripMenuItem
-            // 
-            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.viewToolStripMenuItem.Text = "View";
             // 
             // toolsToolStripMenuItem
             // 
@@ -106,7 +99,8 @@
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.getConfigurationToolStripMenuItem});
+            this.getConfigurationToolStripMenuItem,
+            this.currentProcessesToolStripMenuItem});
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.Size = new System.Drawing.Size(165, 22);
             this.toolStripMenuItem2.Text = "Server";
@@ -117,6 +111,13 @@
             this.getConfigurationToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.getConfigurationToolStripMenuItem.Text = "Get Configuration";
             this.getConfigurationToolStripMenuItem.Click += new System.EventHandler(this.getConfigurationToolStripMenuItem_Click);
+            // 
+            // currentProcessesToolStripMenuItem
+            // 
+            this.currentProcessesToolStripMenuItem.Name = "currentProcessesToolStripMenuItem";
+            this.currentProcessesToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.currentProcessesToolStripMenuItem.Text = "Active Processes";
+            this.currentProcessesToolStripMenuItem.Click += new System.EventHandler(this.currentProcessesToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
@@ -133,6 +134,13 @@
             this.listDatabasesToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.listDatabasesToolStripMenuItem.Text = "List Databases";
             this.listDatabasesToolStripMenuItem.Click += new System.EventHandler(this.listDatabasesToolStripMenuItem_Click);
+            // 
+            // fixOrphanUsersToolStripMenuItem
+            // 
+            this.fixOrphanUsersToolStripMenuItem.Name = "fixOrphanUsersToolStripMenuItem";
+            this.fixOrphanUsersToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.fixOrphanUsersToolStripMenuItem.Text = "Fix Orphan Users";
+            this.fixOrphanUsersToolStripMenuItem.Click += new System.EventHandler(this.fixOrphanUsersToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -229,7 +237,7 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -241,13 +249,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1000, 425);
             this.panel1.TabIndex = 11;
-            // 
-            // fixOrphanUsersToolStripMenuItem
-            // 
-            this.fixOrphanUsersToolStripMenuItem.Name = "fixOrphanUsersToolStripMenuItem";
-            this.fixOrphanUsersToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.fixOrphanUsersToolStripMenuItem.Text = "Fix Orphan Users";
-            this.fixOrphanUsersToolStripMenuItem.Click += new System.EventHandler(this.fixOrphanUsersToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -273,7 +274,6 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem loginsToolStripMenuItem;
@@ -294,6 +294,7 @@
         private System.Windows.Forms.ToolStripMenuItem listDatabasesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyServerTriggersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fixOrphanUsersToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem currentProcessesToolStripMenuItem;
     }
 }
 

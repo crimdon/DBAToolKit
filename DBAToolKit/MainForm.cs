@@ -109,5 +109,11 @@ namespace DBAToolKit
             var fixorphanusers = new Fix_OrphanUsers();
             loadControl(fixorphanusers);
         }
+
+        private void currentProcessesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var sqlprocesses = new Get_SqlProcesses();
+            loadControl(sqlprocesses);
+        }
     }
 }
