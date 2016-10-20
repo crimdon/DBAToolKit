@@ -8,6 +8,7 @@ namespace DBAToolKit.Tools
 {
     public partial class Get_SqlProcesses : UserControl
     {
+        Server sourceserver;
         public Get_SqlProcesses()
         {
             InitializeComponent();
@@ -23,7 +24,7 @@ namespace DBAToolKit.Tools
                 }
 
                 ConnectSqlServer connection = new ConnectSqlServer();
-                Server sourceserver = connection.Connect(txtSource.Text);
+                sourceserver = connection.Connect(txtSource.Text);
                 
                 if (sourceserver.VersionMajor < 9)
                 {
@@ -105,6 +106,16 @@ namespace DBAToolKit.Tools
             listProcesses.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             listProcesses.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             listProcesses.EndUpdate();
+        }
+
+        private void killProcessToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem selectedspids in listProcesses.SelectedItems)
+            {
+                sourceserver.ConnectionContext.ExecuteNonQuery("KILL " + selectedspids.Text);
+                listProcesses.Items.Remove(selectedspids);
+            }
+            listProcesses.Refresh();
         }
     }
 }
