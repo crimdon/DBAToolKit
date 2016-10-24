@@ -153,6 +153,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_686744760C5759E87D19939E094213E2"
+        "OwnerKey" = "8:_97B25A38D58842CA98FA70B3B981AF9C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6FF0311FF056479D9EA3A91C2E2AAF80"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -379,6 +385,12 @@
         "OwnerKey" = "8:_019D22111918D3E34EB02482FF131041"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_686744760C5759E87D19939E094213E2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -404,6 +416,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.5 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.5"
+                    }
+                }
             }
         }
         "Release"
@@ -714,6 +734,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_686744760C5759E87D19939E094213E2"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_686744760C5759E87D19939E094213E2"
+                    {
+                    "Name" = "8:ObjectListView.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:ObjectListView.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_2F2480E0DA3241D2A7633103C3442BE1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6FF0311FF056479D9EA3A91C2E2AAF80"
             {
             "SourcePath" = "8:C:\\Users\\Andrew.Lackenby\\Downloads\\Custom-Icon-Design-Pretty-Office-7-Sql-runner.ico"
@@ -956,15 +1007,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:DBA Toolkit"
-        "ProductCode" = "8:{DC64F55C-DC4E-42C7-B148-54AD721EF912}"
-        "PackageCode" = "8:{C64B9299-726B-4E63-8941-9449A29FACD7}"
+        "ProductCode" = "8:{4E6FD862-A7C5-4474-84E4-B6C76AE11AF8}"
+        "PackageCode" = "8:{A1B28EC0-48CC-476E-9A93-DD099D5459B4}"
         "UpgradeCode" = "8:{C3FCD3F0-D513-452F-942C-AEC05162C928}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
-        "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "InstallAllUsers" = "11:TRUE"
+        "ProductVersion" = "8:1.0.1"
         "Manufacturer" = "8:Collingwood"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1506,7 +1557,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_97B25A38D58842CA98FA70B3B981AF9C"
             {
-            "SourcePath" = "8:..\\DBAToolKit\\obj\\Release\\DBAToolKit.exe"
+            "SourcePath" = "8:..\\DBAToolKit\\obj\\Debug\\DBAToolKit.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_2F2480E0DA3241D2A7633103C3442BE1"
