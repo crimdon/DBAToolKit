@@ -56,5 +56,31 @@ namespace DBAToolKit.Helpers
 
             return false;
         }
+
+        public static String GetPercentage(Int32 value, Int32 total, Int32 places)
+        {
+            Decimal percent = 0;
+            String retval = string.Empty;
+            String strplaces = new String('0', places);
+
+            if (value == 0 || total == 0)
+            {
+                percent = 0;
+            }
+
+            else
+            {
+                percent = Decimal.Divide(value, total) * 100;
+
+                if (places > 0)
+                {
+                    strplaces = "." + strplaces;
+                }
+            }
+
+            retval = percent.ToString("#" + strplaces);
+
+            return retval;
+        }
     }
 }

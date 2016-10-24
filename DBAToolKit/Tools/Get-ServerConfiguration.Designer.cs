@@ -93,26 +93,32 @@
             this.listConfig.Size = new System.Drawing.Size(967, 320);
             this.listConfig.TabIndex = 30;
             this.listConfig.UseCompatibleStateImageBehavior = false;
+            this.listConfig.View = System.Windows.Forms.View.Details;
             // 
             // columnHeader1
             // 
             this.columnHeader1.Text = "Name";
+            this.columnHeader1.Width = 70;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Minimum";
+            this.columnHeader2.Width = 115;
             // 
             // columnHeader3
             // 
             this.columnHeader3.Text = "Maximum";
+            this.columnHeader3.Width = 97;
             // 
             // columnHeader4
             // 
             this.columnHeader4.Text = "Config Value";
+            this.columnHeader4.Width = 105;
             // 
             // columnHeader5
             // 
             this.columnHeader5.Text = "Run Value";
+            this.columnHeader5.Width = 119;
             // 
             // Get_ServerConfiguration
             // 

@@ -115,5 +115,11 @@ namespace DBAToolKit
             var sqlprocesses = new Get_SqlProcesses();
             loadControl(sqlprocesses);
         }
+
+        private void databaseSizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var databasesize = new Get_DatabaseSize();
+            loadControl(databasesize);
+        }
     }
 }

@@ -53,6 +53,7 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.databaseSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -79,7 +80,7 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -123,7 +124,8 @@
             // 
             this.toolStripMenuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.listDatabasesToolStripMenuItem,
-            this.fixOrphanUsersToolStripMenuItem});
+            this.fixOrphanUsersToolStripMenuItem,
+            this.databaseSizeToolStripMenuItem});
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
             this.toolStripMenuItem3.Size = new System.Drawing.Size(165, 22);
             this.toolStripMenuItem3.Text = "Databases";
@@ -237,7 +239,7 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -249,6 +251,13 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1000, 425);
             this.panel1.TabIndex = 11;
+            // 
+            // databaseSizeToolStripMenuItem
+            // 
+            this.databaseSizeToolStripMenuItem.Name = "databaseSizeToolStripMenuItem";
+            this.databaseSizeToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.databaseSizeToolStripMenuItem.Text = "Database Size";
+            this.databaseSizeToolStripMenuItem.Click += new System.EventHandler(this.databaseSizeToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -295,6 +304,7 @@
         private System.Windows.Forms.ToolStripMenuItem copyServerTriggersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fixOrphanUsersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem currentProcessesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem databaseSizeToolStripMenuItem;
     }
 }
 

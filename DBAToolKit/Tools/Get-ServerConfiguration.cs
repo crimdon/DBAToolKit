@@ -48,6 +48,7 @@ namespace DBAToolKit.Tools
         private void showConfiguration(Server sourceserver)
         {
             listConfig.View = System.Windows.Forms.View.Details;
+            listConfig.Items.Clear();
 
             foreach (ConfigProperty item in sourceserver.Configuration.Properties)
             {
