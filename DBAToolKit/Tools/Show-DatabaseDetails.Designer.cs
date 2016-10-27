@@ -1,4 +1,7 @@
-﻿namespace DBAToolKit.Tools
+﻿using System;
+using System.Windows.Forms;
+
+namespace DBAToolKit.Tools
 {
     partial class Show_DatabaseDetails
     {

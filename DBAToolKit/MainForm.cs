@@ -121,5 +121,11 @@ namespace DBAToolKit
             var databasesize = new Get_DatabaseSize();
             loadControl(databasesize);
         }
+
+        private void viewJobTimelineToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var jobstimeline = new Get_SqlJobstimeline();
+            loadControl(jobstimeline);
+        }
     }
 }

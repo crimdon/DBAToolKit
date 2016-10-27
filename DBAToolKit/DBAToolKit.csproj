@@ -92,6 +92,9 @@
     <Compile Include="Helpers\ConnectSqlServer.cs" />
     <Compile Include="Helpers\DBChecks.cs" />
     <Compile Include="Helpers\DBFunctions.cs" />
+    <Compile Include="Helpers\GanttChart.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Helpers\Utilities.cs" />
     <Compile Include="Help\About.cs">
       <SubType>Form</SubType>
@@ -105,6 +108,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\DataClasses.cs" />
     <Compile Include="Models\Processes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -155,6 +159,12 @@
     </Compile>
     <Compile Include="Tools\Fix-OrphanUsers.Designer.cs">
       <DependentUpon>Fix-OrphanUsers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\Get-SqlJobsTimeline.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tools\Get-SqlJobsTimeline.Designer.cs">
+      <DependentUpon>Get-SqlJobsTimeline.cs</DependentUpon>
     </Compile>
     <Compile Include="Tools\Get-DatabaseSize.cs">
       <SubType>UserControl</SubType>
@@ -225,6 +235,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\Fix-OrphanUsers.resx">
       <DependentUpon>Fix-OrphanUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\Get-SqlJobsTimeline.resx">
+      <DependentUpon>Get-SqlJobsTimeline.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\Get-DatabaseSize.resx">
       <DependentUpon>Get-DatabaseSize.cs</DependentUpon>

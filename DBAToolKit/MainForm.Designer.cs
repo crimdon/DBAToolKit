@@ -39,6 +39,7 @@
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.listDatabasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fixOrphanUsersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.databaseSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.loginsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,7 +54,7 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.databaseSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewJobTimelineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -144,6 +145,13 @@
             this.fixOrphanUsersToolStripMenuItem.Text = "Fix Orphan Users";
             this.fixOrphanUsersToolStripMenuItem.Click += new System.EventHandler(this.fixOrphanUsersToolStripMenuItem_Click);
             // 
+            // databaseSizeToolStripMenuItem
+            // 
+            this.databaseSizeToolStripMenuItem.Name = "databaseSizeToolStripMenuItem";
+            this.databaseSizeToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.databaseSizeToolStripMenuItem.Text = "Database Size";
+            this.databaseSizeToolStripMenuItem.Click += new System.EventHandler(this.databaseSizeToolStripMenuItem_Click);
+            // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -195,7 +203,8 @@
             this.copyJobsToolStripMenuItem,
             this.copyCategoriesToolStripMenuItem,
             this.copyAlertsToolStripMenuItem,
-            this.copyOperatorsToolStripMenuItem});
+            this.copyOperatorsToolStripMenuItem,
+            this.viewJobTimelineToolStripMenuItem});
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
             this.toolStripMenuItem6.Size = new System.Drawing.Size(165, 22);
             this.toolStripMenuItem6.Text = "SQL Server Agent";
@@ -203,28 +212,28 @@
             // copyJobsToolStripMenuItem
             // 
             this.copyJobsToolStripMenuItem.Name = "copyJobsToolStripMenuItem";
-            this.copyJobsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.copyJobsToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.copyJobsToolStripMenuItem.Text = "Copy SQL Jobs";
             this.copyJobsToolStripMenuItem.Click += new System.EventHandler(this.copyJobsToolStripMenuItem_Click);
             // 
             // copyCategoriesToolStripMenuItem
             // 
             this.copyCategoriesToolStripMenuItem.Name = "copyCategoriesToolStripMenuItem";
-            this.copyCategoriesToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.copyCategoriesToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.copyCategoriesToolStripMenuItem.Text = "Copy Categories";
             this.copyCategoriesToolStripMenuItem.Click += new System.EventHandler(this.copyCategoriesToolStripMenuItem_Click);
             // 
             // copyAlertsToolStripMenuItem
             // 
             this.copyAlertsToolStripMenuItem.Name = "copyAlertsToolStripMenuItem";
-            this.copyAlertsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.copyAlertsToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.copyAlertsToolStripMenuItem.Text = "Copy Alerts";
             this.copyAlertsToolStripMenuItem.Click += new System.EventHandler(this.copyAlertsToolStripMenuItem_Click);
             // 
             // copyOperatorsToolStripMenuItem
             // 
             this.copyOperatorsToolStripMenuItem.Name = "copyOperatorsToolStripMenuItem";
-            this.copyOperatorsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.copyOperatorsToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.copyOperatorsToolStripMenuItem.Text = "Copy Operators";
             this.copyOperatorsToolStripMenuItem.Click += new System.EventHandler(this.copyOperatorsToolStripMenuItem_Click);
             // 
@@ -252,12 +261,12 @@
             this.panel1.Size = new System.Drawing.Size(1000, 425);
             this.panel1.TabIndex = 11;
             // 
-            // databaseSizeToolStripMenuItem
+            // viewJobTimelineToolStripMenuItem
             // 
-            this.databaseSizeToolStripMenuItem.Name = "databaseSizeToolStripMenuItem";
-            this.databaseSizeToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.databaseSizeToolStripMenuItem.Text = "Database Size";
-            this.databaseSizeToolStripMenuItem.Click += new System.EventHandler(this.databaseSizeToolStripMenuItem_Click);
+            this.viewJobTimelineToolStripMenuItem.Name = "viewJobTimelineToolStripMenuItem";
+            this.viewJobTimelineToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.viewJobTimelineToolStripMenuItem.Text = "View Jobs Timeline";
+            this.viewJobTimelineToolStripMenuItem.Click += new System.EventHandler(this.viewJobTimelineToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -305,6 +314,7 @@
         private System.Windows.Forms.ToolStripMenuItem fixOrphanUsersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem currentProcessesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem databaseSizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewJobTimelineToolStripMenuItem;
     }
 }
 
