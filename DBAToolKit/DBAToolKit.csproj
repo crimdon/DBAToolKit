@@ -109,7 +109,6 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\DataClasses.cs" />
-    <Compile Include="Models\Processes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\Copy-DatabaseMail.cs">
@@ -159,6 +158,12 @@
     </Compile>
     <Compile Include="Tools\Fix-OrphanUsers.Designer.cs">
       <DependentUpon>Fix-OrphanUsers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\Get-ServerMemoryConsumption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tools\Get-ServerMemoryConsumption.Designer.cs">
+      <DependentUpon>Get-ServerMemoryConsumption.cs</DependentUpon>
     </Compile>
     <Compile Include="Tools\Get-SqlJobsTimeline.cs">
       <SubType>UserControl</SubType>
@@ -235,6 +240,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\Fix-OrphanUsers.resx">
       <DependentUpon>Fix-OrphanUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\Get-ServerMemoryConsumption.resx">
+      <DependentUpon>Get-ServerMemoryConsumption.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\Get-SqlJobsTimeline.resx">
       <DependentUpon>Get-SqlJobsTimeline.cs</DependentUpon>

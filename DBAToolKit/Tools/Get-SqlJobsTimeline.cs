@@ -115,7 +115,7 @@ namespace DBAToolKit.Tools
                                                                                           DATEDIFF(dd, 0,
                                                                                           '" + this.dateTimePicker1.Value.ToString("yyyyMMdd") + @"'))
                                                                                    AND    DATEADD(SECOND,
-                                                                                          86400,
+                                                                                          86399,
                                                                                           DATEADD(dd, 0,
                                                                                           DATEDIFF(dd, 0,'" + 
                                                                                           this.dateTimePicker1.Value.ToString("yyyyMMdd") + @"')))

@@ -51,10 +51,11 @@
             this.copyCategoriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyAlertsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyOperatorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewJobTimelineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.viewJobTimelineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.memoryConsumpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -102,7 +103,8 @@
             // 
             this.toolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.getConfigurationToolStripMenuItem,
-            this.currentProcessesToolStripMenuItem});
+            this.currentProcessesToolStripMenuItem,
+            this.memoryConsumpToolStripMenuItem});
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.Size = new System.Drawing.Size(165, 22);
             this.toolStripMenuItem2.Text = "Server";
@@ -110,14 +112,14 @@
             // getConfigurationToolStripMenuItem
             // 
             this.getConfigurationToolStripMenuItem.Name = "getConfigurationToolStripMenuItem";
-            this.getConfigurationToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.getConfigurationToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.getConfigurationToolStripMenuItem.Text = "Get Configuration";
             this.getConfigurationToolStripMenuItem.Click += new System.EventHandler(this.getConfigurationToolStripMenuItem_Click);
             // 
             // currentProcessesToolStripMenuItem
             // 
             this.currentProcessesToolStripMenuItem.Name = "currentProcessesToolStripMenuItem";
-            this.currentProcessesToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.currentProcessesToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.currentProcessesToolStripMenuItem.Text = "Active Processes";
             this.currentProcessesToolStripMenuItem.Click += new System.EventHandler(this.currentProcessesToolStripMenuItem_Click);
             // 
@@ -237,6 +239,13 @@
             this.copyOperatorsToolStripMenuItem.Text = "Copy Operators";
             this.copyOperatorsToolStripMenuItem.Click += new System.EventHandler(this.copyOperatorsToolStripMenuItem_Click);
             // 
+            // viewJobTimelineToolStripMenuItem
+            // 
+            this.viewJobTimelineToolStripMenuItem.Name = "viewJobTimelineToolStripMenuItem";
+            this.viewJobTimelineToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.viewJobTimelineToolStripMenuItem.Text = "View Jobs Timeline";
+            this.viewJobTimelineToolStripMenuItem.Click += new System.EventHandler(this.viewJobTimelineToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -261,12 +270,12 @@
             this.panel1.Size = new System.Drawing.Size(1000, 425);
             this.panel1.TabIndex = 11;
             // 
-            // viewJobTimelineToolStripMenuItem
+            // memoryConsumpToolStripMenuItem
             // 
-            this.viewJobTimelineToolStripMenuItem.Name = "viewJobTimelineToolStripMenuItem";
-            this.viewJobTimelineToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
-            this.viewJobTimelineToolStripMenuItem.Text = "View Jobs Timeline";
-            this.viewJobTimelineToolStripMenuItem.Click += new System.EventHandler(this.viewJobTimelineToolStripMenuItem_Click);
+            this.memoryConsumpToolStripMenuItem.Name = "memoryConsumpToolStripMenuItem";
+            this.memoryConsumpToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.memoryConsumpToolStripMenuItem.Text = "Memory Consumption";
+            this.memoryConsumpToolStripMenuItem.Click += new System.EventHandler(this.memoryConsumpToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -315,6 +324,7 @@
         private System.Windows.Forms.ToolStripMenuItem currentProcessesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem databaseSizeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewJobTimelineToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem memoryConsumpToolStripMenuItem;
     }
 }
 

@@ -127,5 +127,11 @@ namespace DBAToolKit
             var jobstimeline = new Get_SqlJobstimeline();
             loadControl(jobstimeline);
         }
+
+        private void memoryConsumpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var memoryconsumption = new Get_ServerMemoryConsumption();
+            loadControl(memoryconsumption);
+        }
     }
 }
