@@ -13,6 +13,7 @@ namespace DBAToolKit.Tools
     {
         private Server sourceserver;
         GanttChart ganttTimeline;
+        List<JobFilter> categoriesToDisplay = new List<JobFilter>();
 
         public Get_SqlJobstimeline()
         {
@@ -39,7 +40,9 @@ namespace DBAToolKit.Tools
                     throw new Exception("SQL Server versions prior to 2005 are not supported!");
                 }
 
+                setupFilterList();
                 loadGanttChart();
+                btnFilter.Enabled = true;
             }
 
             catch (Exception ex)
@@ -50,6 +53,12 @@ namespace DBAToolKit.Tools
                 
         private void loadGanttChart()
         {
+            // If the Gantt control is already loaded, dispose of it.
+            if (this.Contains(ganttTimeline))
+            {
+                ganttTimeline.Dispose();
+            }
+
             ganttTimeline = new GanttChart();
             ganttTimeline.AllowChange = false;
             ganttTimeline.Dock = DockStyle.Fill;
@@ -72,29 +81,43 @@ namespace DBAToolKit.Tools
 
             foreach (DataRow row in dt.Rows)
             {
-                Color mainColor = new Color();
-                if (row[1].ToString() == "1")
+                JobFilter jobCategory = categoriesToDisplay.Find(x => x.CategoryName == row[4].ToString());
+                if (jobCategory.IsChecked == true)
                 {
-                    mainColor = Color.Green;
-                }
-                else
-                {
-                    mainColor = Color.Red;
-                }
+                    Color mainColor = new Color();
+                    if (row[1].ToString() == "1")
+                    {
+                        mainColor = Color.Green;
+                    }
+                    else
+                    {
+                        mainColor = Color.Red;
+                    }
 
-                if (row[0].ToString() != prevJobName)
-                {
-                    index += 1;
-                }
-                prevJobName = row[0].ToString();
+                    if (row[0].ToString() != prevJobName)
+                    {
+                        index += 1;
+                    }
+                    prevJobName = row[0].ToString();
 
-                lst1.Add(new BarInformation(row[0].ToString(), DateTime.Parse(row[2].ToString()), DateTime.Parse(row[3].ToString()), mainColor, Color.Khaki, index));
+                    lst1.Add(new BarInformation(row[0].ToString(), DateTime.Parse(row[2].ToString()), DateTime.Parse(row[3].ToString()), mainColor, Color.Khaki, index));
+                }
             }
 
             foreach (BarInformation bar in lst1)
             {
                 ganttTimeline.AddChartBar
                 (bar.RowText, bar, bar.FromTime, bar.ToTime, bar.Color, bar.HoverColor, bar.Index);
+            }
+        }
+
+        private void setupFilterList()
+        {
+            DataTable dt = getJobCategories();
+
+            foreach (DataRow row in dt.Rows)
+            {
+               categoriesToDisplay.Add(new JobFilter(row[0].ToString(), true));
             }
         }
 
@@ -107,9 +130,11 @@ namespace DBAToolKit.Tools
                                             run_duration % 100 + ROUND(( run_duration % 10000 ) / 100,
                                                                        0, 0) * 60
                                             + ROUND(( run_duration % 1000000 ) / 10000, 0, 0) * 3600,
-                                            msdb.dbo.agent_datetime(run_date, run_time)) AS end_time
+                                            msdb.dbo.agent_datetime(run_date, run_time)) AS end_time,
+                                    c.name AS category
                                FROM     msdb.dbo.sysjobhistory jh
                                         INNER JOIN msdb.dbo.sysjobs j ON j.job_id = jh.job_id
+                                        INNER JOIN msdb.dbo.syscategories c ON j.category_id = c.category_id
                                WHERE    step_id = 0
                                         AND msdb.dbo.agent_datetime(run_date, run_time) BETWEEN DATEADD(dd, 0,
                                                                                           DATEDIFF(dd, 0,
@@ -122,7 +147,26 @@ namespace DBAToolKit.Tools
                                ORDER BY j.name ASC, msdb.dbo.agent_datetime(run_date, run_time) ASC;";
             DataSet jobHistory = sourceserver.ConnectionContext.ExecuteWithResults(sql);
             return jobHistory.Tables[0];
+        }
 
+        private DataTable getJobCategories()
+        {
+            string sql = @"    SELECT   DISTINCT c.name AS CategoryName
+                               FROM     msdb.dbo.sysjobhistory jh
+                                        INNER JOIN msdb.dbo.sysjobs j ON j.job_id = jh.job_id
+                                        INNER JOIN msdb.dbo.syscategories c ON j.category_id = c.category_id
+                               WHERE    step_id = 0
+                                        AND msdb.dbo.agent_datetime(run_date, run_time) BETWEEN DATEADD(dd, 0,
+                                                                                          DATEDIFF(dd, 0,
+                                                                                          '" + this.dateTimePicker1.Value.ToString("yyyyMMdd") + @"'))
+                                                                                   AND    DATEADD(SECOND,
+                                                                                          86399,
+                                                                                          DATEADD(dd, 0,
+                                                                                          DATEDIFF(dd, 0,'" +
+                                                                                          this.dateTimePicker1.Value.ToString("yyyyMMdd") + @"')))
+                               ORDER BY c.name;";
+            DataSet jobCategories = sourceserver.ConnectionContext.ExecuteWithResults(sql);
+            return jobCategories.Tables[0];
         }
 
         private void GanttTimeline_MouseMove(Object sender, MouseEventArgs e)
@@ -148,5 +192,13 @@ namespace DBAToolKit.Tools
 
         }
 
+        private void btnFilter_Click(object sender, EventArgs e)
+        {
+            Get_SqlJobsTimelineFilter filter = new Get_SqlJobsTimelineFilter();
+            filter.CategoriesToDisplay = categoriesToDisplay;
+            filter.ShowDialog();
+            categoriesToDisplay = filter.CategoriesToDisplay;
+            loadGanttChart();
+        }
     }
 }
