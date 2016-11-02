@@ -6,11 +6,14 @@ using DBAToolKit.Helpers;
 using Microsoft.SqlServer.Management.Smo;
 using Microsoft.SqlServer.Management.Smo.Agent;
 using System.Collections.Specialized;
+using DBAToolKit.Models;
 
 namespace DBAToolKit.Tools
 {
     public partial class Copy_SqlAlerts : UserControl
     {
+        private Server sourceserver;
+        List<ItemToCopy> itemsToCopy = new List<ItemToCopy>();
         public Copy_SqlAlerts()
         {
             InitializeComponent();
@@ -31,7 +34,7 @@ namespace DBAToolKit.Tools
                 }
 
                 ConnectSqlServer connection = new ConnectSqlServer();
-                Server sourceserver = connection.Connect(txtSource.Text);
+                sourceserver = connection.Connect(txtSource.Text);
                 Server destserver = connection.Connect(txtDestination.Text);
 
                 if (sourceserver.VersionMajor < 9 || destserver.VersionMajor < 9)
@@ -44,37 +47,41 @@ namespace DBAToolKit.Tools
                     throw new Exception(string.Format("Migration FROM SQL Server version {0} to {1} not supported!", sourceserver.VersionMajor.ToString(), destserver.VersionMajor.ToString()));
                 }
 
-                List<String> alertsToCopy = txtAlertsToCopy.Text.Split(',').ToList();
+                if (itemsToCopy.Count == 0)
+                {
+                    setupJobList();
+                }
 
                 DateTime started = DateTime.Now;
-                txtOutput.Clear();
-                displayOutput(string.Format("Migration started: {0}", DateTime.Now.ToShortTimeString()));
-                copyAlerts(sourceserver, destserver, alertsToCopy);
-                displayOutput(string.Format("Migration ended: {0}", DateTime.Now.ToShortTimeString()));
+                showOutput.Clear();
+                showOutput.displayOutput(string.Format("Migration started: {0}", DateTime.Now.ToShortTimeString()));
+                copyAlerts(destserver);
+                showOutput.displayOutput(string.Format("Migration ended: {0}", DateTime.Now.ToShortTimeString()));
             }
 
             catch (Exception ex)
             {
-                displayOutput(ex.Message, true);
+                showOutput.displayOutput(ex.Message, true);
             }
         }
 
-        private void copyAlerts (Server sourceserver, Server destserver, List<string> alertstocopy)
+        private void copyAlerts (Server destserver)
         {
             foreach (Alert alert in sourceserver.JobServer.Alerts)
             {
                 string alertname = alert.Name;
-                if (string.IsNullOrEmpty(alertstocopy[0]) || alertstocopy.Contains(alertname))
+                ItemToCopy item = itemsToCopy.Find(x => x.Name == alertname);
+                if (item.IsChecked)
                 {
                     if (DBChecks.AlertExists(destserver, alertname))
                     {
-                        displayOutput(string.Format("Alert {0} already exists in destination. Skipping.", alertname));
+                        showOutput.displayOutput(string.Format("Alert {0} already exists in destination. Skipping.", alertname));
                         continue;
                     }
 
                     if (DBChecks.CategoryExists(destserver, alert.CategoryName))
                     {
-                        displayOutput(string.Format("Category {0} does not exist. Skipping copy of alert {1}.", alert.CategoryName, alertname));
+                        showOutput.displayOutput(string.Format("Category {0} does not exist. Skipping copy of alert {1}.", alert.CategoryName, alertname));
                         continue;
                     }
 
@@ -83,34 +90,55 @@ namespace DBAToolKit.Tools
                         StringCollection sql = alert.Script();
                         destserver.ConnectionContext.ExecuteNonQuery(sql);
                         destserver.JobServer.Refresh();
-                        displayOutput(string.Format("Copied alert {0} to {1}", alertname, destserver.Name));
+                        showOutput.displayOutput(string.Format("Copied alert {0} to {1}", alertname, destserver.Name));
                     }
                     catch (Exception ex)
                     {
-                        displayOutput(ex.Message);
+                        showOutput.displayOutput(ex.Message);
                         continue;
                     }
                 }
             }
         }
-        private void displayOutput(string message, bool errormessage = false)
+        private void setupJobList()
         {
-            if (errormessage)
+            foreach (Alert alert in sourceserver.JobServer.Alerts)
             {
-                txtOutput.ForeColor = System.Drawing.Color.Red;
+                itemsToCopy.Add(new ItemToCopy(alert.Name, false));
             }
-            else
+        }
+
+        private void txtSource_TextChanged(object sender, EventArgs e)
+        {
+            itemsToCopy.Clear();
+        }
+
+        private void btnSelect_Click(object sender, EventArgs e)
+        {
+            try
             {
-                txtOutput.ForeColor = System.Drawing.Color.Black;
+                if (string.IsNullOrEmpty(txtSource.Text) == true)
+                {
+                    throw new Exception("Enter a Source Server!");
+                }
+
+                ConnectSqlServer connection = new ConnectSqlServer();
+                sourceserver = connection.Connect(txtSource.Text);
+
+                if (itemsToCopy.Count == 0)
+                {
+                    setupJobList();
+                }
+
+                SelectItemsToCopy form = new SelectItemsToCopy();
+                form.ItemsToCopy = itemsToCopy;
+                form.ShowDialog();
+                itemsToCopy = form.ItemsToCopy;
             }
 
-            if (txtOutput.Text.Length == 0)
+            catch (Exception ex)
             {
-                txtOutput.Text = message;
-            }
-            else
-            {
-                txtOutput.AppendText("\r\n" + message);
+                showOutput.displayOutput(ex.Message, true);
             }
         }
     }

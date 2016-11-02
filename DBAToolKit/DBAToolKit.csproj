@@ -95,6 +95,18 @@
     <Compile Include="Helpers\GanttChart.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Helpers\SelectItemsToCopy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Helpers\SelectItemsToCopy.Designer.cs">
+      <DependentUpon>SelectItemsToCopy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\ShowOutput.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Helpers\ShowOutput.Designer.cs">
+      <DependentUpon>ShowOutput.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\Utilities.cs" />
     <Compile Include="Help\About.cs">
       <SubType>Form</SubType>
@@ -109,6 +121,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\DataClasses.cs" />
+    <Compile Include="Models\ItemToCopy.cs" />
     <Compile Include="Models\JobFilter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -208,6 +221,12 @@
     <Compile Include="Tools\Show-DatabaseDetails.Designer.cs">
       <DependentUpon>Show-DatabaseDetails.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Helpers\SelectItemsToCopy.resx">
+      <DependentUpon>SelectItemsToCopy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\ShowOutput.resx">
+      <DependentUpon>ShowOutput.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Help\About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>

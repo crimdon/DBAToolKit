@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using DBAToolKit.Helpers;
+using DBAToolKit.Models;
 using Microsoft.SqlServer.Management.Smo;
 using Microsoft.SqlServer.Management.Smo.Agent;
 using System.Collections.Specialized;
@@ -11,14 +12,46 @@ namespace DBAToolKit.Tools
 {
     public partial class Copy_SqlJobs : UserControl
     {
+        private Server sourceserver;
+        List<ItemToCopy> itemsToCopy = new List<ItemToCopy>();
         public Copy_SqlJobs()
         {
             InitializeComponent();
         }
 
+        private void btnSelect_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(txtSource.Text) == true)
+                {
+                    throw new Exception("Enter a Source Server!");
+                }
+
+                ConnectSqlServer connection = new ConnectSqlServer();
+                sourceserver = connection.Connect(txtSource.Text);
+
+                if (itemsToCopy.Count == 0)
+                {
+                    setupJobList();
+                }
+
+                SelectItemsToCopy form = new SelectItemsToCopy();
+                form.ItemsToCopy = itemsToCopy;
+                form.ShowDialog();
+                itemsToCopy = form.ItemsToCopy;
+            }
+
+            catch (Exception ex)
+            {
+                showOutput.displayOutput(ex.Message, true);
+            }
+
+        }
+
         private void btnCopy_Click(object sender, EventArgs e)
         {
-            displayOutput("Attempting to connect to SQL Servers...");
+            showOutput.displayOutput("Attempting to connect to SQL Servers...");
             try
             {
                 if (string.IsNullOrEmpty(txtSource.Text) == true || string.IsNullOrEmpty(txtDestination.Text) == true)
@@ -32,7 +65,7 @@ namespace DBAToolKit.Tools
                 }
 
                 ConnectSqlServer connection = new ConnectSqlServer();
-                Server sourceserver = connection.Connect(txtSource.Text);
+                sourceserver = connection.Connect(txtSource.Text);
                 Server destserver = connection.Connect(txtDestination.Text);
 
                 if (sourceserver.VersionMajor < 9 || destserver.VersionMajor < 9)
@@ -45,33 +78,37 @@ namespace DBAToolKit.Tools
                     throw new Exception(string.Format("Migration FROM SQL Server version {0} to {1} not supported!", sourceserver.VersionMajor.ToString(), destserver.VersionMajor.ToString()));
                 }
 
-                List<String> jobsToCopy = txtJobsToCopy.Text.Split(',').ToList();
+                if (itemsToCopy.Count == 0)
+                {
+                    setupJobList();
+                }
 
                 DateTime started = DateTime.Now;
-                txtOutput.Clear();
-                displayOutput(string.Format("Migration started: {0}", DateTime.Now.ToShortTimeString()));
-                copyJobs(sourceserver, destserver, jobsToCopy, chkDisableOnSource.Checked, chkDisableOnDest.Checked, chkDropDest.Checked);
-                displayOutput(string.Format("Migration ended: {0}", DateTime.Now.ToShortTimeString()));
+                showOutput.Clear();
+                showOutput.displayOutput(string.Format("Migration started: {0}", DateTime.Now.ToShortTimeString()));
+                copyJobs(destserver, chkDisableOnSource.Checked, chkDisableOnDest.Checked, chkDropDest.Checked);
+                showOutput.displayOutput(string.Format("Migration ended: {0}", DateTime.Now.ToShortTimeString()));
             }
 
             catch (Exception ex)
             {
-                displayOutput(ex.Message, true);
+                showOutput.displayOutput(ex.Message, true);
             }
         }
 
-        private void copyJobs(Server sourceserver, Server destserver, List<string> jobstocopy, bool disableonsource, bool disableondest, bool dropdest)
+        private void copyJobs(Server destserver, bool disableonsource, bool disableondest, bool dropdest)
         {
             JobCollection destjobs = destserver.JobServer.Jobs;
 
             foreach (Job job in sourceserver.JobServer.Jobs)
             {
                 string jobname = job.Name;
-                if (string.IsNullOrEmpty(jobstocopy[0]) || jobstocopy.Contains(jobname))
+                ItemToCopy item = itemsToCopy.Find(x => x.Name == jobname);
+                if (item.IsChecked)
                 {
                     if (!DBChecks.LoginExists(destserver, job.OwnerLoginName))
                     {
-                        displayOutput(string.Format("[Job: {0}] Owner {1} doesn't exist ion destination. Skipping. ", jobname, job.OwnerLoginName));
+                        showOutput.displayOutput(string.Format("[Job: {0}] Owner {1} doesn't exist ion destination. Skipping. ", jobname, job.OwnerLoginName));
                         continue;
                     }
 
@@ -79,32 +116,32 @@ namespace DBAToolKit.Tools
                     {
                         if (!DBChecks.DatabaseExists(destserver, jobstep.DatabaseName))
                         {
-                            displayOutput(string.Format("[Job: {0}] Database {1} doesn't exist on destination. Skipping. ", jobname, jobstep.DatabaseName));
+                            showOutput.displayOutput(string.Format("[Job: {0}] Database {1} doesn't exist on destination. Skipping. ", jobname, jobstep.DatabaseName));
                             continue;
                         }
 
                         if (!string.IsNullOrEmpty(jobstep.ProxyName) && !DBChecks.ProxyExists(destserver, jobstep.ProxyName))
                         {
-                            displayOutput(string.Format("[Job: {0}] Proxy {1} doesn't exist on destination. Skipping. ", jobname, jobstep.ProxyName));
+                            showOutput.displayOutput(string.Format("[Job: {0}] Proxy {1} doesn't exist on destination. Skipping. ", jobname, jobstep.ProxyName));
                             continue;
                         }
                     }
 
                     if (!string.IsNullOrEmpty(job.OperatorToEmail) && !DBChecks.OperatorExists(destserver, job.OperatorToEmail))
                     {
-                        displayOutput(string.Format("[Job: {0}] Operator {1} doesn't exist on destination. Skipping. ", jobname, job.OperatorToEmail));
+                        showOutput.displayOutput(string.Format("[Job: {0}] Operator {1} doesn't exist on destination. Skipping. ", jobname, job.OperatorToEmail));
                         continue;
                     }
 
                     if (!string.IsNullOrEmpty(job.OperatorToNetSend) && !DBChecks.OperatorExists(destserver, job.OperatorToNetSend))
                     {
-                        displayOutput(string.Format("[Job: {0}] Operator {1} doesn't exist on destination. Skipping. ", jobname, job.OperatorToNetSend));
+                        showOutput.displayOutput(string.Format("[Job: {0}] Operator {1} doesn't exist on destination. Skipping. ", jobname, job.OperatorToNetSend));
                         continue;
                     }
 
                     if (!string.IsNullOrEmpty(job.OperatorToPage) && !DBChecks.OperatorExists(destserver, job.OperatorToPage))
                     {
-                        displayOutput(string.Format("[Job: {0}] Operator {1} doesn't exist on destination. Skipping. ", jobname, job.OperatorToPage));
+                        showOutput.displayOutput(string.Format("[Job: {0}] Operator {1} doesn't exist on destination. Skipping. ", jobname, job.OperatorToPage));
                         continue;
                     }
 
@@ -112,7 +149,7 @@ namespace DBAToolKit.Tools
                     {
                         if (!dropdest)
                         {
-                            displayOutput(string.Format("Job: {0} already exists on destination server. Skipping. ", jobname));
+                            showOutput.displayOutput(string.Format("Job: {0} already exists on destination server. Skipping. ", jobname));
                             continue;
                         }
                         else
@@ -124,7 +161,7 @@ namespace DBAToolKit.Tools
                             }
                             catch (Exception ex)
                             {
-                                displayOutput(ex.Message);
+                                showOutput.displayOutput(ex.Message);
                                 continue;
                             }
                         }
@@ -150,13 +187,13 @@ namespace DBAToolKit.Tools
                             DBFunctions.ChangeJobStatus(sourceserver, jobname, false);
                         }
 
-                        displayOutput(string.Format("Copied job {0} to {1}", jobname, destserver.Name));
+                        showOutput.displayOutput(string.Format("Copied job {0} to {1}", jobname, destserver.Name));
 
                     }
                     catch (Exception ex)
                     {
-                        displayOutput(string.Format("Failed to copy job {0} to {1}", jobname, destserver.Name));
-                        displayOutput(ex.Message);
+                        showOutput.displayOutput(string.Format("Failed to copy job {0} to {1}", jobname, destserver.Name));
+                        showOutput.displayOutput(ex.Message);
                         continue;
                     }
                     
@@ -164,26 +201,17 @@ namespace DBAToolKit.Tools
             }
         }
 
-        private void displayOutput(string message, bool errormessage = false)
+        private void setupJobList()
         {
-            if (errormessage)
+            foreach (Job job in sourceserver.JobServer.Jobs)
             {
-                txtOutput.ForeColor = System.Drawing.Color.Red;
-            }
-            else
-            {
-                txtOutput.ForeColor = System.Drawing.Color.Black;
-            }
-
-            if (txtOutput.Text.Length == 0)
-            {
-                txtOutput.Text = message;
-            }
-            else
-            {
-                txtOutput.AppendText("\r\n" + message);
+                itemsToCopy.Add(new ItemToCopy(job.Name, false));
             }
         }
 
+        private void txtSource_TextChanged(object sender, EventArgs e)
+        {
+            itemsToCopy.Clear();
+        }
     }
 }

@@ -6,12 +6,14 @@ using System.Security;
 using System.Collections.Specialized;
 using System.Collections.Generic;
 using System.Linq;
+using DBAToolKit.Models;
 
 namespace DBAToolKit.Tools
 {
     public partial class Copy_SqlLogin : UserControl
     {
-
+        private Server sourceserver;
+        List<ItemToCopy> itemsToCopy = new List<ItemToCopy>();
         public Copy_SqlLogin()
         {
             InitializeComponent();
@@ -28,7 +30,7 @@ namespace DBAToolKit.Tools
 
         private void btnCopy_Click(object sender, EventArgs e)
         {
-            displayOutput("Attempting to connect to SQL Servers...");
+            showOutput.displayOutput("Attempting to connect to SQL Servers...");
             try
             {
                 if (string.IsNullOrEmpty(txtSource.Text) == true || string.IsNullOrEmpty(txtDestination.Text) == true)
@@ -42,7 +44,7 @@ namespace DBAToolKit.Tools
                 }
 
                 ConnectSqlServer connection = new ConnectSqlServer();
-                Server sourceserver = connection.Connect(txtSource.Text);
+                sourceserver = connection.Connect(txtSource.Text);
                 Server destserver = connection.Connect(txtDestination.Text);
 
                 if(sourceserver.VersionMajor < 9 || destserver.VersionMajor < 9)
@@ -55,22 +57,25 @@ namespace DBAToolKit.Tools
                     throw new Exception(string.Format("Migration FROM SQL Server version {0} to {1} not supported!", sourceserver.VersionMajor.ToString(), destserver.VersionMajor.ToString()));
                 }
 
-                List<String> usersToCopy = txtUsersToCopy.Text.Split(',').ToList();
+                if (itemsToCopy.Count == 0)
+                {
+                    setupJobList();
+                }
 
                 DateTime started = DateTime.Now;
-                txtOutput.Clear();
-                displayOutput(string.Format("Migration started: {0}", DateTime.Now.ToShortTimeString()));
-                processLogins(sourceserver, destserver, cmbAction.SelectedItem.ToString(), usersToCopy);
-                displayOutput(string.Format("Migration ended: {0}", DateTime.Now.ToShortTimeString()));
+                showOutput.Clear();
+                showOutput.displayOutput(string.Format("Migration started: {0}", DateTime.Now.ToShortTimeString()));
+                processLogins(destserver, cmbAction.SelectedItem.ToString());
+                showOutput.displayOutput(string.Format("Migration ended: {0}", DateTime.Now.ToShortTimeString()));
             }
 
             catch (Exception ex)
             {
-                displayOutput(ex.Message, true);
+                showOutput.displayOutput(ex.Message, true);
             }
         }
 
-        private void processLogins(Server sourceserver, Server destserver, string action, List<string> userstoprocess)
+        private void processLogins(Server destserver, string action)
         {
             foreach (Login sourcelogin in sourceserver.Logins)
             {
@@ -79,91 +84,91 @@ namespace DBAToolKit.Tools
                 string servername = sourceserver.NetName.ToLower();
                 Login destlogin = destserver.Logins[username];
 
-                if (!string.IsNullOrEmpty(userstoprocess[0]) && !userstoprocess.Contains(username))
+                ItemToCopy item = itemsToCopy.Find(x => x.Name == username);
+                if (item.IsChecked)
                 {
-                    continue;
-                }
 
-                if (username.StartsWith("##") || username == "sa" || username == "distributor_admin")
-                {
-                    displayOutput(string.Format("Skipping {0}.", username));
-                    continue;
-                }
+                    if (username.StartsWith("##") || username == "sa" || username == "distributor_admin")
+                    {
+                        showOutput.displayOutput(string.Format("Skipping {0}.", username));
+                        continue;
+                    }
 
-                if (currentlogin == username && action.StartsWith("Force"))
-                {
-                    displayOutput("Cannot drop login performing the migration. Skipping");
-                    continue;
-                }
+                    if (currentlogin == username && action.StartsWith("Force"))
+                    {
+                        showOutput.displayOutput("Cannot drop login performing the migration. Skipping");
+                        continue;
+                    }
 
-                string userbase = username.Split('\\')[0].ToLower();
-                if (servername == userbase || username.StartsWith("NT ") || username.StartsWith("BUILTIN)"))
-                {
-                    displayOutput(string.Format("{0} is skipped because it is a local machine name.", username));
-                    continue;
-                }
+                    string userbase = username.Split('\\')[0].ToLower();
+                    if (servername == userbase || username.StartsWith("NT ") || username.StartsWith("BUILTIN)"))
+                    {
+                        showOutput.displayOutput(string.Format("{0} is skipped because it is a local machine name.", username));
+                        continue;
+                    }
 
-                if (sourcelogin.LoginType != LoginType.SqlLogin && sourcelogin.LoginType != LoginType.WindowsUser && sourcelogin.LoginType != LoginType.WindowsGroup)
-                {
-                    displayOutput(string.Format("{0} logins are not support. Skipping login {1}.", sourcelogin.LoginType.ToString(), username));
-                    continue;
-                }
+                    if (sourcelogin.LoginType != LoginType.SqlLogin && sourcelogin.LoginType != LoginType.WindowsUser && sourcelogin.LoginType != LoginType.WindowsGroup)
+                    {
+                        showOutput.displayOutput(string.Format("{0} logins are not support. Skipping login {1}.", sourcelogin.LoginType.ToString(), username));
+                        continue;
+                    }
 
-                if (destlogin != null && action.StartsWith("Force") && username == destserver.ServiceAccount)
-                {
-                    displayOutput(string.Format("{0} is the destiation service account. Skipping drop.", username));
-                    continue;
-                }
+                    if (destlogin != null && action.StartsWith("Force") && username == destserver.ServiceAccount)
+                    {
+                        showOutput.displayOutput(string.Format("{0} is the destiation service account. Skipping drop.", username));
+                        continue;
+                    }
 
-                if (destlogin == null && action.StartsWith("Sync"))
-                {
-                    displayOutput(string.Format("{0} does not exist on destination. Skipping sync.", username));
-                    continue;
-                }
+                    if (destlogin == null && action.StartsWith("Sync"))
+                    {
+                        showOutput.displayOutput(string.Format("{0} does not exist on destination. Skipping sync.", username));
+                        continue;
+                    }
 
-                if (destlogin != null && action.StartsWith("Normal"))
-                {
-                    displayOutput(string.Format("{0} already exists in destination. Select Force Copy to drop and recreate.", username));
-                    continue;
-                }
+                    if (destlogin != null && action.StartsWith("Normal"))
+                    {
+                        showOutput.displayOutput(string.Format("{0} already exists in destination. Select Force Copy to drop and recreate.", username));
+                        continue;
+                    }
 
-                switch (action)
-                {
-                    case "Normal Copy":
-                        copyLogin(sourceserver, destserver, sourcelogin, destlogin);
-                        syncPermissions(sourceserver, destserver, username);
-                        break;
+                    switch (action)
+                    {
+                        case "Normal Copy":
+                            copyLogin(sourceserver, destserver, sourcelogin, destlogin);
+                            syncPermissions(sourceserver, destserver, username);
+                            break;
 
-                    case "Normal Copy with Database Permission Sync":
-                        copyLogin(sourceserver, destserver, sourcelogin, destlogin);
-                        syncPermissions(sourceserver, destserver, username);
-                        syncDatabasePerms(sourcelogin, destlogin, sourceserver, destserver);
-                        break;
+                        case "Normal Copy with Database Permission Sync":
+                            copyLogin(sourceserver, destserver, sourcelogin, destlogin);
+                            syncPermissions(sourceserver, destserver, username);
+                            syncDatabasePerms(sourcelogin, destlogin, sourceserver, destserver);
+                            break;
 
-                    case "Forced Copy":
-                        dropUser(destserver, destlogin, username);
-                        copyLogin(sourceserver, destserver, sourcelogin, destlogin);
-                        syncPermissions(sourceserver, destserver, username);
-                        break;
+                        case "Forced Copy":
+                            dropUser(destserver, destlogin, username);
+                            copyLogin(sourceserver, destserver, sourcelogin, destlogin);
+                            syncPermissions(sourceserver, destserver, username);
+                            break;
 
-                    case "Forced Copy with Database Permission Sync":
-                        dropUser(destserver, destlogin, username);
-                        copyLogin(sourceserver, destserver, sourcelogin, destlogin);
-                        syncPermissions(sourceserver, destserver, username);
-                        syncDatabasePerms(sourcelogin, destlogin, sourceserver, destserver);
-                        break;
+                        case "Forced Copy with Database Permission Sync":
+                            dropUser(destserver, destlogin, username);
+                            copyLogin(sourceserver, destserver, sourcelogin, destlogin);
+                            syncPermissions(sourceserver, destserver, username);
+                            syncDatabasePerms(sourcelogin, destlogin, sourceserver, destserver);
+                            break;
 
-                    case "Sync Logon Permissions Only":
-                        syncPermissions(sourceserver, destserver, username);
-                        break;
+                        case "Sync Logon Permissions Only":
+                            syncPermissions(sourceserver, destserver, username);
+                            break;
 
-                    case "Sync Database Permission Only":
-                        syncDatabasePerms(sourcelogin, destlogin, sourceserver, destserver);
-                        break;
+                        case "Sync Database Permission Only":
+                            syncDatabasePerms(sourcelogin, destlogin, sourceserver, destserver);
+                            break;
 
-                    default:
-                        displayOutput("No Action selected", true);
-                        break;
+                        default:
+                            showOutput.displayOutput("No Action selected", true);
+                            break;
+                    }
                 }
             }
         }
@@ -173,7 +178,7 @@ namespace DBAToolKit.Tools
             try
             {
                 string username = sourcelogin.Name;
-                displayOutput(string.Format("Attempting to add {0} to {1}.", username, destserver.Name));
+                showOutput.displayOutput(string.Format("Attempting to add {0} to {1}.", username, destserver.Name));
                 destlogin = new Login(destserver, username);
 
                 destlogin.Sid = sourcelogin.Sid;
@@ -197,7 +202,7 @@ namespace DBAToolKit.Tools
 
                     destlogin.Create(hashedpass, LoginCreateOptions.IsHashed);
                     destlogin.Refresh();
-                    displayOutput(string.Format("Successfully added {0} to {1}.", username, destserver.Name));
+                    showOutput.displayOutput(string.Format("Successfully added {0} to {1}.", username, destserver.Name));
                 }
 
                 else if (sourcelogin.LoginType == LoginType.WindowsUser || sourcelogin.LoginType == LoginType.WindowsGroup)
@@ -207,7 +212,7 @@ namespace DBAToolKit.Tools
 
                     destlogin.Create();
                     destlogin.Refresh();
-                    displayOutput(string.Format("Successfully added {0} to {1}.", username, destserver.Name));
+                    showOutput.displayOutput(string.Format("Successfully added {0} to {1}.", username, destserver.Name));
                 }
 
                 else
@@ -218,8 +223,8 @@ namespace DBAToolKit.Tools
 
             catch (Exception ex)
             {
-                displayOutput("Error copying user!", true);
-                displayOutput(ex.Message);
+                showOutput.displayOutput("Error copying user!", true);
+                showOutput.displayOutput(ex.Message);
             }
         }
 
@@ -228,7 +233,7 @@ namespace DBAToolKit.Tools
             DBFunctions.KillConnections(dbserver, username);
             DBFunctions.ChangeDbOwner(dbserver, username);
             DBFunctions.ChangeJobOwner(dbserver, username);
-            displayOutput(string.Format("Dropping {0} from destination server.", username));
+            showOutput.displayOutput(string.Format("Dropping {0} from destination server.", username));
             serverlogin.Drop(); 
         }
 
@@ -247,13 +252,13 @@ namespace DBAToolKit.Tools
                     if (sourcerolemembers.Contains(username) && !destrolemembers.Contains(username))
                     {
                         destrole.AddMember(username);
-                        displayOutput(string.Format("Added user {0} to role {1} on destination server", username, destrole.Name));
+                        showOutput.displayOutput(string.Format("Added user {0} to role {1} on destination server", username, destrole.Name));
                     }
 
                     if (!sourcerolemembers.Contains(username) && destrolemembers.Contains(username))
                     {
                         destrole.DropMember(username);
-                        displayOutput(string.Format("Removed user {0} to role {1} on destination server", username, destrole.Name));
+                        showOutput.displayOutput(string.Format("Removed user {0} to role {1} on destination server", username, destrole.Name));
                     }
                 }
             }
@@ -274,7 +279,7 @@ namespace DBAToolKit.Tools
                 }
                 ServerPermissionSet permset = new ServerPermissionSet(perm.PermissionType);
                 destserver.Revoke(permset, username, false, grantwithgrant);
-                displayOutput(string.Format("Successfully revoked {0} to {1} on destination server", permstate, username));
+                showOutput.displayOutput(string.Format("Successfully revoked {0} to {1} on destination server", permstate, username));
             }
             //Copy permissions from source server
             foreach (ServerPermissionInfo perm in sourceserver.EnumServerPermissions(username))
@@ -293,7 +298,7 @@ namespace DBAToolKit.Tools
 
                 ServerPermissionSet permset = new ServerPermissionSet(perm.PermissionType);
                 destserver.Grant(permset, username, grantwithgrant);
-                displayOutput(string.Format("Successfully performed {0} to {1} on destination server", permstate, username));
+                showOutput.displayOutput(string.Format("Successfully performed {0} to {1} on destination server", permstate, username));
             }
 
         }
@@ -319,8 +324,8 @@ namespace DBAToolKit.Tools
                     }
                     catch (Exception ex)
                     {
-                        displayOutput(string.Format("Failed to drop user {0} From {1} on destination.", dbusername, dbname),true);
-                        displayOutput(ex.Message);
+                        showOutput.displayOutput(string.Format("Failed to drop user {0} From {1} on destination.", dbusername, dbname),true);
+                        showOutput.displayOutput(ex.Message);
                     }
 
                     try
@@ -329,8 +334,8 @@ namespace DBAToolKit.Tools
                     }
                     catch (Exception ex)
                     {
-                        displayOutput(string.Format("Failed to revoke permission for user {0} on {1}.", dbusername, dbname),true);
-                        displayOutput(ex.Message, true);
+                        showOutput.displayOutput(string.Format("Failed to revoke permission for user {0} on {1}.", dbusername, dbname),true);
+                        showOutput.displayOutput(ex.Message, true);
                     }
                 }
             }
@@ -355,8 +360,8 @@ namespace DBAToolKit.Tools
                     }
                     catch (Exception ex)
                     {
-                        displayOutput(string.Format("Failed to add user {0} to database {1}", dbusername, dbname),true);
-                        displayOutput(ex.Message, true);
+                        showOutput.displayOutput(string.Format("Failed to add user {0} to database {1}", dbusername, dbname),true);
+                        showOutput.displayOutput(ex.Message, true);
                     }
 
                     //Change the owner
@@ -372,8 +377,8 @@ namespace DBAToolKit.Tools
                     }
                     catch (Exception ex)
                     {
-                        displayOutput(string.Format("Error adding user {0} to role on database {1}", dbusername, dbname),true);
-                        displayOutput(ex.Message, true);
+                        showOutput.displayOutput(string.Format("Error adding user {0} to role on database {1}", dbusername, dbname),true);
+                        showOutput.displayOutput(ex.Message, true);
                     }
 
                     //Map permissions
@@ -384,32 +389,63 @@ namespace DBAToolKit.Tools
                     }
                     catch (Exception ex)
                     {
-                        displayOutput(string.Format("Error granting permission for user {0} on database {1}", dbusername, dbname),true);
-                        displayOutput(ex.Message, true);
+                        showOutput.displayOutput(string.Format("Error granting permission for user {0} on database {1}", dbusername, dbname),true);
+                        showOutput.displayOutput(ex.Message, true);
                     }
                 }
-                displayOutput(string.Format("Database permissions synced for user {0} on database {1}", dbusername, dbname));
+                showOutput.displayOutput(string.Format("Database permissions synced for user {0} on database {1}", dbusername, dbname));
+            }
+        }
+        private void setupJobList()
+        {
+            foreach (Login sourcelogin in sourceserver.Logins)
+            {
+                string username = sourcelogin.Name;
+                if (username.StartsWith("##") || username == "sa" || username == "distributor_admin")
+                {
+                    continue;
+                }
+
+                if (sourcelogin.LoginType != LoginType.SqlLogin && sourcelogin.LoginType != LoginType.WindowsUser && sourcelogin.LoginType != LoginType.WindowsGroup)
+                {
+                    continue;
+                }
+
+                itemsToCopy.Add(new ItemToCopy(sourcelogin.Name, false));
             }
         }
 
-        private void displayOutput(string message, bool errormessage = false)
+        private void txtSource_TextChanged(object sender, EventArgs e)
         {
-            if (errormessage)
+            itemsToCopy.Clear();
+        }
+
+        private void btnSelect_Click(object sender, EventArgs e)
+        {
+            try
             {
-                txtOutput.ForeColor = System.Drawing.Color.Red;
-            }
-            else
-            {
-                txtOutput.ForeColor = System.Drawing.Color.Black;
+                if (string.IsNullOrEmpty(txtSource.Text) == true)
+                {
+                    throw new Exception("Enter a Source Server!");
+                }
+
+                ConnectSqlServer connection = new ConnectSqlServer();
+                sourceserver = connection.Connect(txtSource.Text);
+
+                if (itemsToCopy.Count == 0)
+                {
+                    setupJobList();
+                }
+
+                SelectItemsToCopy form = new SelectItemsToCopy();
+                form.ItemsToCopy = itemsToCopy;
+                form.ShowDialog();
+                itemsToCopy = form.ItemsToCopy;
             }
 
-            if (txtOutput.Text.Length == 0)
+            catch (Exception ex)
             {
-                txtOutput.Text = message;
-            }
-            else
-            {
-                txtOutput.AppendText("\r\n" + message);
+                showOutput.displayOutput(ex.Message, true);
             }
         }
     }

@@ -32,13 +32,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtDestination = new System.Windows.Forms.TextBox();
-            this.txtOutput = new System.Windows.Forms.TextBox();
             this.btnCopy = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtUsersToCopy = new System.Windows.Forms.TextBox();
             this.cmbAction = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.showOutput = new DBAToolKit.Helpers.ShowOutput();
+            this.btnSelect = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtSource
@@ -47,6 +46,7 @@
             this.txtSource.Name = "txtSource";
             this.txtSource.Size = new System.Drawing.Size(150, 20);
             this.txtSource.TabIndex = 0;
+            this.txtSource.TextChanged += new System.EventHandler(this.txtSource_TextChanged);
             // 
             // label1
             // 
@@ -73,19 +73,6 @@
             this.txtDestination.Size = new System.Drawing.Size(150, 20);
             this.txtDestination.TabIndex = 1;
             // 
-            // txtOutput
-            // 
-            this.txtOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtOutput.Location = new System.Drawing.Point(16, 107);
-            this.txtOutput.Multiline = true;
-            this.txtOutput.Name = "txtOutput";
-            this.txtOutput.ReadOnly = true;
-            this.txtOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtOutput.Size = new System.Drawing.Size(969, 276);
-            this.txtOutput.TabIndex = 8;
-            // 
             // btnCopy
             // 
             this.btnCopy.Location = new System.Drawing.Point(754, 78);
@@ -106,22 +93,6 @@
             this.label3.TabIndex = 10;
             this.label3.Text = "Copy SQL Logins";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(652, 42);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(73, 13);
-            this.label4.TabIndex = 11;
-            this.label4.Text = "Users to Copy";
-            // 
-            // txtUsersToCopy
-            // 
-            this.txtUsersToCopy.Location = new System.Drawing.Point(754, 36);
-            this.txtUsersToCopy.Name = "txtUsersToCopy";
-            this.txtUsersToCopy.Size = new System.Drawing.Size(150, 20);
-            this.txtUsersToCopy.TabIndex = 2;
-            // 
             // cmbAction
             // 
             this.cmbAction.FormattingEnabled = true;
@@ -139,17 +110,33 @@
             this.label5.TabIndex = 13;
             this.label5.Text = "Action";
             // 
+            // showOutput
+            // 
+            this.showOutput.Location = new System.Drawing.Point(16, 107);
+            this.showOutput.Name = "showOutput";
+            this.showOutput.Size = new System.Drawing.Size(969, 276);
+            this.showOutput.TabIndex = 14;
+            // 
+            // btnSelect
+            // 
+            this.btnSelect.Location = new System.Drawing.Point(647, 39);
+            this.btnSelect.Name = "btnSelect";
+            this.btnSelect.Size = new System.Drawing.Size(123, 23);
+            this.btnSelect.TabIndex = 31;
+            this.btnSelect.Text = "Select Logins To Copy";
+            this.btnSelect.UseVisualStyleBackColor = true;
+            this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
+            // 
             // Copy_SqlLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnSelect);
+            this.Controls.Add(this.showOutput);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.cmbAction);
-            this.Controls.Add(this.txtUsersToCopy);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnCopy);
-            this.Controls.Add(this.txtOutput);
             this.Controls.Add(this.txtDestination);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -167,12 +154,11 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtDestination;
-        private System.Windows.Forms.TextBox txtOutput;
         private System.Windows.Forms.Button btnCopy;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox txtUsersToCopy;
         private System.Windows.Forms.ComboBox cmbAction;
         private System.Windows.Forms.Label label5;
+        private Helpers.ShowOutput showOutput;
+        private System.Windows.Forms.Button btnSelect;
     }
 }

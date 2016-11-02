@@ -5,11 +5,14 @@ using System.Windows.Forms;
 using DBAToolKit.Helpers;
 using Microsoft.SqlServer.Management.Smo;
 using System.Collections.Specialized;
+using DBAToolKit.Models;
 
 namespace DBAToolKit.Tools
 {
     public partial class Copy_ServerTriggers : UserControl
     {
+        private Server sourceserver;
+        List<ItemToCopy> itemsToCopy = new List<ItemToCopy>();
         public Copy_ServerTriggers()
         {
             InitializeComponent();
@@ -17,7 +20,7 @@ namespace DBAToolKit.Tools
 
         private void btnCopy_Click(object sender, EventArgs e)
         {
-            displayOutput("Attempting to connect to SQL Servers...");
+            showOutput.displayOutput("Attempting to connect to SQL Servers...");
             try
             {
                 if (string.IsNullOrEmpty(txtSource.Text) == true || string.IsNullOrEmpty(txtDestination.Text) == true)
@@ -31,7 +34,7 @@ namespace DBAToolKit.Tools
                 }
 
                 ConnectSqlServer connection = new ConnectSqlServer();
-                Server sourceserver = connection.Connect(txtSource.Text);
+                sourceserver = connection.Connect(txtSource.Text);
                 Server destserver = connection.Connect(txtDestination.Text);
 
                 if (sourceserver.VersionMajor < 9 || destserver.VersionMajor < 9)
@@ -44,47 +47,51 @@ namespace DBAToolKit.Tools
                     throw new Exception(string.Format("Migration FROM SQL Server version {0} to {1} not supported!", sourceserver.VersionMajor.ToString(), destserver.VersionMajor.ToString()));
                 }
 
-                List<String> objectsToCopy = txtObjectsToCopy.Text.Split(',').ToList();
+                if (itemsToCopy.Count == 0)
+                {
+                    setupJobList();
+                }
 
                 DateTime started = DateTime.Now;
-                txtOutput.Clear();
-                displayOutput(string.Format("Migration started: {0}", DateTime.Now.ToShortTimeString()));
-                copyServerTriggers(sourceserver, destserver, objectsToCopy, chkDisableOnSource.Checked, chkDisableOnDest.Checked, chkDropDest.Checked);
-                displayOutput(string.Format("Migration ended: {0}", DateTime.Now.ToShortTimeString()));
+                showOutput.Clear();
+                showOutput.displayOutput(string.Format("Migration started: {0}", DateTime.Now.ToShortTimeString()));
+                copyServerTriggers(destserver, chkDisableOnSource.Checked, chkDisableOnDest.Checked, chkDropDest.Checked);
+                showOutput.displayOutput(string.Format("Migration ended: {0}", DateTime.Now.ToShortTimeString()));
             }
 
             catch (Exception ex)
             {
-                displayOutput(ex.Message, true);
+                showOutput.displayOutput(ex.Message, true);
             }
         }
 
-        private void copyServerTriggers(Server sourceserver, Server destserver, List<string> objectstocopy, bool disableonsource, bool disableondest, bool dropdest)
+        private void copyServerTriggers(Server destserver, bool disableonsource, bool disableondest, bool dropdest)
         {
             ServerDdlTriggerCollection desttriggers = destserver.Triggers;
 
             foreach (ServerDdlTrigger trigger in sourceserver.Triggers)
             {
                 string triggername = trigger.Name;
-                if (string.IsNullOrEmpty(objectstocopy[0]) || objectstocopy.Contains(triggername))
+                ItemToCopy item = itemsToCopy.Find(x => x.Name == triggername);
+                if (item.IsChecked)
                 {
                     if (desttriggers[triggername] != null)                        
                     {
                         if (!dropdest)
                         {
-                            displayOutput(string.Format("Trigger {0} already exists in destination. Skipping.", triggername));
+                            showOutput.displayOutput(string.Format("Trigger {0} already exists in destination. Skipping.", triggername));
                             continue;
                         }
                         try
                         {
-                            displayOutput(string.Format("Dropping trigger {0}.", triggername));
+                            showOutput.displayOutput(string.Format("Dropping trigger {0}.", triggername));
                             ServerDdlTrigger desttrigger = desttriggers[triggername];
                             desttriggers[triggername].Drop();
                             desttriggers.Refresh();
                         }
                         catch (Exception ex)
                         {
-                            displayOutput(ex.Message);
+                            showOutput.displayOutput(ex.Message);
                             continue;
                         }
                     }
@@ -94,7 +101,7 @@ namespace DBAToolKit.Tools
                         StringCollection sql = trigger.Script();
                         destserver.ConnectionContext.ExecuteNonQuery(sql);
                         destserver.Triggers.Refresh();
-                        displayOutput(string.Format("Copied trigger {0} to {1}", triggername, destserver.Name));
+                        showOutput.displayOutput(string.Format("Copied trigger {0} to {1}", triggername, destserver.Name));
 
                         if (disableonsource)
                         {
@@ -112,35 +119,54 @@ namespace DBAToolKit.Tools
                     }
                     catch (Exception ex)
                     {
-                        displayOutput(string.Format("Error copying trigger {0} to {1}", triggername, destserver.Name));
-                        displayOutput(ex.Message);
+                        showOutput.displayOutput(string.Format("Error copying trigger {0} to {1}", triggername, destserver.Name));
+                        showOutput.displayOutput(ex.Message);
                         continue;
                     }
-
                 }
             }
         }
 
-        private void displayOutput(string message, bool errormessage = false)
+        private void setupJobList()
         {
-            if (errormessage)
+            foreach (ServerDdlTrigger trigger in sourceserver.Triggers)
             {
-                txtOutput.ForeColor = System.Drawing.Color.Red;
-            }
-            else
-            {
-                txtOutput.ForeColor = System.Drawing.Color.Black;
-            }
-
-            if (txtOutput.Text.Length == 0)
-            {
-                txtOutput.Text = message;
-            }
-            else
-            {
-                txtOutput.AppendText("\r\n" + message);
+                itemsToCopy.Add(new ItemToCopy(trigger.Name, false));
             }
         }
 
+        private void txtSource_TextChanged(object sender, EventArgs e)
+        {
+            itemsToCopy.Clear();
+        }
+
+        private void btnSelect_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(txtSource.Text) == true)
+                {
+                    throw new Exception("Enter a Source Server!");
+                }
+
+                ConnectSqlServer connection = new ConnectSqlServer();
+                sourceserver = connection.Connect(txtSource.Text);
+
+                if (itemsToCopy.Count == 0)
+                {
+                    setupJobList();
+                }
+
+                SelectItemsToCopy form = new SelectItemsToCopy();
+                form.ItemsToCopy = itemsToCopy;
+                form.ShowDialog();
+                itemsToCopy = form.ItemsToCopy;
+            }
+
+            catch (Exception ex)
+            {
+                showOutput.displayOutput(ex.Message, true);
+            }
+        }
     }
 }

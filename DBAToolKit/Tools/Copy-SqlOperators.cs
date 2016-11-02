@@ -6,11 +6,14 @@ using DBAToolKit.Helpers;
 using Microsoft.SqlServer.Management.Smo;
 using Microsoft.SqlServer.Management.Smo.Agent;
 using System.Collections.Specialized;
+using DBAToolKit.Models;
 
 namespace DBAToolKit.Tools
 {
     public partial class Copy_SqlOperators : UserControl
     {
+        private Server sourceserver;
+        List<ItemToCopy> itemsToCopy = new List<ItemToCopy>();
         public Copy_SqlOperators()
         {
             InitializeComponent();
@@ -44,31 +47,35 @@ namespace DBAToolKit.Tools
                     throw new Exception(string.Format("Migration FROM SQL Server version {0} to {1} not supported!", sourceserver.VersionMajor.ToString(), destserver.VersionMajor.ToString()));
                 }
 
-                List<String> operatorsToCopy = txtOperatorsToCopy.Text.Split(',').ToList();
+                if (itemsToCopy.Count == 0)
+                {
+                    setupJobList();
+                };
 
                 DateTime started = DateTime.Now;
-                txtOutput.Clear();
-                displayOutput(string.Format("Migration started: {0}", DateTime.Now.ToShortTimeString()));
-                copyOperators(sourceserver, destserver, operatorsToCopy);
-                displayOutput(string.Format("Migration ended: {0}", DateTime.Now.ToShortTimeString()));
+                showOutput.Clear();
+                showOutput.displayOutput(string.Format("Migration started: {0}", DateTime.Now.ToShortTimeString()));
+                copyOperators(destserver);
+                showOutput.displayOutput(string.Format("Migration ended: {0}", DateTime.Now.ToShortTimeString()));
             }
 
             catch (Exception ex)
             {
-                displayOutput(ex.Message, true);
+                showOutput.displayOutput(ex.Message, true);
             }
         }
 
-        private void copyOperators (Server sourceserver, Server destserver, List<string> alertstocopy)
+        private void copyOperators (Server destserver)
         {
             foreach (Operator op in sourceserver.JobServer.Operators)
             {
                 string opname = op.Name;
-                if (string.IsNullOrEmpty(alertstocopy[0]) || alertstocopy.Contains(opname))
+                ItemToCopy item = itemsToCopy.Find(x => x.Name == categoryname);
+                if (item.IsChecked)
                 {
                     if (DBChecks.OperatorExists(destserver, opname))
                     {
-                        displayOutput(string.Format("Operator {0} already exists in destination. Skipping.", opname));
+                        showOutput.displayOutput(string.Format("Operator {0} already exists in destination. Skipping.", opname));
                         continue;
                     }
 
@@ -78,34 +85,55 @@ namespace DBAToolKit.Tools
                         destserver.ConnectionContext.ExecuteNonQuery(sql);
                         destserver.JobServer.Refresh();
 
-                        displayOutput(string.Format("Copied operator {0} to {1}", opname, destserver.Name));
+                        showOutput.displayOutput(string.Format("Copied operator {0} to {1}", opname, destserver.Name));
                     }
                     catch (Exception ex)
                     {
-                        displayOutput(ex.Message);
+                        showOutput.displayOutput(ex.Message);
                         continue;
                     }
                 }
             }
         }
-        private void displayOutput(string message, bool errormessage = false)
+        private void setupJobList()
         {
-            if (errormessage)
+            foreach (JobCategory cat in sourceserver.JobServer.JobCategories)
             {
-                txtOutput.ForeColor = System.Drawing.Color.Red;
+                itemsToCopy.Add(new ItemToCopy(cat.Name, false));
             }
-            else
+        }
+
+        private void txtSource_TextChanged(object sender, EventArgs e)
+        {
+            itemsToCopy.Clear();
+        }
+
+        private void btnSelect_Click(object sender, EventArgs e)
+        {
+            try
             {
-                txtOutput.ForeColor = System.Drawing.Color.Black;
+                if (string.IsNullOrEmpty(txtSource.Text) == true)
+                {
+                    throw new Exception("Enter a Source Server!");
+                }
+
+                ConnectSqlServer connection = new ConnectSqlServer();
+                sourceserver = connection.Connect(txtSource.Text);
+
+                if (itemsToCopy.Count == 0)
+                {
+                    setupJobList();
+                }
+
+                SelectItemsToCopy form = new SelectItemsToCopy();
+                form.ItemsToCopy = itemsToCopy;
+                form.ShowDialog();
+                itemsToCopy = form.ItemsToCopy;
             }
 
-            if (txtOutput.Text.Length == 0)
+            catch (Exception ex)
             {
-                txtOutput.Text = message;
-            }
-            else
-            {
-                txtOutput.AppendText("\r\n" + message);
+                showOutput.displayOutput(ex.Message, true);
             }
         }
     }

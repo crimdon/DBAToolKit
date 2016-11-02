@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using DBAToolKit.Helpers;
 using Microsoft.SqlServer.Management.Smo;
 using Microsoft.SqlServer.Management.Smo.Agent;
-using System.Collections.Specialized;
+using DBAToolKit.Models;
 
 namespace DBAToolKit.Tools
 {
     public partial class Copy_JobCategories : UserControl
     {
+        private Server sourceserver;
+        List<ItemToCopy> itemsToCopy = new List<ItemToCopy>();
         public Copy_JobCategories()
         {
             InitializeComponent();
@@ -31,7 +32,7 @@ namespace DBAToolKit.Tools
                 }
 
                 ConnectSqlServer connection = new ConnectSqlServer();
-                Server sourceserver = connection.Connect(txtSource.Text);
+                sourceserver = connection.Connect(txtSource.Text);
                 Server destserver = connection.Connect(txtDestination.Text);
 
                 if (sourceserver.VersionMajor < 9 || destserver.VersionMajor < 9)
@@ -44,31 +45,35 @@ namespace DBAToolKit.Tools
                     throw new Exception(string.Format("SQL Login migration FROM SQL Server version {0} to {1} not supported!", sourceserver.VersionMajor.ToString(), destserver.VersionMajor.ToString()));
                 }
 
-                List<String> categoriesToCopy = txtCategoriesToCopy.Text.Split(',').ToList();
+                if (itemsToCopy.Count == 0)
+                {
+                    setupJobList();
+                }
 
                 DateTime started = DateTime.Now;
-                txtOutput.Clear();
-                displayOutput(string.Format("Migration started: {0}", DateTime.Now.ToShortTimeString()));
-                copyCategories(sourceserver, destserver, categoriesToCopy);
-                displayOutput(string.Format("Migration ended: {0}", DateTime.Now.ToShortTimeString()));
+                showOutput.Clear();
+                showOutput.displayOutput(string.Format("Migration started: {0}", DateTime.Now.ToShortTimeString()));
+                copyCategories(destserver);
+                showOutput.displayOutput(string.Format("Migration ended: {0}", DateTime.Now.ToShortTimeString()));
             }
 
             catch (Exception ex)
             {
-                displayOutput(ex.Message, true);
+                showOutput.displayOutput(ex.Message, true);
             }
         }
 
-        private void copyCategories (Server sourceserver, Server destserver, List<string> categoriestocopy)
+        private void copyCategories (Server destserver)
         {
             foreach (JobCategory cat in sourceserver.JobServer.JobCategories)
             {
                 string categoryname = cat.Name;
-                if (string.IsNullOrEmpty(categoriestocopy[0]) || categoriestocopy.Contains(categoryname))
+                ItemToCopy item = itemsToCopy.Find(x => x.Name == categoryname);
+                if (item.IsChecked)
                 {
                     if (DBChecks.CategoryExists(destserver, categoryname))
                     {
-                        displayOutput(string.Format("Category {0} already exists in destination. Skipping.", categoryname));
+                        showOutput.displayOutput(string.Format("Category {0} already exists in destination. Skipping.", categoryname));
                         continue;
                     }
 
@@ -82,32 +87,54 @@ namespace DBAToolKit.Tools
                     }
                     catch (Exception ex)
                     {
-                        displayOutput(ex.Message);
+                        showOutput.displayOutput(ex.Message);
                         continue;
                     }
 
-                    displayOutput(string.Format("Copied category {0} to destination", categoryname));
+                    showOutput.displayOutput(string.Format("Copied category {0} to destination", categoryname));
                 }
             }
         }
-        private void displayOutput(string message, bool errormessage = false)
+
+        private void setupJobList()
         {
-            if (errormessage)
+            foreach (JobCategory cat in sourceserver.JobServer.JobCategories)
             {
-                txtOutput.ForeColor = System.Drawing.Color.Red;
+                itemsToCopy.Add(new ItemToCopy(cat.Name, false));
             }
-            else
+        }
+
+        private void txtSource_TextChanged(object sender, EventArgs e)
+        {
+            itemsToCopy.Clear();
+        }
+
+        private void btnSelect_Click(object sender, EventArgs e)
+        {
+            try
             {
-                txtOutput.ForeColor = System.Drawing.Color.Black;
+                if (string.IsNullOrEmpty(txtSource.Text) == true)
+                {
+                    throw new Exception("Enter a Source Server!");
+                }
+
+                ConnectSqlServer connection = new ConnectSqlServer();
+                sourceserver = connection.Connect(txtSource.Text);
+
+                if (itemsToCopy.Count == 0)
+                {
+                    setupJobList();
+                }
+
+                SelectItemsToCopy form = new SelectItemsToCopy();
+                form.ItemsToCopy = itemsToCopy;
+                form.ShowDialog();
+                itemsToCopy = form.ItemsToCopy;
             }
 
-            if (txtOutput.Text.Length == 0)
+            catch (Exception ex)
             {
-                txtOutput.Text = message;
-            }
-            else
-            {
-                txtOutput.AppendText("\r\n" + message);
+                showOutput.displayOutput(ex.Message, true);
             }
         }
     }

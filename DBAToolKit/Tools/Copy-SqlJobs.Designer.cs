@@ -29,10 +29,7 @@
         private void InitializeComponent()
         {
             this.label3 = new System.Windows.Forms.Label();
-            this.txtJobsToCopy = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.btnCopy = new System.Windows.Forms.Button();
-            this.txtOutput = new System.Windows.Forms.TextBox();
             this.txtDestination = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -40,6 +37,8 @@
             this.chkDisableOnSource = new System.Windows.Forms.CheckBox();
             this.chkDisableOnDest = new System.Windows.Forms.CheckBox();
             this.chkDropDest = new System.Windows.Forms.CheckBox();
+            this.showOutput = new DBAToolKit.Helpers.ShowOutput();
+            this.btnSelect = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label3
@@ -52,22 +51,6 @@
             this.label3.TabIndex = 11;
             this.label3.Text = "Copy SQL Jobs";
             // 
-            // txtJobsToCopy
-            // 
-            this.txtJobsToCopy.Location = new System.Drawing.Point(755, 27);
-            this.txtJobsToCopy.Name = "txtJobsToCopy";
-            this.txtJobsToCopy.Size = new System.Drawing.Size(150, 20);
-            this.txtJobsToCopy.TabIndex = 2;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(653, 33);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(68, 13);
-            this.label4.TabIndex = 19;
-            this.label4.Text = "Jobs to Copy";
-            // 
             // btnCopy
             // 
             this.btnCopy.Location = new System.Drawing.Point(755, 69);
@@ -77,19 +60,6 @@
             this.btnCopy.Text = "Copy";
             this.btnCopy.UseVisualStyleBackColor = true;
             this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
-            // 
-            // txtOutput
-            // 
-            this.txtOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtOutput.Location = new System.Drawing.Point(17, 98);
-            this.txtOutput.Multiline = true;
-            this.txtOutput.Name = "txtOutput";
-            this.txtOutput.ReadOnly = true;
-            this.txtOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtOutput.Size = new System.Drawing.Size(969, 276);
-            this.txtOutput.TabIndex = 18;
             // 
             // txtDestination
             // 
@@ -122,6 +92,7 @@
             this.txtSource.Name = "txtSource";
             this.txtSource.Size = new System.Drawing.Size(150, 20);
             this.txtSource.TabIndex = 0;
+            this.txtSource.TextChanged += new System.EventHandler(this.txtSource_TextChanged);
             // 
             // chkDisableOnSource
             // 
@@ -153,17 +124,33 @@
             this.chkDropDest.Text = "Drop Destination (if exists)";
             this.chkDropDest.UseVisualStyleBackColor = true;
             // 
+            // showOutput
+            // 
+            this.showOutput.Location = new System.Drawing.Point(17, 98);
+            this.showOutput.Name = "showOutput";
+            this.showOutput.Size = new System.Drawing.Size(969, 276);
+            this.showOutput.TabIndex = 23;
+            // 
+            // btnSelect
+            // 
+            this.btnSelect.Location = new System.Drawing.Point(675, 23);
+            this.btnSelect.Name = "btnSelect";
+            this.btnSelect.Size = new System.Drawing.Size(127, 23);
+            this.btnSelect.TabIndex = 24;
+            this.btnSelect.Text = "Select Jobs To Copy";
+            this.btnSelect.UseVisualStyleBackColor = true;
+            this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
+            // 
             // Copy_SqlJobs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnSelect);
+            this.Controls.Add(this.showOutput);
             this.Controls.Add(this.chkDropDest);
             this.Controls.Add(this.chkDisableOnDest);
             this.Controls.Add(this.chkDisableOnSource);
-            this.Controls.Add(this.txtJobsToCopy);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.btnCopy);
-            this.Controls.Add(this.txtOutput);
             this.Controls.Add(this.txtDestination);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -179,10 +166,7 @@
         #endregion
 
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtJobsToCopy;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnCopy;
-        private System.Windows.Forms.TextBox txtOutput;
         private System.Windows.Forms.TextBox txtDestination;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
@@ -190,5 +174,7 @@
         private System.Windows.Forms.CheckBox chkDisableOnSource;
         private System.Windows.Forms.CheckBox chkDisableOnDest;
         private System.Windows.Forms.CheckBox chkDropDest;
+        private Helpers.ShowOutput showOutput;
+        private System.Windows.Forms.Button btnSelect;
     }
 }
