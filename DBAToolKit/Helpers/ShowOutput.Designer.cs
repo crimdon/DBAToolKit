@@ -37,10 +37,8 @@
             this.txtOutput.Location = new System.Drawing.Point(0, 0);
             this.txtOutput.Multiline = true;
             this.txtOutput.Name = "txtOutput";
-            this.txtOutput.ReadOnly = true;
-            this.txtOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtOutput.Size = new System.Drawing.Size(969, 276);
-            this.txtOutput.TabIndex = 19;
+            this.txtOutput.TabIndex = 0;
             // 
             // ShowOutput
             // 

@@ -70,7 +70,7 @@ namespace DBAToolKit.Tools
             foreach (Operator op in sourceserver.JobServer.Operators)
             {
                 string opname = op.Name;
-                ItemToCopy item = itemsToCopy.Find(x => x.Name == categoryname);
+                ItemToCopy item = itemsToCopy.Find(x => x.Name == opname);
                 if (item.IsChecked)
                 {
                     if (DBChecks.OperatorExists(destserver, opname))

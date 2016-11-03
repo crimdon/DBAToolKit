@@ -51,7 +51,6 @@ namespace DBAToolKit.Tools
 
         private void btnCopy_Click(object sender, EventArgs e)
         {
-            showOutput.displayOutput("Attempting to connect to SQL Servers...");
             try
             {
                 if (string.IsNullOrEmpty(txtSource.Text) == true || string.IsNullOrEmpty(txtDestination.Text) == true)

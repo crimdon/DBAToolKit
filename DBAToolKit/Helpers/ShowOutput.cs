@@ -26,10 +26,12 @@ namespace DBAToolKit.Helpers
         {
             if (errormessage)
             {
+                txtOutput.BackColor = txtOutput.BackColor;
                 txtOutput.ForeColor = System.Drawing.Color.Red;
             }
             else
             {
+                txtOutput.BackColor = txtOutput.BackColor;
                 txtOutput.ForeColor = System.Drawing.Color.Black;
             }
 
