@@ -133,5 +133,11 @@ namespace DBAToolKit
             var memoryconsumption = new Get_ServerMemoryConsumption();
             loadControl(memoryconsumption);
         }
+
+        private void backupHistoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var backuphistory = new Get_DatabaseBackupHistory();
+            loadControl(backuphistory);
+        }
     }
 }

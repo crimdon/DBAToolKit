@@ -173,6 +173,12 @@
     <Compile Include="Tools\Fix-OrphanUsers.Designer.cs">
       <DependentUpon>Fix-OrphanUsers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\Get-DatabaseBackupHistory.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tools\Get-DatabaseBackupHistory.Designer.cs">
+      <DependentUpon>Get-DatabaseBackupHistory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tools\Get-ServerMemoryConsumption.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -266,6 +272,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\Fix-OrphanUsers.resx">
       <DependentUpon>Fix-OrphanUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\Get-DatabaseBackupHistory.resx">
+      <DependentUpon>Get-DatabaseBackupHistory.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\Get-ServerMemoryConsumption.resx">
       <DependentUpon>Get-ServerMemoryConsumption.cs</DependentUpon>

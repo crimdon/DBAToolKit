@@ -36,6 +36,7 @@
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.getConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.currentProcessesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.memoryConsumpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.listDatabasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fixOrphanUsersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,7 +56,7 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.memoryConsumpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.backupHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -123,12 +124,20 @@
             this.currentProcessesToolStripMenuItem.Text = "Active Processes";
             this.currentProcessesToolStripMenuItem.Click += new System.EventHandler(this.currentProcessesToolStripMenuItem_Click);
             // 
+            // memoryConsumpToolStripMenuItem
+            // 
+            this.memoryConsumpToolStripMenuItem.Name = "memoryConsumpToolStripMenuItem";
+            this.memoryConsumpToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.memoryConsumpToolStripMenuItem.Text = "Memory Consumption";
+            this.memoryConsumpToolStripMenuItem.Click += new System.EventHandler(this.memoryConsumpToolStripMenuItem_Click);
+            // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.listDatabasesToolStripMenuItem,
             this.fixOrphanUsersToolStripMenuItem,
-            this.databaseSizeToolStripMenuItem});
+            this.databaseSizeToolStripMenuItem,
+            this.backupHistoryToolStripMenuItem});
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
             this.toolStripMenuItem3.Size = new System.Drawing.Size(165, 22);
             this.toolStripMenuItem3.Text = "Databases";
@@ -270,12 +279,12 @@
             this.panel1.Size = new System.Drawing.Size(1000, 425);
             this.panel1.TabIndex = 11;
             // 
-            // memoryConsumpToolStripMenuItem
+            // backupHistoryToolStripMenuItem
             // 
-            this.memoryConsumpToolStripMenuItem.Name = "memoryConsumpToolStripMenuItem";
-            this.memoryConsumpToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
-            this.memoryConsumpToolStripMenuItem.Text = "Memory Consumption";
-            this.memoryConsumpToolStripMenuItem.Click += new System.EventHandler(this.memoryConsumpToolStripMenuItem_Click);
+            this.backupHistoryToolStripMenuItem.Name = "backupHistoryToolStripMenuItem";
+            this.backupHistoryToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.backupHistoryToolStripMenuItem.Text = "Backup History";
+            this.backupHistoryToolStripMenuItem.Click += new System.EventHandler(this.backupHistoryToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -325,6 +334,7 @@
         private System.Windows.Forms.ToolStripMenuItem databaseSizeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewJobTimelineToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem memoryConsumpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem backupHistoryToolStripMenuItem;
     }
 }
 
