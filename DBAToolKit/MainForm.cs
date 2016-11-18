@@ -139,5 +139,11 @@ namespace DBAToolKit
             var backuphistory = new Get_DatabaseBackupHistory();
             loadControl(backuphistory);
         }
+
+        private void autogrowSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var databasefilesizes = new Get_DatabaseFileSizes();
+            loadControl(databasefilesizes);
+        }
     }
 }

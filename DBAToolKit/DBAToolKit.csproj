@@ -125,6 +125,12 @@
     <Compile Include="Models\JobFilter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\Change-Autogrowth.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tools\Change-Autogrowth.Designer.cs">
+      <DependentUpon>Change-Autogrowth.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tools\Copy-DatabaseMail.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -178,6 +184,12 @@
     </Compile>
     <Compile Include="Tools\Get-DatabaseBackupHistory.Designer.cs">
       <DependentUpon>Get-DatabaseBackupHistory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\Get-DatabaseFileSizes.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tools\Get-DatabaseFileSizes.Designer.cs">
+      <DependentUpon>Get-DatabaseFileSizes.cs</DependentUpon>
     </Compile>
     <Compile Include="Tools\Get-ServerMemoryConsumption.cs">
       <SubType>UserControl</SubType>
@@ -249,6 +261,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Tools\Change-Autogrowth.resx">
+      <DependentUpon>Change-Autogrowth.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Tools\Copy-DatabaseMail.resx">
       <DependentUpon>Copy-DatabaseMail.cs</DependentUpon>
     </EmbeddedResource>
@@ -275,6 +290,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\Get-DatabaseBackupHistory.resx">
       <DependentUpon>Get-DatabaseBackupHistory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\Get-DatabaseFileSizes.resx">
+      <DependentUpon>Get-DatabaseFileSizes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\Get-ServerMemoryConsumption.resx">
       <DependentUpon>Get-ServerMemoryConsumption.cs</DependentUpon>

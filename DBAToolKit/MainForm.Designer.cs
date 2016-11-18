@@ -41,6 +41,7 @@
             this.listDatabasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fixOrphanUsersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.databaseSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.backupHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.loginsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,7 +57,7 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.backupHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autogrowSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -137,7 +138,8 @@
             this.listDatabasesToolStripMenuItem,
             this.fixOrphanUsersToolStripMenuItem,
             this.databaseSizeToolStripMenuItem,
-            this.backupHistoryToolStripMenuItem});
+            this.backupHistoryToolStripMenuItem,
+            this.autogrowSettingsToolStripMenuItem});
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
             this.toolStripMenuItem3.Size = new System.Drawing.Size(165, 22);
             this.toolStripMenuItem3.Text = "Databases";
@@ -162,6 +164,13 @@
             this.databaseSizeToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.databaseSizeToolStripMenuItem.Text = "Database Size";
             this.databaseSizeToolStripMenuItem.Click += new System.EventHandler(this.databaseSizeToolStripMenuItem_Click);
+            // 
+            // backupHistoryToolStripMenuItem
+            // 
+            this.backupHistoryToolStripMenuItem.Name = "backupHistoryToolStripMenuItem";
+            this.backupHistoryToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.backupHistoryToolStripMenuItem.Text = "Backup History";
+            this.backupHistoryToolStripMenuItem.Click += new System.EventHandler(this.backupHistoryToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -279,12 +288,12 @@
             this.panel1.Size = new System.Drawing.Size(1000, 425);
             this.panel1.TabIndex = 11;
             // 
-            // backupHistoryToolStripMenuItem
+            // autogrowSettingsToolStripMenuItem
             // 
-            this.backupHistoryToolStripMenuItem.Name = "backupHistoryToolStripMenuItem";
-            this.backupHistoryToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.backupHistoryToolStripMenuItem.Text = "Backup History";
-            this.backupHistoryToolStripMenuItem.Click += new System.EventHandler(this.backupHistoryToolStripMenuItem_Click);
+            this.autogrowSettingsToolStripMenuItem.Name = "autogrowSettingsToolStripMenuItem";
+            this.autogrowSettingsToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.autogrowSettingsToolStripMenuItem.Text = "File Sizes";
+            this.autogrowSettingsToolStripMenuItem.Click += new System.EventHandler(this.autogrowSettingsToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -335,6 +344,7 @@
         private System.Windows.Forms.ToolStripMenuItem viewJobTimelineToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem memoryConsumpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem backupHistoryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autogrowSettingsToolStripMenuItem;
     }
 }
 
