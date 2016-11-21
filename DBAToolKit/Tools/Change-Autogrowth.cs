@@ -18,7 +18,7 @@ namespace DBAToolKit.Tools
         public string dbLogicalFile { get; set; }
         public string dbFileType { get; set; }
         private DataFile dataFileChanged;
-        private LogFile logFilechanged;
+        private LogFile logFileChanged;
         public Change_Autogrowth()
         {
             InitializeComponent();
@@ -85,17 +85,27 @@ namespace DBAToolKit.Tools
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            switch (dbFileType)
+            try
             {
-                case "Data":
-                    dataFileChanged.Alter();
-                    break;
-                case "Log":
-                    logFilechanged.Alter();
-                    break;
+                switch (dbFileType)
+                {
+                    case "Data":
+                        changeDataFile();
+                        dataFileChanged.Alter();
+                        break;
+                    case "Log":
+                        changeLogFile();
+                        logFileChanged.Alter();
+                        break;
+                }
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.InnerException.InnerException.Message);
+            }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -196,10 +206,16 @@ namespace DBAToolKit.Tools
                                 this.numericInMegabytes.Value = (decimal)dbFile.Growth / 1024;
                                 break;
                         }
+                        //string maxsize = dbFile.MaxSize.ToString();
 
-                        switch ((dbFile.MaxSize / 1024).ToString())
+                        switch ((dbFile.MaxSize).ToString())
                         {
-                            case "2097152":
+                            case "2147483648":
+                                this.radioUnlimited.Checked = true;
+                                this.numericLimitedTo.Value = 100;
+                                this.numericLimitedTo.Enabled = false;
+                                break;
+                            case "-1":
                                 this.radioUnlimited.Checked = true;
                                 this.numericLimitedTo.Value = 100;
                                 this.numericLimitedTo.Enabled = false;
@@ -210,9 +226,61 @@ namespace DBAToolKit.Tools
                                 break;
                         }
 
-                        logFilechanged = dbFile;
+                        logFileChanged = dbFile;
                         break;
                     }
+                }
+            }
+        }
+
+        private void changeDataFile()
+        {
+            if (chkEnable.Checked)
+            {
+                if (radioInPercent.Checked)
+                {
+                    dataFileChanged.GrowthType = FileGrowthType.Percent;
+                    dataFileChanged.Growth = (double)numericInPercent.Value;
+                }
+                else
+                {
+                    dataFileChanged.GrowthType = FileGrowthType.KB;
+                    dataFileChanged.Growth = (double)numericInMegabytes.Value * 1024;
+                }
+
+                if (radioLimitedTo.Checked)
+                {
+                    dataFileChanged.MaxSize = (double)numericLimitedTo.Value * 1024;
+                }
+                else
+                {
+                    dataFileChanged.MaxSize = -1;
+                }
+            }
+        }
+
+        private void changeLogFile()
+        {
+            if (chkEnable.Checked)
+            {
+                if (radioInPercent.Checked)
+                {
+                    logFileChanged.GrowthType = FileGrowthType.Percent;
+                    logFileChanged.Growth = (double)numericInPercent.Value;
+                }
+                else
+                {
+                    logFileChanged.GrowthType = FileGrowthType.KB;
+                    logFileChanged.Growth = (double)numericInMegabytes.Value * 1024;
+                }
+
+                if (radioLimitedTo.Checked)
+                {
+                    logFileChanged.MaxSize = (double)numericLimitedTo.Value * 1024;
+                }
+                else
+                {
+                    logFileChanged.MaxSize = -1;
                 }
             }
         }

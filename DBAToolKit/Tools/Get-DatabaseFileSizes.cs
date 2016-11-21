@@ -200,6 +200,8 @@ namespace DBAToolKit.Tools
                 frm.dbLogicalFile = lvItem.SubItems[1].Text;
                 frm.dbFileType = lvItem.SubItems[2].Text.Trim();
                 frm.ShowDialog();
+                if (frm.DialogResult == DialogResult.OK)
+                    showDatabaseFiles();
                 frm.Dispose();
             }
         }
