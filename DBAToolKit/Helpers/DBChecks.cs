@@ -20,11 +20,14 @@ namespace DBAToolKit.Helpers
 
         public static bool DatabaseUserExists(Database db, string user)
         {
-            foreach (User dbuser in db.Users)
+            if (db.Status == DatabaseStatus.Normal)
             {
-                if (user.ToLower() == dbuser.Name.ToLower())
+                foreach (User dbuser in db.Users)
                 {
-                    return true;
+                    if (user.ToLower() == dbuser.Name.ToLower())
+                    {
+                        return true;
+                    }
                 }
             }
             return false;

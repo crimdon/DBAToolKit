@@ -12,7 +12,7 @@ namespace DBAToolKit.Models
         public bool IsChecked { get; set; }
         public ItemToCopy()
         { }
-        public ItemToCopy (string name, bool ischecked)
+        public ItemToCopy (string name, bool ischecked = false)
         {
             Name = name;
             IsChecked = ischecked;

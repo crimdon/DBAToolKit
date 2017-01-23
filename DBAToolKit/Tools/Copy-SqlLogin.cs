@@ -47,7 +47,7 @@ namespace DBAToolKit.Tools
                 sourceserver = connection.Connect(txtSource.Text);
                 Server destserver = connection.Connect(txtDestination.Text);
 
-                if(sourceserver.VersionMajor < 9 || destserver.VersionMajor < 9)
+                if (sourceserver.VersionMajor < 9 || destserver.VersionMajor < 9)
                 {
                     throw new Exception("SQL Server versions prior to 2005 are not supported!");
                 }
@@ -73,7 +73,7 @@ namespace DBAToolKit.Tools
             {
                 showOutput.displayOutput(ex.Message, true);
             }
-        }
+}
 
         private void processLogins(Server destserver, string action)
         {
@@ -82,11 +82,16 @@ namespace DBAToolKit.Tools
                 string username = sourcelogin.Name;
                 string currentlogin = sourceserver.ConnectionContext.TrueLogin;
                 string servername = sourceserver.NetName.ToLower();
-                Login destlogin = destserver.Logins[username];
+                ItemToCopy item = new ItemToCopy();
+                var checkitem = itemsToCopy.FirstOrDefault(x => x.Name == username);
+                if (checkitem == null)
+                    item.IsChecked = false;
+                else
+                    item = (ItemToCopy)checkitem;
 
-                ItemToCopy item = itemsToCopy.Find(x => x.Name == username);
                 if (item.IsChecked)
                 {
+                    Login destlogin = destserver.Logins[username];
 
                     if (username.StartsWith("##") || username == "sa" || username == "distributor_admin")
                     {
@@ -185,7 +190,7 @@ namespace DBAToolKit.Tools
                 destlogin.Language = sourcelogin.Language;
 
                 string defaultdb = sourcelogin.DefaultDatabase;
-                if (destserver.Databases[defaultdb] == null)
+                if (destserver.Databases[defaultdb] == null || destserver.Databases[defaultdb].Status != DatabaseStatus.Normal)
                 {
                     defaultdb = "master";
                 }
@@ -349,9 +354,10 @@ namespace DBAToolKit.Tools
                 string dbusername = dbmap.UserName;
                 string dbloginname = dbmap.LoginName;
 
-                // Only if database exists on destination
+                // Only if database exists on destination and its status is normal
                 if (DBChecks.DatabaseExists(destserver, sourcedb.Name) &&
-                    DBChecks.LoginExists(destserver, dbloginname) && !DBChecks.DatabaseUserExists(destdb, dbusername))
+                    DBChecks.LoginExists(destserver, dbloginname) && !DBChecks.DatabaseUserExists(destdb, dbusername)
+                    && destdb.Status == DatabaseStatus.Normal)
                 {
                     // Add DB User
                     try
