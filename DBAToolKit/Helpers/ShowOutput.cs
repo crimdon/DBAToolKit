@@ -19,30 +19,29 @@ namespace DBAToolKit.Helpers
 
         public void Clear()
         {
-            txtOutput.Clear();
+            rtOutput.Clear();
         }
 
         public void displayOutput(string message, bool errormessage = false)
         {
             if (errormessage)
-            {
-                txtOutput.BackColor = txtOutput.BackColor;
-                txtOutput.ForeColor = System.Drawing.Color.Red;
-            }
+                AppendText(message, Color.Red);
             else
-            {
-                txtOutput.BackColor = txtOutput.BackColor;
-                txtOutput.ForeColor = System.Drawing.Color.Black;
-            }
+                AppendText(message, Color.Black);
+        }
 
-            if (txtOutput.Text.Length == 0)
-            {
-                txtOutput.Text = message;
-            }
+        private void AppendText(string text, Color color)
+        {
+            rtOutput.SelectionStart = rtOutput.TextLength;
+            rtOutput.SelectionLength = 0;
+
+            rtOutput.SelectionColor = color;
+            if (!string.IsNullOrWhiteSpace(rtOutput.Text))
+                rtOutput.AppendText("\r\n" + text);
             else
-            {
-                txtOutput.AppendText("\r\n" + message);
-            }
+                rtOutput.AppendText(text);
+            rtOutput.SelectionColor = rtOutput.ForeColor;
+            rtOutput.ScrollToCaret();
         }
     }
 }
