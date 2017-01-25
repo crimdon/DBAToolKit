@@ -80,6 +80,7 @@ namespace DBAToolKit.Tools
             foreach (Login sourcelogin in sourceserver.Logins)
             {
                 string username = sourcelogin.Name;
+                Login destlogin = destserver.Logins[username];
                 string currentlogin = sourceserver.ConnectionContext.TrueLogin;
                 string servername = sourceserver.NetName.ToLower();
                 ItemToCopy item = new ItemToCopy();
@@ -91,8 +92,6 @@ namespace DBAToolKit.Tools
 
                 if (item.IsChecked)
                 {
-                    Login destlogin = destserver.Logins[username];
-
                     if (username.StartsWith("##") || username == "sa" || username == "distributor_admin")
                     {
                         showOutput.displayOutput(string.Format("Skipping {0}.", username));
@@ -311,95 +310,101 @@ namespace DBAToolKit.Tools
         private void syncDatabasePerms(Login sourcelogin, Login destlogin, Server sourceserver, Server destserver)
         {
             // Remove user from destination if it does not exist on source
-            foreach (DatabaseMapping dbmap in destlogin.EnumDatabaseMappings())
+            if (destlogin.EnumDatabaseMappings() != null)
             {
-                string dbname = dbmap.DBName;
-                Database destdb = destserver.Databases[dbname];
-                Database sourcedb = sourceserver.Databases[dbname];
-                string dbusername = dbmap.UserName;
-                string dbloginname = dbmap.LoginName;
-
-                if (DBChecks.DatabaseExists(sourceserver, destdb.Name) &&
-                    !DBChecks.DatabaseUserExists(sourcedb, dbusername) && DBChecks.DatabaseUserExists(destdb, dbusername))
+                foreach (DatabaseMapping dbmap in destlogin.EnumDatabaseMappings())
                 {
+                    string dbname = dbmap.DBName;
+                    Database destdb = destserver.Databases[dbname];
+                    Database sourcedb = sourceserver.Databases[dbname];
+                    string dbusername = dbmap.UserName;
+                    string dbloginname = dbmap.LoginName;
 
-                    try
+                    if (DBChecks.DatabaseExists(sourceserver, destdb.Name) &&
+                        !DBChecks.DatabaseUserExists(sourcedb, dbusername) && DBChecks.DatabaseUserExists(destdb, dbusername))
                     {
-                        DBFunctions.DropDBUser(sourcedb, destdb, dbusername);
-                    }
-                    catch (Exception ex)
-                    {
-                        showOutput.displayOutput(string.Format("Failed to drop user {0} From {1} on destination.", dbusername, dbname),true);
-                        showOutput.displayOutput(ex.Message);
-                    }
 
-                    try
-                    {
-                        DBFunctions.RevokeDBPerms(sourcedb, destdb, dbusername);
-                    }
-                    catch (Exception ex)
-                    {
-                        showOutput.displayOutput(string.Format("Failed to revoke permission for user {0} on {1}.", dbusername, dbname),true);
-                        showOutput.displayOutput(ex.Message, true);
+                        try
+                        {
+                            DBFunctions.DropDBUser(sourcedb, destdb, dbusername);
+                        }
+                        catch (Exception ex)
+                        {
+                            showOutput.displayOutput(string.Format("Failed to drop user {0} From {1} on destination.", dbusername, dbname), true);
+                            showOutput.displayOutput(ex.Message);
+                        }
+
+                        try
+                        {
+                            DBFunctions.RevokeDBPerms(sourcedb, destdb, dbusername);
+                        }
+                        catch (Exception ex)
+                        {
+                            showOutput.displayOutput(string.Format("Failed to revoke permission for user {0} on {1}.", dbusername, dbname), true);
+                            showOutput.displayOutput(ex.Message, true);
+                        }
                     }
                 }
             }
 
             // Add the database mappings and permissions
-            foreach (DatabaseMapping dbmap in sourcelogin.EnumDatabaseMappings())
             {
-                string dbname = dbmap.DBName;
-                Database destdb = destserver.Databases[dbname];
-                Database sourcedb = sourceserver.Databases[dbname];
-                string dbusername = dbmap.UserName;
-                string dbloginname = dbmap.LoginName;
+                if (sourcelogin.EnumDatabaseMappings() != null)
+                    foreach (DatabaseMapping dbmap in sourcelogin.EnumDatabaseMappings())
+                    {
+                        string dbname = dbmap.DBName;
+                        Database destdb = destserver.Databases[dbname];
+                        Database sourcedb = sourceserver.Databases[dbname];
+                        string dbusername = dbmap.UserName;
+                        string dbloginname = dbmap.LoginName;
 
-                // Only if database exists on destination and its status is normal
-                if (DBChecks.DatabaseExists(destserver, sourcedb.Name) &&
-                    DBChecks.LoginExists(destserver, dbloginname) && !DBChecks.DatabaseUserExists(destdb, dbusername)
-                    && destdb.Status == DatabaseStatus.Normal)
-                {
-                    // Add DB User
-                    try
-                    {
-                        DBFunctions.AddDBUser(destdb, dbusername);
-                    }
-                    catch (Exception ex)
-                    {
-                        showOutput.displayOutput(string.Format("Failed to add user {0} to database {1}", dbusername, dbname),true);
-                        showOutput.displayOutput(ex.Message, true);
-                    }
+                        // Only if database exists on destination and its status is normal
+                        if (DBChecks.DatabaseExists(destserver, sourcedb.Name) &&
+                            DBChecks.LoginExists(destserver, dbloginname) && !DBChecks.DatabaseUserExists(destdb, dbusername)
+                            && destdb.Status == DatabaseStatus.Normal)
+                        {
+                            // Add DB User
+                            try
+                            {
+                                DBFunctions.AddDBUser(destdb, dbusername);
+                            }
+                            catch (Exception ex)
+                            {
+                                showOutput.displayOutput(string.Format("Failed to add user {0} to database {1}", dbusername, dbname), true);
+                                showOutput.displayOutput(ex.Message, true);
+                            }
 
-                    //Change the owner
-                    if (sourcedb.Owner == dbusername)
-                    {
-                        DBFunctions.ChangeDbOwner(destserver, null, dbusername, dbname);
-                    }
+                            //Change the owner
+                            if (sourcedb.Owner == dbusername)
+                            {
+                                DBFunctions.ChangeDbOwner(destserver, null, dbusername, dbname);
+                            }
 
-                    //Map the roles
-                    try
-                    {
-                        DBFunctions.AddUserToDBRoles(sourcedb, destdb, dbusername);
-                    }
-                    catch (Exception ex)
-                    {
-                        showOutput.displayOutput(string.Format("Error adding user {0} to role on database {1}", dbusername, dbname),true);
-                        showOutput.displayOutput(ex.Message, true);
-                    }
+                            //Map the roles
+                            try
+                            {
+                                DBFunctions.AddUserToDBRoles(sourcedb, destdb, dbusername);
+                            }
+                            catch (Exception ex)
+                            {
+                                showOutput.displayOutput(string.Format("Error adding user {0} to role on database {1}", dbusername, dbname), true);
+                                showOutput.displayOutput(ex.Message, true);
+                            }
 
-                    //Map permissions
+                            //Map permissions
 
-                    try
-                    {
-                        DBFunctions.GrantDBPerms(sourcedb, destdb, dbusername);
+                            try
+                            {
+                                DBFunctions.GrantDBPerms(sourcedb, destdb, dbusername);
+                            }
+                            catch (Exception ex)
+                            {
+                                showOutput.displayOutput(string.Format("Error granting permission for user {0} on database {1}", dbusername, dbname), true);
+                                showOutput.displayOutput(ex.Message, true);
+                            }
+                        }
+                        showOutput.displayOutput(string.Format("Database permissions synced for user {0} on database {1}", dbusername, dbname));
                     }
-                    catch (Exception ex)
-                    {
-                        showOutput.displayOutput(string.Format("Error granting permission for user {0} on database {1}", dbusername, dbname),true);
-                        showOutput.displayOutput(ex.Message, true);
-                    }
-                }
-                showOutput.displayOutput(string.Format("Database permissions synced for user {0} on database {1}", dbusername, dbname));
             }
         }
         private void setupJobList()
