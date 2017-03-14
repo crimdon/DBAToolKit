@@ -30,16 +30,15 @@
         {
             this.label3 = new System.Windows.Forms.Label();
             this.btnCopy = new System.Windows.Forms.Button();
-            this.txtOutput = new System.Windows.Forms.TextBox();
             this.txtDestination = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.txtSource = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtItemToCopy = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.cboAction = new System.Windows.Forms.ComboBox();
             this.chkDropDest = new System.Windows.Forms.CheckBox();
+            this.btnSelect = new System.Windows.Forms.Button();
+            this.showOutput = new DBAToolKit.Helpers.ShowOutput();
             this.SuspendLayout();
             // 
             // label3
@@ -61,19 +60,6 @@
             this.btnCopy.Text = "Copy";
             this.btnCopy.UseVisualStyleBackColor = true;
             this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
-            // 
-            // txtOutput
-            // 
-            this.txtOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtOutput.Location = new System.Drawing.Point(17, 98);
-            this.txtOutput.Multiline = true;
-            this.txtOutput.Name = "txtOutput";
-            this.txtOutput.ReadOnly = true;
-            this.txtOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtOutput.Size = new System.Drawing.Size(969, 276);
-            this.txtOutput.TabIndex = 29;
             // 
             // txtDestination
             // 
@@ -106,22 +92,7 @@
             this.txtSource.Name = "txtSource";
             this.txtSource.Size = new System.Drawing.Size(150, 20);
             this.txtSource.TabIndex = 23;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(635, 29);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(129, 13);
-            this.label4.TabIndex = 30;
-            this.label4.Text = "Account or Profile to copy";
-            // 
-            // txtItemToCopy
-            // 
-            this.txtItemToCopy.Location = new System.Drawing.Point(780, 26);
-            this.txtItemToCopy.Name = "txtItemToCopy";
-            this.txtItemToCopy.Size = new System.Drawing.Size(184, 20);
-            this.txtItemToCopy.TabIndex = 31;
+            this.txtSource.TextChanged += new System.EventHandler(this.txtSource_TextChanged);
             // 
             // label5
             // 
@@ -139,6 +110,7 @@
             this.cboAction.Name = "cboAction";
             this.cboAction.Size = new System.Drawing.Size(150, 21);
             this.cboAction.TabIndex = 33;
+            this.cboAction.SelectedIndexChanged += new System.EventHandler(this.cboAction_SelectedIndexChanged);
             // 
             // chkDropDest
             // 
@@ -150,17 +122,33 @@
             this.chkDropDest.Text = "Drop Destination (if exists)";
             this.chkDropDest.UseVisualStyleBackColor = true;
             // 
+            // btnSelect
+            // 
+            this.btnSelect.Location = new System.Drawing.Point(687, 25);
+            this.btnSelect.Name = "btnSelect";
+            this.btnSelect.Size = new System.Drawing.Size(121, 23);
+            this.btnSelect.TabIndex = 35;
+            this.btnSelect.Text = "Select Items To Copy";
+            this.btnSelect.UseVisualStyleBackColor = true;
+            this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
+            // 
+            // showOutput
+            // 
+            this.showOutput.Location = new System.Drawing.Point(8, 101);
+            this.showOutput.Name = "showOutput";
+            this.showOutput.Size = new System.Drawing.Size(969, 276);
+            this.showOutput.TabIndex = 36;
+            // 
             // Copy_DatabaseMail
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.showOutput);
+            this.Controls.Add(this.btnSelect);
             this.Controls.Add(this.chkDropDest);
             this.Controls.Add(this.cboAction);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.txtItemToCopy);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.btnCopy);
-            this.Controls.Add(this.txtOutput);
             this.Controls.Add(this.txtDestination);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -177,15 +165,14 @@
 
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnCopy;
-        private System.Windows.Forms.TextBox txtOutput;
         private System.Windows.Forms.TextBox txtDestination;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtSource;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox txtItemToCopy;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cboAction;
         private System.Windows.Forms.CheckBox chkDropDest;
+        private System.Windows.Forms.Button btnSelect;
+        private Helpers.ShowOutput showOutput;
     }
 }
