@@ -97,9 +97,9 @@ namespace DBAToolKit.Tools
         }
         private void setupJobList()
         {
-            foreach (JobCategory cat in sourceserver.JobServer.JobCategories)
+            foreach (Operator op in sourceserver.JobServer.Operators)
             {
-                itemsToCopy.Add(new ItemToCopy(cat.Name, false));
+                itemsToCopy.Add(new ItemToCopy(op.Name, false));
             }
         }
 
