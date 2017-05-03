@@ -45,6 +45,16 @@ namespace DBAToolKit.Helpers
                 connectionString.ConnectionString = conn;
             }
         }
+        public static void deleteConnectionString(string serverName)
+        {
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var connectionString = config.ConnectionStrings.ConnectionStrings[serverName];
+            if (connectionString != null)
+            {
+                config.ConnectionStrings.ConnectionStrings.Remove(serverName);
+            }
+            config.Save(ConfigurationSaveMode.Full);
+        }
         public bool testConnection(string conSTR)
         {
             try

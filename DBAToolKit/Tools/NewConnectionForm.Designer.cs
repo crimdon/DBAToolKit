@@ -1,4 +1,4 @@
-﻿namespace DBAToolKit
+﻿namespace DBAToolKit.Tools
 {
     partial class NewConnectionForm
     {

@@ -37,7 +37,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -136,10 +137,10 @@
     <Compile Include="Models\DataClasses.cs" />
     <Compile Include="Models\ItemToCopy.cs" />
     <Compile Include="Models\JobFilter.cs" />
-    <Compile Include="NewConnectionForm.cs">
+    <Compile Include="Tools\NewConnectionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewConnectionForm.designer.cs">
+    <Compile Include="Tools\NewConnectionForm.designer.cs">
       <DependentUpon>NewConnectionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -252,6 +253,12 @@
     <Compile Include="Tools\Get-ServerConfiguration.Designer.cs">
       <DependentUpon>Get-ServerConfiguration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\Maintain-RegisteredServers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tools\Maintain-RegisteredServers.Designer.cs">
+      <DependentUpon>Maintain-RegisteredServers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tools\Show-DatabaseDetails.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -273,7 +280,7 @@
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewConnectionForm.resx">
+    <EmbeddedResource Include="Tools\NewConnectionForm.resx">
       <DependentUpon>NewConnectionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -339,6 +346,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\Get-ServerConfiguration.resx">
       <DependentUpon>Get-ServerConfiguration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\Maintain-RegisteredServers.resx">
+      <DependentUpon>Maintain-RegisteredServers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\Show-DatabaseDetails.resx">
       <DependentUpon>Show-DatabaseDetails.cs</DependentUpon>

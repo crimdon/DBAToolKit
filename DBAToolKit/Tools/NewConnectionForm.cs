@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace DBAToolKit
+namespace DBAToolKit.Tools
 {
     public partial class NewConnectionForm : Form
     {

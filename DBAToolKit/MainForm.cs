@@ -143,8 +143,8 @@ namespace DBAToolKit
 
         private void addNewConnectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            NewConnectionForm newConnection = new NewConnectionForm();
-            newConnection.ShowDialog();
+            var registeredservers = new Maintain_RegisteredServers();
+            loadControl(registeredservers);
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
