@@ -39,11 +39,11 @@ namespace DBAToolKit.Tools
             {
                 if (css.Name.ToString() != "LocalSqlServer")
                 {
-
+                    string maskedConnectionString = Regex.Replace(css.ConnectionString, "Password=[^;]*;", "Password=******;");
                     listRegisteredServers.Items.Add(new ListViewItem(new string[]
                         {
                             css.Name.ToString(),
-                            css.ConnectionString
+                            maskedConnectionString
                         }));
                 }
             }
