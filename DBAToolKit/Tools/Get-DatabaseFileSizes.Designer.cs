@@ -31,11 +31,11 @@
             this.components = new System.ComponentModel.Container();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtSource = new System.Windows.Forms.TextBox();
             this.btnDisplay = new System.Windows.Forms.Button();
             this.listDatabaseFiles = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -43,7 +43,7 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.changeAutogrowSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cmbFilter = new System.Windows.Forms.ComboBox();
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.registeredServersSource = new DBAToolKit.Helpers.RegisteredServers();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,13 +65,6 @@
             this.label1.Size = new System.Drawing.Size(75, 13);
             this.label1.TabIndex = 28;
             this.label1.Text = "Source Server";
-            // 
-            // txtSource
-            // 
-            this.txtSource.Location = new System.Drawing.Point(103, 33);
-            this.txtSource.Name = "txtSource";
-            this.txtSource.Size = new System.Drawing.Size(150, 20);
-            this.txtSource.TabIndex = 27;
             // 
             // btnDisplay
             // 
@@ -119,6 +112,11 @@
             this.columnHeader2.Text = "Logical Name";
             this.columnHeader2.Width = 170;
             // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "Type";
+            this.columnHeader7.Width = 43;
+            // 
             // columnHeader3
             // 
             this.columnHeader3.Text = "Physical File Name";
@@ -155,26 +153,30 @@
             // 
             // cmbFilter
             // 
+            this.cmbFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbFilter.FormattingEnabled = true;
             this.cmbFilter.Location = new System.Drawing.Point(295, 33);
             this.cmbFilter.Name = "cmbFilter";
             this.cmbFilter.Size = new System.Drawing.Size(204, 21);
             this.cmbFilter.TabIndex = 31;
             // 
-            // columnHeader7
+            // registeredServersSource
             // 
-            this.columnHeader7.Text = "Type";
-            this.columnHeader7.Width = 43;
+            this.registeredServersSource.Location = new System.Drawing.Point(87, 36);
+            this.registeredServersSource.Name = "registeredServersSource";
+            this.registeredServersSource.SelectedServer = null;
+            this.registeredServersSource.Size = new System.Drawing.Size(150, 20);
+            this.registeredServersSource.TabIndex = 32;
             // 
             // Get_DatabaseFileSizes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.registeredServersSource);
             this.Controls.Add(this.cmbFilter);
             this.Controls.Add(this.listDatabaseFiles);
             this.Controls.Add(this.btnDisplay);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtSource);
             this.Controls.Add(this.label3);
             this.Name = "Get_DatabaseFileSizes";
             this.Size = new System.Drawing.Size(1000, 400);
@@ -188,7 +190,6 @@
 
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtSource;
         private System.Windows.Forms.Button btnDisplay;
         private System.Windows.Forms.ListView listDatabaseFiles;
         private System.Windows.Forms.ComboBox cmbFilter;
@@ -201,5 +202,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem changeAutogrowSettingsToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader columnHeader7;
+        private Helpers.RegisteredServers registeredServersSource;
     }
 }

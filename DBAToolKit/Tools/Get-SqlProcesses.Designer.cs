@@ -31,11 +31,11 @@
             this.components = new System.ComponentModel.Container();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtSource = new System.Windows.Forms.TextBox();
             this.btnDisplay = new System.Windows.Forms.Button();
             this.listProcesses = new BrightIdeasSoftware.DataListView();
             this.contextMenuProcesses = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.killProcessToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.registeredServersSource = new DBAToolKit.Helpers.RegisteredServers();
             ((System.ComponentModel.ISupportInitialize)(this.listProcesses)).BeginInit();
             this.contextMenuProcesses.SuspendLayout();
             this.SuspendLayout();
@@ -58,13 +58,6 @@
             this.label1.Size = new System.Drawing.Size(75, 13);
             this.label1.TabIndex = 28;
             this.label1.Text = "Source Server";
-            // 
-            // txtSource
-            // 
-            this.txtSource.Location = new System.Drawing.Point(103, 33);
-            this.txtSource.Name = "txtSource";
-            this.txtSource.Size = new System.Drawing.Size(150, 20);
-            this.txtSource.TabIndex = 27;
             // 
             // btnDisplay
             // 
@@ -111,14 +104,22 @@
             this.killProcessToolStripMenuItem.Text = "Kill Process";
             this.killProcessToolStripMenuItem.Click += new System.EventHandler(this.killProcessToolStripMenuItem_Click);
             // 
+            // registeredServersSource
+            // 
+            this.registeredServersSource.Location = new System.Drawing.Point(87, 36);
+            this.registeredServersSource.Name = "registeredServersSource";
+            this.registeredServersSource.SelectedServer = null;
+            this.registeredServersSource.Size = new System.Drawing.Size(150, 20);
+            this.registeredServersSource.TabIndex = 31;
+            // 
             // Get_SqlProcesses
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.registeredServersSource);
             this.Controls.Add(this.listProcesses);
             this.Controls.Add(this.btnDisplay);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtSource);
             this.Controls.Add(this.label3);
             this.Name = "Get_SqlProcesses";
             this.Size = new System.Drawing.Size(1000, 400);
@@ -133,10 +134,10 @@
 
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtSource;
         private System.Windows.Forms.Button btnDisplay;
         private BrightIdeasSoftware.DataListView listProcesses;
         private System.Windows.Forms.ContextMenuStrip contextMenuProcesses;
         private System.Windows.Forms.ToolStripMenuItem killProcessToolStripMenuItem;
+        private Helpers.RegisteredServers registeredServersSource;
     }
 }

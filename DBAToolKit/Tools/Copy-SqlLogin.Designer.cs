@@ -28,25 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtSource = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.txtDestination = new System.Windows.Forms.TextBox();
             this.btnCopy = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.cmbAction = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.showOutput = new DBAToolKit.Helpers.ShowOutput();
             this.btnSelect = new System.Windows.Forms.Button();
+            this.registeredServersSource = new DBAToolKit.Helpers.RegisteredServers();
+            this.registeredServersDestination = new DBAToolKit.Helpers.RegisteredServers();
             this.SuspendLayout();
-            // 
-            // txtSource
-            // 
-            this.txtSource.Location = new System.Drawing.Point(111, 36);
-            this.txtSource.Name = "txtSource";
-            this.txtSource.Size = new System.Drawing.Size(150, 20);
-            this.txtSource.TabIndex = 0;
-            this.txtSource.TextChanged += new System.EventHandler(this.txtSource_TextChanged);
             // 
             // label1
             // 
@@ -65,13 +57,6 @@
             this.label2.Size = new System.Drawing.Size(91, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "Desination Server";
-            // 
-            // txtDestination
-            // 
-            this.txtDestination.Location = new System.Drawing.Point(434, 36);
-            this.txtDestination.Name = "txtDestination";
-            this.txtDestination.Size = new System.Drawing.Size(150, 20);
-            this.txtDestination.TabIndex = 1;
             // 
             // btnCopy
             // 
@@ -95,6 +80,7 @@
             // 
             // cmbAction
             // 
+            this.cmbAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbAction.FormattingEnabled = true;
             this.cmbAction.Location = new System.Drawing.Point(111, 78);
             this.cmbAction.Name = "cmbAction";
@@ -127,20 +113,37 @@
             this.btnSelect.UseVisualStyleBackColor = true;
             this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
             // 
+            // registeredServersSource
+            // 
+            this.registeredServersSource.Location = new System.Drawing.Point(111, 39);
+            this.registeredServersSource.Name = "registeredServersSource";
+            this.registeredServersSource.SelectedServer = null;
+            this.registeredServersSource.Size = new System.Drawing.Size(150, 20);
+            this.registeredServersSource.TabIndex = 32;
+            this.registeredServersSource.SelectedServerChanged += new System.EventHandler(this.registeredServersSource_SelectedServerChanged);
+            // 
+            // registeredServersDestination
+            // 
+            this.registeredServersDestination.Location = new System.Drawing.Point(414, 38);
+            this.registeredServersDestination.Name = "registeredServersDestination";
+            this.registeredServersDestination.SelectedServer = null;
+            this.registeredServersDestination.Size = new System.Drawing.Size(150, 20);
+            this.registeredServersDestination.TabIndex = 33;
+            // 
             // Copy_SqlLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.registeredServersDestination);
+            this.Controls.Add(this.registeredServersSource);
             this.Controls.Add(this.btnSelect);
             this.Controls.Add(this.showOutput);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.cmbAction);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnCopy);
-            this.Controls.Add(this.txtDestination);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtSource);
             this.Name = "Copy_SqlLogin";
             this.Size = new System.Drawing.Size(1000, 400);
             this.ResumeLayout(false);
@@ -149,16 +152,15 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox txtSource;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtDestination;
         private System.Windows.Forms.Button btnCopy;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cmbAction;
         private System.Windows.Forms.Label label5;
         private Helpers.ShowOutput showOutput;
         private System.Windows.Forms.Button btnSelect;
+        private Helpers.RegisteredServers registeredServersSource;
+        private Helpers.RegisteredServers registeredServersDestination;
     }
 }

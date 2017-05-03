@@ -37,6 +37,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -51,6 +52,9 @@
     <ApplicationIcon>Resources\DB-Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Program Files\Microsoft SQL Server\120\SDK\Assemblies\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
@@ -76,7 +80,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -89,11 +95,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\ConnectionManager.cs" />
     <Compile Include="Helpers\ConnectSqlServer.cs" />
     <Compile Include="Helpers\DBChecks.cs" />
     <Compile Include="Helpers\DBFunctions.cs" />
     <Compile Include="Helpers\GanttChart.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Helpers\RegisteredServers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Helpers\RegisteredServers.Designer.cs">
+      <DependentUpon>RegisteredServers.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\SelectItemsToCopy.cs">
       <SubType>Form</SubType>
@@ -123,6 +136,12 @@
     <Compile Include="Models\DataClasses.cs" />
     <Compile Include="Models\ItemToCopy.cs" />
     <Compile Include="Models\JobFilter.cs" />
+    <Compile Include="NewConnectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewConnectionForm.designer.cs">
+      <DependentUpon>NewConnectionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\Change-Autogrowth.cs">
@@ -239,6 +258,9 @@
     <Compile Include="Tools\Show-DatabaseDetails.Designer.cs">
       <DependentUpon>Show-DatabaseDetails.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Helpers\RegisteredServers.resx">
+      <DependentUpon>RegisteredServers.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Helpers\SelectItemsToCopy.resx">
       <DependentUpon>SelectItemsToCopy.cs</DependentUpon>
     </EmbeddedResource>
@@ -250,6 +272,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewConnectionForm.resx">
+      <DependentUpon>NewConnectionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

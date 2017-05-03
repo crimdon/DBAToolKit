@@ -16,13 +16,13 @@ namespace DBAToolKit.Tools
         {
             try
             {
-                if (string.IsNullOrEmpty(txtSource.Text) == true)
+                if (string.IsNullOrEmpty(registeredServersSource.SelectedServer) == true)
                 {
                     throw new Exception("Enter a Server!");
                 }
 
                 ConnectSqlServer connection = new ConnectSqlServer();
-                Server sourceserver = connection.Connect(txtSource.Text);
+                Server sourceserver = connection.Connect(registeredServersSource.SelectedServer);
                 
                 if (sourceserver.VersionMajor < 9)
                 {
@@ -67,7 +67,7 @@ namespace DBAToolKit.Tools
                 ListView.SelectedListViewItemCollection items = listDatabases.SelectedItems;
 
                 ListViewItem lvItem = items[0];
-                MainForm.dbServer = this.txtSource.Text;
+                MainForm.dbServer = this.registeredServersSource.SelectedServer;
                 MainForm.dbName = lvItem.Text;
                 Show_DatabaseDetails frm = new Show_DatabaseDetails();
                 frm.Show();

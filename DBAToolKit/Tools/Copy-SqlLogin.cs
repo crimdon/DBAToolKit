@@ -33,19 +33,19 @@ namespace DBAToolKit.Tools
             showOutput.displayOutput("Attempting to connect to SQL Servers...");
             try
             {
-                if (string.IsNullOrEmpty(txtSource.Text) == true || string.IsNullOrEmpty(txtDestination.Text) == true)
+                if (string.IsNullOrEmpty(registeredServersSource.SelectedServer) == true || string.IsNullOrEmpty(registeredServersDestination.SelectedServer) == true)
                 {
                     throw new Exception("Enter a Source and Destination Server!");
                 }
 
-                if (txtSource.Text == txtDestination.Text)
+                if (registeredServersSource.SelectedServer == registeredServersDestination.SelectedServer)
                 {
                     throw new Exception("Source and destination cannot be the same!");
                 }
 
                 ConnectSqlServer connection = new ConnectSqlServer();
-                sourceserver = connection.Connect(txtSource.Text);
-                Server destserver = connection.Connect(txtDestination.Text);
+                sourceserver = connection.Connect(registeredServersSource.SelectedServer);
+                Server destserver = connection.Connect(registeredServersDestination.SelectedServer);
 
                 if (sourceserver.VersionMajor < 9 || destserver.VersionMajor < 9)
                 {
@@ -425,23 +425,17 @@ namespace DBAToolKit.Tools
                 itemsToCopy.Add(new ItemToCopy(sourcelogin.Name, false));
             }
         }
-
-        private void txtSource_TextChanged(object sender, EventArgs e)
-        {
-            itemsToCopy.Clear();
-        }
-
         private void btnSelect_Click(object sender, EventArgs e)
         {
             try
             {
-                if (string.IsNullOrEmpty(txtSource.Text) == true)
+                if (string.IsNullOrEmpty(registeredServersSource.SelectedServer) == true)
                 {
                     throw new Exception("Enter a Source Server!");
                 }
 
                 ConnectSqlServer connection = new ConnectSqlServer();
-                sourceserver = connection.Connect(txtSource.Text);
+                sourceserver = connection.Connect(registeredServersSource.SelectedServer);
 
                 if (itemsToCopy.Count == 0)
                 {
@@ -458,6 +452,11 @@ namespace DBAToolKit.Tools
             {
                 showOutput.displayOutput(ex.Message, true);
             }
+        }
+
+        private void registeredServersSource_SelectedServerChanged(object sender, EventArgs e)
+        {
+            itemsToCopy.Clear();
         }
     }
 }
