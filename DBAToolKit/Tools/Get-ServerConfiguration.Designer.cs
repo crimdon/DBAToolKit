@@ -30,7 +30,6 @@
         {
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtSource = new System.Windows.Forms.TextBox();
             this.btnDisplay = new System.Windows.Forms.Button();
             this.listConfig = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -38,6 +37,7 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.registeredServersSource = new DBAToolKit.Helpers.RegisteredServers();
             this.SuspendLayout();
             // 
             // label3
@@ -58,13 +58,6 @@
             this.label1.Size = new System.Drawing.Size(75, 13);
             this.label1.TabIndex = 28;
             this.label1.Text = "Source Server";
-            // 
-            // txtSource
-            // 
-            this.txtSource.Location = new System.Drawing.Point(103, 33);
-            this.txtSource.Name = "txtSource";
-            this.txtSource.Size = new System.Drawing.Size(150, 20);
-            this.txtSource.TabIndex = 27;
             // 
             // btnDisplay
             // 
@@ -123,14 +116,22 @@
             this.columnHeader5.Text = "Run Value";
             this.columnHeader5.Width = 119;
             // 
+            // registeredServersSource
+            // 
+            this.registeredServersSource.Location = new System.Drawing.Point(87, 38);
+            this.registeredServersSource.Name = "registeredServersSource";
+            this.registeredServersSource.SelectedServer = null;
+            this.registeredServersSource.Size = new System.Drawing.Size(150, 20);
+            this.registeredServersSource.TabIndex = 31;
+            // 
             // Get_ServerConfiguration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.registeredServersSource);
             this.Controls.Add(this.listConfig);
             this.Controls.Add(this.btnDisplay);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtSource);
             this.Controls.Add(this.label3);
             this.Name = "Get_ServerConfiguration";
             this.Size = new System.Drawing.Size(1000, 400);
@@ -143,7 +144,6 @@
 
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtSource;
         private System.Windows.Forms.Button btnDisplay;
         private System.Windows.Forms.ListView listConfig;
         private System.Windows.Forms.ColumnHeader columnHeader1;
@@ -151,5 +151,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
+        private Helpers.RegisteredServers registeredServersSource;
     }
 }

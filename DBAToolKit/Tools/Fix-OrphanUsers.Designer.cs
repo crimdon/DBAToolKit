@@ -30,12 +30,12 @@
         {
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtSource = new System.Windows.Forms.TextBox();
             this.btnFind = new System.Windows.Forms.Button();
             this.listOrphanUsers = new System.Windows.Forms.ListView();
             this.label2 = new System.Windows.Forms.Label();
             this.txtDatabaseName = new System.Windows.Forms.TextBox();
             this.btnFix = new System.Windows.Forms.Button();
+            this.registeredServersSource = new DBAToolKit.Helpers.RegisteredServers();
             this.SuspendLayout();
             // 
             // label3
@@ -56,13 +56,6 @@
             this.label1.Size = new System.Drawing.Size(62, 13);
             this.label1.TabIndex = 28;
             this.label1.Text = "SQL Server";
-            // 
-            // txtSource
-            // 
-            this.txtSource.Location = new System.Drawing.Point(103, 33);
-            this.txtSource.Name = "txtSource";
-            this.txtSource.Size = new System.Drawing.Size(150, 20);
-            this.txtSource.TabIndex = 1;
             // 
             // btnFind
             // 
@@ -116,17 +109,25 @@
             this.btnFix.UseVisualStyleBackColor = true;
             this.btnFix.Click += new System.EventHandler(this.btnFix_Click);
             // 
+            // registeredServersSource
+            // 
+            this.registeredServersSource.Location = new System.Drawing.Point(74, 35);
+            this.registeredServersSource.Name = "registeredServersSource";
+            this.registeredServersSource.SelectedServer = null;
+            this.registeredServersSource.Size = new System.Drawing.Size(150, 20);
+            this.registeredServersSource.TabIndex = 32;
+            // 
             // Fix_OrphanUsers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.registeredServersSource);
             this.Controls.Add(this.btnFix);
             this.Controls.Add(this.txtDatabaseName);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.listOrphanUsers);
             this.Controls.Add(this.btnFind);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtSource);
             this.Controls.Add(this.label3);
             this.Name = "Fix_OrphanUsers";
             this.Size = new System.Drawing.Size(1000, 400);
@@ -139,11 +140,11 @@
 
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtSource;
         private System.Windows.Forms.Button btnFind;
         private System.Windows.Forms.ListView listOrphanUsers;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtDatabaseName;
         private System.Windows.Forms.Button btnFix;
+        private Helpers.RegisteredServers registeredServersSource;
     }
 }

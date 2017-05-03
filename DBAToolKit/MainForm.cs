@@ -45,11 +45,6 @@ namespace DBAToolKit
             loadControl(copyLogins);   
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
         private void copyJobsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var copyjobs = new Copy_SqlJobs();
@@ -144,6 +139,17 @@ namespace DBAToolKit
         {
             var databasefilesizes = new Get_DatabaseFileSizes();
             loadControl(databasefilesizes);
+        }
+
+        private void addNewConnectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var registeredservers = new Maintain_RegisteredServers();
+            loadControl(registeredservers);
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

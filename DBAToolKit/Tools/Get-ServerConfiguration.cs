@@ -23,13 +23,13 @@ namespace DBAToolKit.Tools
         {
             try
             {
-                if (string.IsNullOrEmpty(txtSource.Text) == true)
+                if (string.IsNullOrEmpty(registeredServersSource.SelectedServer) == true)
                 {
                     throw new Exception("Enter a Server!");
                 }
 
                 ConnectSqlServer connection = new ConnectSqlServer();
-                Server sourceserver = connection.Connect(txtSource.Text);
+                Server sourceserver = connection.Connect(registeredServersSource.SelectedServer);
                 
                 if (sourceserver.VersionMajor < 9)
                 {

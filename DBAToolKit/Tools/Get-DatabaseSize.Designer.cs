@@ -43,7 +43,6 @@
             System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtSource = new System.Windows.Forms.TextBox();
             this.btnDisplay = new System.Windows.Forms.Button();
             this.listDatabses = new System.Windows.Forms.ListBox();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -52,6 +51,7 @@
             this.listSizes = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.registeredServersSource = new DBAToolKit.Helpers.RegisteredServers();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
@@ -75,13 +75,6 @@
             this.label1.Size = new System.Drawing.Size(75, 13);
             this.label1.TabIndex = 28;
             this.label1.Text = "Source Server";
-            // 
-            // txtSource
-            // 
-            this.txtSource.Location = new System.Drawing.Point(103, 33);
-            this.txtSource.Name = "txtSource";
-            this.txtSource.Size = new System.Drawing.Size(150, 20);
-            this.txtSource.TabIndex = 27;
             // 
             // btnDisplay
             // 
@@ -201,16 +194,24 @@
             this.columnHeader2.Text = "Value";
             this.columnHeader2.Width = 100;
             // 
+            // registeredServersSource
+            // 
+            this.registeredServersSource.Location = new System.Drawing.Point(87, 36);
+            this.registeredServersSource.Name = "registeredServersSource";
+            this.registeredServersSource.SelectedServer = null;
+            this.registeredServersSource.Size = new System.Drawing.Size(150, 20);
+            this.registeredServersSource.TabIndex = 32;
+            // 
             // Get_DatabaseSize
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.registeredServersSource);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.listDatabses);
             this.Controls.Add(this.btnDisplay);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtSource);
             this.Controls.Add(this.label3);
             this.Name = "Get_DatabaseSize";
             this.Size = new System.Drawing.Size(1000, 400);
@@ -226,7 +227,6 @@
 
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtSource;
         private System.Windows.Forms.Button btnDisplay;
         private System.Windows.Forms.ListBox listDatabses;
         private System.Windows.Forms.Panel panel1;
@@ -235,5 +235,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
+        private Helpers.RegisteredServers registeredServersSource;
     }
 }

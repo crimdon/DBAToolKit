@@ -30,12 +30,12 @@
         {
             this.label3 = new System.Windows.Forms.Label();
             this.btnCopy = new System.Windows.Forms.Button();
-            this.txtDestination = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtSource = new System.Windows.Forms.TextBox();
             this.showOutput = new DBAToolKit.Helpers.ShowOutput();
             this.btnSelect = new System.Windows.Forms.Button();
+            this.registeredServersSource = new DBAToolKit.Helpers.RegisteredServers();
+            this.registeredServersDestination = new DBAToolKit.Helpers.RegisteredServers();
             this.SuspendLayout();
             // 
             // label3
@@ -58,13 +58,6 @@
             this.btnCopy.UseVisualStyleBackColor = true;
             this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
             // 
-            // txtDestination
-            // 
-            this.txtDestination.Location = new System.Drawing.Point(435, 27);
-            this.txtDestination.Name = "txtDestination";
-            this.txtDestination.Size = new System.Drawing.Size(150, 20);
-            this.txtDestination.TabIndex = 24;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -83,14 +76,6 @@
             this.label1.TabIndex = 26;
             this.label1.Text = "Source Server";
             // 
-            // txtSource
-            // 
-            this.txtSource.Location = new System.Drawing.Point(112, 27);
-            this.txtSource.Name = "txtSource";
-            this.txtSource.Size = new System.Drawing.Size(150, 20);
-            this.txtSource.TabIndex = 23;
-            this.txtSource.TextChanged += new System.EventHandler(this.txtSource_TextChanged);
-            // 
             // showOutput
             // 
             this.showOutput.Location = new System.Drawing.Point(17, 107);
@@ -108,17 +93,34 @@
             this.btnSelect.UseVisualStyleBackColor = true;
             this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
             // 
+            // registeredServersSource
+            // 
+            this.registeredServersSource.Location = new System.Drawing.Point(96, 29);
+            this.registeredServersSource.Name = "registeredServersSource";
+            this.registeredServersSource.SelectedServer = null;
+            this.registeredServersSource.Size = new System.Drawing.Size(150, 20);
+            this.registeredServersSource.TabIndex = 33;
+            this.registeredServersSource.SelectedServerChanged += new System.EventHandler(this.registeredServersSource_SelectedServerChanged);
+            // 
+            // registeredServersDestination
+            // 
+            this.registeredServersDestination.Location = new System.Drawing.Point(415, 29);
+            this.registeredServersDestination.Name = "registeredServersDestination";
+            this.registeredServersDestination.SelectedServer = null;
+            this.registeredServersDestination.Size = new System.Drawing.Size(150, 20);
+            this.registeredServersDestination.TabIndex = 34;
+            // 
             // Copy_SqlAlerts
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.registeredServersDestination);
+            this.Controls.Add(this.registeredServersSource);
             this.Controls.Add(this.btnSelect);
             this.Controls.Add(this.showOutput);
             this.Controls.Add(this.btnCopy);
-            this.Controls.Add(this.txtDestination);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtSource);
             this.Controls.Add(this.label3);
             this.Name = "Copy_SqlAlerts";
             this.Size = new System.Drawing.Size(1000, 400);
@@ -131,11 +133,11 @@
 
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnCopy;
-        private System.Windows.Forms.TextBox txtDestination;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtSource;
         private Helpers.ShowOutput showOutput;
         private System.Windows.Forms.Button btnSelect;
+        private Helpers.RegisteredServers registeredServersSource;
+        private Helpers.RegisteredServers registeredServersDestination;
     }
 }

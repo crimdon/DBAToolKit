@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addNewConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,6 +43,7 @@
             this.fixOrphanUsersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.databaseSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backupHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autogrowSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.loginsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,7 +59,6 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.autogrowSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,15 +77,23 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addNewConnectionToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
+            // addNewConnectionToolStripMenuItem
+            // 
+            this.addNewConnectionToolStripMenuItem.Name = "addNewConnectionToolStripMenuItem";
+            this.addNewConnectionToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.addNewConnectionToolStripMenuItem.Text = "Maintain Registered Servers";
+            this.addNewConnectionToolStripMenuItem.Click += new System.EventHandler(this.addNewConnectionToolStripMenuItem_Click);
+            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -171,6 +180,13 @@
             this.backupHistoryToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.backupHistoryToolStripMenuItem.Text = "Backup History";
             this.backupHistoryToolStripMenuItem.Click += new System.EventHandler(this.backupHistoryToolStripMenuItem_Click);
+            // 
+            // autogrowSettingsToolStripMenuItem
+            // 
+            this.autogrowSettingsToolStripMenuItem.Name = "autogrowSettingsToolStripMenuItem";
+            this.autogrowSettingsToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.autogrowSettingsToolStripMenuItem.Text = "File Sizes";
+            this.autogrowSettingsToolStripMenuItem.Click += new System.EventHandler(this.autogrowSettingsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -288,13 +304,6 @@
             this.panel1.Size = new System.Drawing.Size(1000, 425);
             this.panel1.TabIndex = 11;
             // 
-            // autogrowSettingsToolStripMenuItem
-            // 
-            this.autogrowSettingsToolStripMenuItem.Name = "autogrowSettingsToolStripMenuItem";
-            this.autogrowSettingsToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.autogrowSettingsToolStripMenuItem.Text = "File Sizes";
-            this.autogrowSettingsToolStripMenuItem.Click += new System.EventHandler(this.autogrowSettingsToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -317,8 +326,6 @@
         #endregion
 
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem loginsToolStripMenuItem;
@@ -345,6 +352,9 @@
         private System.Windows.Forms.ToolStripMenuItem memoryConsumpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem backupHistoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autogrowSettingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addNewConnectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 
