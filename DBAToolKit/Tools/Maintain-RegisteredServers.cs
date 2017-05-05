@@ -1,6 +1,6 @@
 ﻿using DBAToolKit.Helpers;
+using DBAToolKit.Models;
 using System;
-using System.Configuration;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -21,11 +21,18 @@ namespace DBAToolKit.Tools
         }
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            foreach (ListViewItem server in listRegisteredServers.CheckedItems)
+            try
             {
-                ConnectionManager.deleteConnectionString(server.SubItems[0].Text);
+                foreach (ListViewItem server in listRegisteredServers.CheckedItems)
+                {
+                    ConnectionManager.deleteConnectionString(server.SubItems[0].Text);
+                }
+                LoadListView();
             }
-            LoadListView();
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         private void Maintain_RegisteredServers_Load(object sender, EventArgs e)
         {
@@ -34,16 +41,15 @@ namespace DBAToolKit.Tools
         private void LoadListView()
         {
             listRegisteredServers.Items.Clear();
-            ConfigurationManager.RefreshSection("connectionStrings");
-            foreach (ConnectionStringSettings css in ConfigurationManager.ConnectionStrings)
+            using (var dbCtx = new ConfigDBContainer())
             {
-                if (css.Name.ToString() != "LocalSqlServer")
+                foreach (Servers server in dbCtx.Servers)
                 {
-
+                    string maskedConnectionString = Regex.Replace(server.ConnectionString, "Password=[^;]*;", "Password=******;");
                     listRegisteredServers.Items.Add(new ListViewItem(new string[]
                         {
-                            css.Name.ToString(),
-                            css.ConnectionString
+                            server.ServerName,
+                            maskedConnectionString
                         }));
                 }
             }

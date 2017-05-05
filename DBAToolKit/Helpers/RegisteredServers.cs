@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Configuration;
+using DBAToolKit.Models;
 
 namespace DBAToolKit.Helpers
 {
@@ -16,12 +16,11 @@ namespace DBAToolKit.Helpers
         private void cboServerName_DropDown(object sender, EventArgs e)
         {
             cboServerName.Items.Clear();
-            ConfigurationManager.RefreshSection("connectionStrings");
-            foreach (ConnectionStringSettings css in ConfigurationManager.ConnectionStrings)
+            using (var dbCtx = new ConfigDBContainer())
             {
-                if (css.Name.ToString() != "LocalSqlServer")
+                foreach (Servers server in dbCtx.Servers)
                 {
-                    cboServerName.Items.Add(css.Name.ToString());
+                    cboServerName.Items.Add(server.ServerName);
                 }
             }
         }
