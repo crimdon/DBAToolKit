@@ -35,24 +35,31 @@ namespace DBAToolKit.Tools
         private void btnOK_Click(object sender, EventArgs e)
         {
             errorProvider1.Clear();
-            if (this.ValidateChildren())
-            {            
-                ConnectionManager sqlCmd = new ConnectionManager();  
-                string strConn = sqlCmd.makeConnectionString(txtServerName.Text, cboAuthentication.SelectedIndex, txtUserName.Text, txtPassword.Text, "Master");
-                bool connectionOK = sqlCmd.testConnection(strConn);
-                if (!connectionOK)
+            try
+            {
+                if (this.ValidateChildren())
                 {
-                    errorProvider1.SetError(txtServerName, "Connection to SQL Server failed");
-                    this.DialogResult = DialogResult.None;
+                    ConnectionManager sqlCmd = new ConnectionManager();
+                    string strConn = sqlCmd.makeConnectionString(txtServerName.Text, cboAuthentication.SelectedIndex, txtUserName.Text, txtPassword.Text, "Master");
+                    bool connectionOK = sqlCmd.testConnection(strConn);
+                    if (!connectionOK)
+                    {
+                        errorProvider1.SetError(txtServerName, "Connection to SQL Server failed");
+                        this.DialogResult = DialogResult.None;
+                    }
+                    else
+                    {
+                        sqlCmd.saveConnectionString(txtServerName.Text, strConn);
+                    }
                 }
                 else
                 {
-                    sqlCmd.saveConnectionString(txtServerName.Text, strConn);
+                    this.DialogResult = DialogResult.None;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                this.DialogResult = DialogResult.None;
+                errorProvider1.SetError(txtServerName, ex.Message);
             }
         }
 

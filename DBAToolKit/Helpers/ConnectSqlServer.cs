@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.SqlServer.Management.Smo;
-using System.Configuration;
+using DBAToolKit.Models;
 
 namespace DBAToolKit.Helpers
 {
@@ -11,18 +11,22 @@ namespace DBAToolKit.Helpers
         {
             try
             {
-                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                var connectionString = config.ConnectionStrings.ConnectionStrings[SqlServer];
-                Server server = new Server(SqlServer);
-                server.ConnectionContext.ConnectionString = connectionString.ConnectionString;
-                server.ConnectionContext.Connect();
-
-                if (!server.ConnectionContext.FixedServerRoles.ToString().Any("SysAdmin".Contains))
+                using (var dbCtx = new ConfigDBContainer())
                 {
-                    throw new Exception("User is not a member of sysadm");
-                }
+                    var dbServer = dbCtx.Servers
+                            .Where(s => s.ServerName == SqlServer)
+                            .FirstOrDefault();
+                    Server server = new Server(SqlServer);
+                    server.ConnectionContext.ConnectionString = dbServer.ConnectionString;
+                    server.ConnectionContext.Connect();
 
-                return server;
+                    if (!server.ConnectionContext.FixedServerRoles.ToString().Any("SysAdmin".Contains))
+                    {
+                        throw new Exception("User is not a member of sysadm");
+                    }
+
+                    return server;
+                }
             }
 
             catch (Exception)

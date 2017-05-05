@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Linq;
+using DBAToolKit.Models;
 
 
 namespace DBAToolKit.Helpers
@@ -28,32 +30,28 @@ namespace DBAToolKit.Helpers
         }
         public void saveConnectionString(string serverName, string conn)
         {
-            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var connectionString = config.ConnectionStrings.ConnectionStrings[serverName];
-            if (connectionString == null)
+            using (var dbCtx = new ConfigDBContainer())
             {
-                config.ConnectionStrings.ConnectionStrings.Add(new ConnectionStringSettings
+                var serverToAdd = dbCtx.Servers.FirstOrDefault(s => s.ServerName == serverName);
+                if (serverToAdd == null)
                 {
-                    Name = serverName,
-                    ConnectionString = conn,
-                    ProviderName = "System.Data.SqlClient"
-                });
-                config.Save(ConfigurationSaveMode.Full);
-            }
-            else
-            {
-                connectionString.ConnectionString = conn;
-            }
+                    dbCtx.Servers.Add(new Servers { ServerName = serverName, ConnectionString = conn });
+                    dbCtx.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("Server already exists. Delete first!");
+                }
+            }   
         }
         public static void deleteConnectionString(string serverName)
         {
-            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var connectionString = config.ConnectionStrings.ConnectionStrings[serverName];
-            if (connectionString != null)
+            using (var dbCtx = new ConfigDBContainer())
             {
-                config.ConnectionStrings.ConnectionStrings.Remove(serverName);
+                var serverToRemove = dbCtx.Servers.FirstOrDefault(s => s.ServerName == serverName);
+                dbCtx.Servers.Remove(serverToRemove);
+                dbCtx.SaveChanges();
             }
-            config.Save(ConfigurationSaveMode.Full);
         }
         public bool testConnection(string conSTR)
         {
@@ -70,6 +68,14 @@ namespace DBAToolKit.Helpers
             {
                 return false;
             }
+        }
+        public static void AddConnectionStringSettings(Configuration config, ConnectionStringSettings conStringSettings)
+        {
+            ConnectionStringsSection connectionStringsSection = config.ConnectionStrings;
+            connectionStringsSection.SectionInformation.AllowExeDefinition = ConfigurationAllowExeDefinition.MachineToLocalUser;
+            connectionStringsSection.ConnectionStrings.Add(conStringSettings);
+            config.Save(ConfigurationSaveMode.Minimal);
+            ConfigurationManager.RefreshSection("connectionStrings");
         }
     }
 }
