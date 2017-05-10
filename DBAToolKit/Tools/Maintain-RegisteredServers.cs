@@ -1,5 +1,5 @@
 ﻿using DBAToolKit.Helpers;
-using DBAToolKit.Models;
+using Microsoft.Win32;
 using System;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -41,18 +41,21 @@ namespace DBAToolKit.Tools
         private void LoadListView()
         {
             listRegisteredServers.Items.Clear();
-            using (var dbCtx = new ConfigDBContainer())
+            RegistryKey ProgSettings = Registry.CurrentUser.OpenSubKey("Software\\DBAToolKit", true);
+            if (ProgSettings.ValueCount > 0)
             {
-                foreach (Servers server in dbCtx.Servers)
+                foreach (string server in ProgSettings.GetValueNames())
                 {
-                    string maskedConnectionString = Regex.Replace(server.ConnectionString, "Password=[^;]*;", "Password=******;");
+                    string maskedConnectionString = Regex.Replace(ProgSettings.GetValue(server, false).ToString(), "Password=[^;]*;", "Password=******;");
                     listRegisteredServers.Items.Add(new ListViewItem(new string[]
                         {
-                            server.ServerName,
+                            server,
                             maskedConnectionString
                         }));
                 }
             }
+            ProgSettings.Close();
+            
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-using DBAToolKit.Models;
+using System.Configuration;
+using Microsoft.Win32;
 
 namespace DBAToolKit.Helpers
 {
@@ -16,14 +17,14 @@ namespace DBAToolKit.Helpers
         private void cboServerName_DropDown(object sender, EventArgs e)
         {
             cboServerName.Items.Clear();
-            using (var dbCtx = new ConfigDBContainer())
+            RegistryKey ProgSettings = Registry.CurrentUser.OpenSubKey("Software\\DBAToolKit", true);
+            foreach (var server in ProgSettings.GetValueNames())
             {
-                foreach (Servers server in dbCtx.Servers)
-                {
-                    cboServerName.Items.Add(server.ServerName);
-                }
+                cboServerName.Items.Add(server);
             }
+            ProgSettings.Close();
         }
+
         private void cboServerName_SelectedValueChanged(object sender, EventArgs e)
         {
             SelectedServer = cboServerName.SelectedItem.ToString();

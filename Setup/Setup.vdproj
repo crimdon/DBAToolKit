@@ -958,6 +958,17 @@
                 {
                 }
             }
+            "{1525181F-901A-416C-8A58-119130FE478E}:_50013BCED7EA467DA61405512D2F931F"
+            {
+            "Name" = "8:#1915"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:AppDataFolder"
+                "Folders"
+                {
+                }
+            }
             "{1525181F-901A-416C-8A58-119130FE478E}:_74249EF72E414BFB9C60829B7D0D3424"
             {
             "Name" = "8:#1919"
@@ -1008,7 +1019,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:DBA Toolkit"
         "ProductCode" = "8:{00290883-5E8C-4017-87DD-DBD66E5707D4}"
-        "PackageCode" = "8:{6CF96CC2-CEE8-4A93-A981-0A77732A02E4}"
+        "PackageCode" = "8:{6A390C45-94AE-4C56-A91D-8BFD84A48265}"
         "UpgradeCode" = "8:{C3FCD3F0-D513-452F-942C-AEC05162C928}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

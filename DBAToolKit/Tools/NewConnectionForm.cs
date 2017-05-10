@@ -60,6 +60,7 @@ namespace DBAToolKit.Tools
             catch (Exception ex)
             {
                 errorProvider1.SetError(txtServerName, ex.Message);
+                this.DialogResult = DialogResult.None;
             }
         }
 
