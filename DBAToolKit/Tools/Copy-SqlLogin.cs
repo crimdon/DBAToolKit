@@ -145,6 +145,7 @@ namespace DBAToolKit.Tools
                         case "Normal Copy with Database Permission Sync":
                             copyLogin(sourceserver, destserver, sourcelogin, destlogin);
                             syncPermissions(sourceserver, destserver, username);
+                            destlogin = destserver.Logins[username];
                             syncDatabasePerms(sourcelogin, destlogin, sourceserver, destserver);
                             break;
 
@@ -158,6 +159,7 @@ namespace DBAToolKit.Tools
                             dropUser(destserver, destlogin, username);
                             copyLogin(sourceserver, destserver, sourcelogin, destlogin);
                             syncPermissions(sourceserver, destserver, username);
+                            destlogin = destserver.Logins[username];
                             syncDatabasePerms(sourcelogin, destlogin, sourceserver, destserver);
                             break;
 
