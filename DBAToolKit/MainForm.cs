@@ -19,11 +19,11 @@ namespace DBAToolKit
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            //if (!Utilities.CheckForSmo())
-            //{
-            //    MessageBox.Show("SMO is not installed!");
-            //    toolsToolStripMenuItem.Enabled = false;
-            //}
+            if (!Utilities.CheckForSmo())
+            {
+                MessageBox.Show("SMO is not installed!");
+                toolsToolStripMenuItem.Enabled = false;
+            }
         }
 
         private void loadControl(Control control)
