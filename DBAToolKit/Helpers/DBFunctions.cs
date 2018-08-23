@@ -51,7 +51,7 @@ namespace DBAToolKit.Helpers
             }
         }
 
-        public static SecureString GetHashedPassword (Server server, Login login)
+        public static SecureString GetHashedPassword(Server server, Login login)
         {
             string sql;
             if (server.VersionMajor == 9)
@@ -78,7 +78,7 @@ namespace DBAToolKit.Helpers
             else
             {
                 return Utilities.MakeSecureString(hashedpass.ToString());
-            }            
+            }
         }
 
         public static void GrantDBPerms(Database sourcedb, Database destdb, string dbusername)
@@ -138,7 +138,7 @@ namespace DBAToolKit.Helpers
 
                 if (!DBChecks.DBRoleExists(sourcedb, destrolename) && !sourcerole.EnumMembers().Contains(dbusername) && destrole.EnumMembers().Contains(dbusername))
                 {
-                        destrole.DropMember(dbusername);
+                    destrole.DropMember(dbusername);
                 }
 
             }
@@ -149,12 +149,12 @@ namespace DBAToolKit.Helpers
         public static void AddDBUser(Database db, string dbusername)
         {
             // Map the user
-            if (!DBChecks.DatabaseUserExists(db,dbusername))
+            if (!DBChecks.DatabaseUserExists(db, dbusername))
             {
-                    User dbuser = new User(db, dbusername);
-                    dbuser.Login = dbusername;
-                    dbuser.Create();
-                    dbuser.Refresh();
+                User dbuser = new User(db, dbusername);
+                dbuser.Login = dbusername;
+                dbuser.Create();
+                dbuser.Refresh();
             }
         }
 

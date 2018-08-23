@@ -45,7 +45,8 @@ namespace DBAToolKit.Tools
         {
             foreach (Database db in sourceserver.Databases)
             {
-                listDatabses.Items.Add(db.Name);
+                if (db.Status == DatabaseStatus.Normal)
+                    listDatabses.Items.Add(db.Name);
             }
             listDatabses.Show();
         }

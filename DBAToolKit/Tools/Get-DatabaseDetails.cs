@@ -40,6 +40,7 @@ namespace DBAToolKit.Tools
 
         private void showConfiguration(Server sourceserver)
         {
+
             listDatabases.View = System.Windows.Forms.View.Details;
 
             listDatabases.Columns.Add("Database Name");
@@ -52,7 +53,8 @@ namespace DBAToolKit.Tools
 
             foreach (Database db in sourceserver.Databases)
             {
-                listDatabases.Items.Add(new ListViewItem(new string[] { db.Name, db.ID.ToString(), db.RecoveryModel.ToString(), db.Owner, db.CompatibilityLevel.ToString(),
+                if (db.Status == DatabaseStatus.Normal)
+                    listDatabases.Items.Add(new ListViewItem(new string[] { db.Name, db.ID.ToString(), db.RecoveryModel.ToString(), db.Owner, db.CompatibilityLevel.ToString(),
                     db.CreateDate.ToShortDateString(), db.Size.ToString() }));
             }
 

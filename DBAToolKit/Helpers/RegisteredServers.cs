@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Configuration;
 using Microsoft.Win32;
 
 namespace DBAToolKit.Helpers
